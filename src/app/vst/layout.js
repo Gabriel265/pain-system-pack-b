@@ -14,8 +14,7 @@ export default function VSTLayout({ children }) {
     {children}
   </main>
 </div>
-
-      <Footer />
+    <Footer />
     </div>
   );
 }

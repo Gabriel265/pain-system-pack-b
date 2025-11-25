@@ -6,7 +6,7 @@ import Footer from "@/components/common/Footer";
 export default function PortalLayout({ children }) {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Top Header (visible on all screens) */}
+      
       <Header />
 
       <div className="flex flex-1">
@@ -17,8 +17,7 @@ export default function PortalLayout({ children }) {
   </main>
 </div>
 
-      {/* Footer always at the bottom */}
-      <Footer />
+     <Footer />
     </div>
   );
 }
