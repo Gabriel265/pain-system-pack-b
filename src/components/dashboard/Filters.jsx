@@ -17,9 +17,9 @@ export default function Filters({ dateRange, setDateRange, category, setCategory
         className="bg-card border border-border rounded-lg px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
       >
         <option value="all">All Categories</option>
-        <option value="accommodations">Accommodations</option>
-        <option value="carhire">Car Hire</option>
-        <option value="tours">Tours</option>
+        <option value="service">Accommodations</option>
+        <option value="service">Car Hire</option>
+        <option value="service">Tours</option>
       </select>
     </div>
   );
