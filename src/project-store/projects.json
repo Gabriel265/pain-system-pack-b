@@ -8,5 +8,15 @@
     "category": "website",
     "createdAt": "2025-12-03T00:00:00Z",
     "updatedAt": "2025-12-03T00:00:00Z"
+  },
+  {
+    "title": "project add",
+    "slug": "project-add",
+    "description": "project added from website to git repo",
+    "status": "draft",
+    "category": "website",
+    "id": "gnzszOj62kj1gnXIve8GI",
+    "updatedAt": "2025-12-08T18:54:21.836Z",
+    "createdAt": "2025-12-08T18:54:21.836Z"
   }
 ]
