@@ -4,9 +4,9 @@
     "slug": "example-project",
     "title": "Example Project edit",
     "description": "This is a sample project description.",
-    "status": "live",
+    "status": "draft",
     "category": "builder",
     "createdAt": "2025-12-03T00:00:00Z",
-    "updatedAt": "2025-12-08T19:01:03.640Z"
+    "updatedAt": "2025-12-08T19:01:29.172Z"
   }
 ]
