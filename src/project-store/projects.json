@@ -2,12 +2,12 @@
   {
     "id": "1",
     "slug": "example-project",
-    "title": "Example Project edit",
-    "description": "This is a sample project description.",
-    "status": "active",
+    "title": "Example Project edited",
+    "description": "This is a sample project description. edit",
+    "status": "in-progress",
     "category": "builder",
     "createdAt": "2025-12-03T00:00:00Z",
-    "updatedAt": "2025-12-08T19:36:03.878Z"
+    "updatedAt": "2025-12-08T21:07:29.721Z"
   },
   {
     "title": "second projetc",
