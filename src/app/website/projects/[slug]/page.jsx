@@ -7,7 +7,7 @@ async function getProject(slug) {
   const filePath = path.join(process.cwd(), "src/project-store/projects.json");
   const jsonData = fs.readFileSync(filePath, "utf8");
   const projects = JSON.parse(jsonData);
-  return projects.find((p) => p.slug === slug && p.status === "live");
+  return projects.find((p) => p.slug === slug && p.status === "active");
 }
 
 export async function generateStaticParams() {
@@ -15,8 +15,8 @@ export async function generateStaticParams() {
   const jsonData = fs.readFileSync(filePath, "utf8");
   const projects = JSON.parse(jsonData);
 
-  return projects
-    .filter((p) => p.status === "live")
+   return projects
+    .filter((p) => p.status === "active")
     .map((p) => ({ slug: p.slug }));
 }
 

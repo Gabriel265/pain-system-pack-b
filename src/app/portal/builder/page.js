@@ -1,83 +1,232 @@
-import React from 'react';
+// src/app/portal/builder/page.jsx
+'use client';
 
-export default function BuilderPage() {
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { nanoid } from 'nanoid';
+import toast, { Toaster } from 'react-hot-toast';
+import { ArrowLeft } from 'lucide-react';
+
+export default function ProjectBuilderPage() {
+  const router = useRouter();
+
+  // Get project from URL (e.g. ?edit=abc123) or create new
+  const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+  const editId = urlParams.get('edit');
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    title: '',
+    slug: '',
+    description: '',
+    status: 'in-progress',
+    category: 'portal',
+  });
+
+  // Auto-generate slug when title changes (only on create)
+  useEffect(() => {
+    if (!isEditing && formData.title) {
+      const slug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .replace(/-+/g, '-');
+      setFormData(prev => ({ ...prev, slug }));
+    }
+  }, [formData.title, isEditing]);
+
+  // Load existing project if editing
+  useEffect(() => {
+    if (editId) {
+      const loadProject = async () => {
+        try {
+          const res = await fetch(`/api/projects?id=${editId}`);
+          if (res.ok) {
+            const project = await res.json();
+            setFormData({
+              title: project.title || '',
+              slug: project.slug || '',
+              description: project.description || '',
+              status: project.status || 'in-progress',
+              category: project.category || 'website',
+            });
+            setIsEditing(true);
+          } else {
+            toast.error('Project not found');
+            router.push('/portal/builder');
+          }
+        } catch {
+          toast.error('Failed to load project');
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadProject();
+    } else {
+      setLoading(false);
+    }
+  }, [editId, router]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.title.trim() || !formData.slug.trim() || !formData.description.trim()) {
+      toast.error('Title, slug, and description are required');
+      return;
+    }
+
+    const payload = {
+      ...formData,
+      id: isEditing ? editId : nanoid(),
+      updatedAt: new Date().toISOString(),
+      ...(isEditing ? {} : { createdAt: new Date().toISOString() }),
+    };
+
+    try {
+      const res = await fetch('/api/projects', {
+        method: isEditing ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        toast.success(isEditing ? 'Project updated!' : 'Project created!');
+        router.push('/admin/projects');
+      } else {
+        const error = await res.text();
+        toast.error(error || 'Failed to save');
+      }
+    } catch {
+      toast.error('Network error');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen px-4 sm:px-6 lg:px-8">
-      {/* Header Spacer */}
-      <div className="h-16 md:h-20 lg:h-24"></div>
-      
-      {/* Page Title */}
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-          Page Title
-        </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400">
-          Optional subtitle or description goes here
-        </p>
-      </div>
+    <>
+      <Toaster position="top-right" />
 
-      {/* Main Content Grid */}
-      <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-4 md:gap-6 pb-8">
-        
-        {/* Sidebar - Tools/Components Panel */}
-        <div className="w-full">
-          <div className="space-y-3 md:space-y-4">
-            {[...Array(8)].map((_, i) => (
-              <div 
-                key={i} 
-                className="group h-12 sm:h-14 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-200 hover:shadow-md flex items-center px-4 cursor-pointer"
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+
+          {/* Header */}
+          <div className="mb-8">
+            <button
+              onClick={() => router.push('/admin/projects')}
+              className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium mb-4"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Back to Projects
+            </button>
+            <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">
+              {isEditing ? 'Edit Project' : 'Create New Project'}
+            </h1>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-8">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Project Title *
+              </label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                required
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
+                placeholder="My Awesome Project"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Slug {isEditing && '(cannot change when editing)'}
+              </label>
+              <input
+                type="text"
+                value={formData.slug}
+                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                required
+                readOnly={isEditing}
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Description *
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                rows={8}
+                required
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 resize-none transition"
+                placeholder="Describe your project..."
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Status
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500"
+                >
+                  <option value="active">Active (Published)</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="paused">Paused</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Category
+                </label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500"
+                >
+                  <option value="portal">Portal</option>
+                  <option value="website">Website</option>
+                  <option value="app">App</option>
+                  <option value="builder">Builder</option>
+                  <option value="system">System</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex gap-4 pt-6">
+              <button
+                type="submit"
+                className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-5 rounded-xl text-lg shadow-xl transition transform hover:scale-105"
               >
-                <div className="flex items-center gap-3 w-full">
-                  <div className="w-6 h-6 bg-gray-200 dark:bg-gray-800 rounded group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 transition-colors"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded flex-1 max-w-[120px] group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 transition-colors"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Canvas Area */}
-        <div className="w-full">
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-orange-400 dark:hover:border-orange-600 rounded-2xl min-h-[400px] lg:min-h-[600px] xl:min-h-[700px] flex flex-col items-center justify-center text-center p-6 sm:p-8 transition-all duration-300">
-            
-            {/* Canvas Placeholder Content */}
-            <div className="space-y-4">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl shadow-lg flex items-center justify-center">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white rounded-lg"></div>
-              </div>
-              
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-800 dark:text-gray-200">
-                Canvas Area
-              </h2>
-              
-              <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md">
-                Drag and drop components here or click to start building your design
-              </p>
-              
-              {/* Optional Action Buttons */}
-              <div className="flex flex-wrap gap-3 justify-center pt-2">
-                <button className="px-4 py-2 sm:px-6 sm:py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md text-sm sm:text-base">
-                  Get Started
-                </button>
-                <button className="px-4 py-2 sm:px-6 sm:py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base">
-                  Learn More
-                </button>
-              </div>
+                {isEditing ? 'Update Project' : 'Create Project'}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push('/admin/projects')}
+                className="px-8 py-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
             </div>
-
-            {/* Optional Grid Pattern Overlay */}
-            <div className="absolute inset-0 opacity-5 pointer-events-none">
-              <div className="w-full h-full" style={{
-                backgroundImage: `
-                  linear-gradient(currentColor 1px, transparent 1px),
-                  linear-gradient(90deg, currentColor 1px, transparent 1px)
-                `,
-                backgroundSize: '20px 20px'
-              }}></div>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }

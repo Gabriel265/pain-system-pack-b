@@ -23,7 +23,7 @@ import {
   ChevronsRight,
 } from 'lucide-react';
 
-export default function AdminProjectsClient() {
+export default function ProjectsBuilder() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -34,7 +34,7 @@ export default function AdminProjectsClient() {
     slug: '',
     description: '',
     status: 'in-progress',
-    category: 'website',
+    category: 'builder',
   });
   const [loading, setLoading] = useState(true);
   const [isTableCollapsed, setIsTableCollapsed] = useState(false);
@@ -226,7 +226,7 @@ export default function AdminProjectsClient() {
         {/* Page Title */}
         <div className="mb-10">
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">
-            Admin • Projects
+            Projects • Builder
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Manage all your projects</p>
         </div>
@@ -268,11 +268,11 @@ export default function AdminProjectsClient() {
                       <option value="paused">Paused</option>
                     </select>
                     <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                      <option value="builder">Builder</option>
                       <option value="website">Website</option>
                       <option value="portal">Portal</option>
                       <option value="app">App</option>
-                      <option value="builder">Builder</option>
-                      <option value="system">System</option>
+                                            <option value="system">System</option>
                     </select>
                   </div>
                   <button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-5 rounded-xl text-lg shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3">
@@ -324,88 +324,86 @@ export default function AdminProjectsClient() {
                   )}
                 </div>
 
-                {/* Desktop: Fully Responsive Table */}
-<div className="hidden lg:block overflow-x-auto -mx-6 px-6">
-  <div className="inline-block min-w-full align-middle">
-    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-      <thead className="bg-gray-50 dark:bg-gray-700">
-        <tr>
-          <th className="w-12 px-3 py-4 text-left">
-            <button onClick={selectAll}>
-              {selectedIds.size === currentProjects.length && currentProjects.length > 0 ? 
-                <CheckSquare className="w-5 h-5 text-orange-600" /> : 
-                <Square className="w-5 h-5 text-gray-400" />
-              }
-            </button>
-          </th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Title</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Slug</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Description</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Category</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Created</th>
-          <th className="px-3 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Updated</th>
-          <th className="px-3 py-4 text-right text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-        </tr>
-      </thead>
-      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-        {loading ? (
-          <tr><td colSpan={9} className="text-center py-16 text-gray-500">Loading...</td></tr>
-        ) : currentProjects.length === 0 ? (
-          <tr><td colSpan={9} className="text-center py-16 text-gray-500">No projects found</td></tr>
-        ) : (
-          currentProjects.map(project => (
-            <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-              <td className="px-3 py-4">
-                <button onClick={() => toggleSelect(project.id)}>
-                  {selectedIds.has(project.id) ? 
-                    <CheckSquare className="w-5 h-5 text-orange-600" /> : 
-                    <Square className="w-5 h-5 text-gray-400" />
-                  }
-                </button>
-              </td>
-              <td className="px-3 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-xs">
-                {project.title || 'Untitled'}
-              </td>
-              <td className="px-3 py-4 text-sm font-mono text-gray-600 dark:text-gray-400 truncate max-w-48">
-                /{project.slug || '—'}
-              </td>
-              <td className="px-3 py-4 text-sm text-gray-600 dark:text-gray-400">
-                <div className="line-clamp-2 max-w-md">
-                  {project.description || 'No description'}
-                </div>
-              </td>
-              <td className="px-3 py-4">
-                <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                  project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
-                  project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
-                  'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-                }`}>
-                  {project.status || 'paused'}
-                </span>
-              </td>
-              <td className="px-3 py-4 text-sm text-gray-600 dark:text-gray-400 capitalize">
-                {project.category || '—'}
-              </td>
-              <td className="px-3 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                {formatDate(project.createdAt)}
-              </td>
-              <td className="px-3 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                {formatDateTime(project.updatedAt)}
-              </td>
-              <td className="px-3 py-4 text-right">
-                <div className="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1.5">
-                  <button onClick={() => handleEdit(project)} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition"><Edit className="w-4 h-4" /></button>
-                  <button onClick={() => handleToggleStatus(project)} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900 rounded transition"><Globe className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(project.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"><Trash2 className="w-4 h-4" /></button>
-                </div>
-              </td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
+                {/* Desktop: Responsive Table */}
+<div className="hidden lg:block overflow-x-auto">
+  <table className="w-full min-w-[1000px]"> {/* ← This is the key */}
+    <thead className="bg-gray-50 dark:bg-gray-700">
+      <tr>
+        <th className="w-12 px-4 py-4 text-left">
+          <button onClick={selectAll}>
+            {selectedIds.size === currentProjects.length && currentProjects.length > 0 ? 
+              <CheckSquare className="w-5 h-5 text-orange-600" /> : 
+              <Square className="w-5 h-5 text-gray-400" />
+            }
+          </button>
+        </th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-48">Title</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-32">Slug</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-64 max-w-96">Description</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-28">Status</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-32">Category</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-36">Created</th>
+        <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-36">Updated</th>
+        <th className="px-4 py-4 text-right text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-40">Actions</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+      {loading ? (
+        <tr><td colSpan={9} className="text-center py-16 text-gray-500">Loading...</td></tr>
+      ) : currentProjects.length === 0 ? (
+        <tr><td colSpan={9} className="text-center py-16 text-gray-500">No projects found</td></tr>
+      ) : (
+        currentProjects.map(project => (
+          <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+            <td className="px-4 py-4">
+              <button onClick={() => toggleSelect(project.id)}>
+                {selectedIds.has(project.id) ? 
+                  <CheckSquare className="w-5 h-5 text-orange-600" /> : 
+                  <Square className="w-5 h-5 text-gray-400" />
+                }
+              </button>
+            </td>
+            <td className="px-4 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-64">
+              {project.title || 'Untitled'}
+            </td>
+            <td className="px-4 py-4 text-sm font-mono text-gray-600 dark:text-gray-400 truncate max-w-48">
+              /{project.slug || '—'}
+            </td>
+            <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="line-clamp-2 max-w-96">
+                {project.description || 'No description'}
+              </div>
+            </td>
+            <td className="px-4 py-4">
+              <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
+                'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+              }`}>
+                {project.status || 'paused'}
+              </span>
+            </td>
+            <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 capitalize">
+              {project.category || '—'}
+            </td>
+            <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              {formatDate(project.createdAt)}
+            </td>
+            <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              {formatDateTime(project.updatedAt)}
+            </td>
+            <td className="px-4 py-4 text-right">
+              <div className="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1.5">
+                <button onClick={() => handleEdit(project)} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition"><Edit className="w-4 h-4" /></button>
+                <button onClick={() => handleToggleStatus(project)} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900 rounded transition"><Globe className="w-4 h-4" /></button>
+                <button onClick={() => handleDelete(project.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            </td>
+          </tr>
+        ))
+      )}
+    </tbody>
+  </table>
 </div>
 
                 {/* Mobile: Cards */}

@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import AdminProjectsClient from './AdminProjectsClient';
 
 export default async function AdminProjects() {
-  // AWAIT cookies() — THIS IS THE KEY FOR NEXT.JS 15+
   const cookieStore = await cookies();
   const userRole = cookieStore.get('user_role')?.value;
 

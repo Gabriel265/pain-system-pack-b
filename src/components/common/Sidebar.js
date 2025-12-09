@@ -12,7 +12,18 @@ const adminLinks = [
   { href: "/admin/projects", label: "Projects", icon: FolderOpen },
   { divider: true },
   { href: "/portal/dashboard", label: "Portal Dashboard", icon: Home },
+  { divider: true },
+  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  { divider: true },
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
+];
+
+const builderLinks = [
+  { href: "/admin/projects", label: "Admin Projects", icon: FolderOpen },
+  { divider: true },
+  { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
+  { divider: true },
+  { href: "/portal/dashboard", label: "Portal Dashboard", icon: Home },
 ];
 
 const portalLinks = [
@@ -22,7 +33,10 @@ const portalLinks = [
   { href: "/portal/builder", label: "Builder", icon: Hammer },
   { divider: true },
   { href: "/admin/projects", label: "Admin Projects", icon: FolderOpen },
+  { divider: true },
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
+  { divider: true },
+  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
 ];
 
 const vstLinks = [
@@ -33,8 +47,12 @@ const vstLinks = [
   { href: "/automation/vst-website-automation/safety", label: "Safety", icon: Shield },
   { divider: true },
   { href: "/admin/projects", label: "Admin Panel", icon: FolderOpen },
+  { divider: true },
   { href: "/portal/dashboard", label: "Portal", icon: Home },
+  { divider: true },
+  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
 ];
+
 
 export default function Sidebar({ type }) {
   const pathname = usePathname();
@@ -43,6 +61,7 @@ export default function Sidebar({ type }) {
   const links = 
     type === "portal" ? portalLinks :
     type === "vst" ? vstLinks :
+    type === "builder" ? builderLinks :
     type === "admin" ? adminLinks : [];
 
   // Mobile menu open state
@@ -73,7 +92,8 @@ export default function Sidebar({ type }) {
   const getTitle = () => {
     if (pathname.startsWith("/admin")) return "Admin Panel";
     if (pathname.startsWith("/portal")) return "Pain Portal";
-    if (pathname.startsWith("/automation")) return "VST System";
+    if (pathname.startsWith("vst-website-automation")) return "VST System";
+    if (pathname.startsWith("project-builder")) return "Projects Builder";
     return "Menu";
   };
 

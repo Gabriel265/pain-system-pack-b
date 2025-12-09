@@ -90,7 +90,7 @@ export default function Header() {
               </a>
             ))}
 
-            {/* Portal Button */}
+            {/* Login Button */}
             <Link
               href="/login"
               className="inline-flex items-center px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full transition transform hover:scale-105"
@@ -128,21 +128,13 @@ export default function Header() {
               </a>
             ))}
 
-            {/* Portal & VST in Mobile Menu */}
+            {/* Login */}
             <Link
               href="/login"
               className="block w-full text-center py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full"
               onClick={() => setIsOpen(false)}
             >
-              Portal
-            </Link>
-
-            <Link
-              href="/vst/vst-website-automation"
-              className="block w-full text-center py-3 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold rounded-full shadow-md"
-              onClick={() => setIsOpen(false)}
-            >
-              VST App
+              Login
             </Link>
           </div>
         </div>

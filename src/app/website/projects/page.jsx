@@ -6,13 +6,15 @@ export default function ProjectsPage() {
   const filePath = path.join(process.cwd(), 'src/project-store/projects.json');
   const jsonData = fs.readFileSync(filePath, 'utf8');
   const projects = JSON.parse(jsonData);
-  const liveProjects = projects.filter(p => p.status === 'live');
+  const liveProjects = projects.filter(p => 
+  p.status && ['live', 'active'].includes(p.status.toLowerCase())
+);
 
   return (
     <div className="min-h-screen bg-background text-foreground py-20">
       <div className="container mx-auto px-6">
         <h1 className="text-6xl font-black text-center mb-16 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-          Our Projects
+          Projects
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
