@@ -38,5 +38,15 @@
     "id": "qJsQPJYQSjtqaDC65HDEG",
     "updatedAt": "2025-12-09T03:43:09.648Z",
     "createdAt": "2025-12-09T03:43:09.645Z"
+  },
+  {
+    "title": "Project from Portal",
+    "slug": "project-from-portal",
+    "description": "Project from Portal description",
+    "status": "active",
+    "category": "portal",
+    "id": "n8q5QIOTmFZnAKLJX7PeX",
+    "updatedAt": "2025-12-09T12:33:14.382Z",
+    "createdAt": "2025-12-09T12:33:14.381Z"
   }
 ]
