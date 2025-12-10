@@ -1,0 +1,45 @@
+name: Pain System Auto-Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - ai-deploy
+
+jobs:
+  build-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Configure Git user
+        if: success()
+        run: |
+          git config user.name "pain-system-bot"
+          git config user.email "bot@thepainsystem.com"
+
+      - name: Merge ai-deploy into main
+        if: success()
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git checkout ai-deploy
+          git fetch origin main:main
+          git merge main || true
+          git checkout main
+          git merge ai-deploy --no-edit
+          git push https://x-access-token:${GH_PAT}@github.com/${{ github.repository }} main
