@@ -34,12 +34,11 @@ jobs:
 
       - name: Merge ai-deploy into main
         if: success()
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git checkout ai-deploy
           git fetch origin main:main
           git merge main || true
           git checkout main
           git merge ai-deploy --no-edit
-          git push https://x-access-token:${GH_PAT}@github.com/${{ github.repository }} main
+          git push https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }} main
+
