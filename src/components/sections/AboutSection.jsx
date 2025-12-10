@@ -8,7 +8,7 @@ const AboutSection = () => {
       <div className="max-w-7xl mx-auto">
         {/* Main Heading */}
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-12 sm:mb-16 lg:mb-20">
-          ABOUT<br />US
+          ABOUT<br />ME
         </h1>
 
         {/* Content Grid */}
