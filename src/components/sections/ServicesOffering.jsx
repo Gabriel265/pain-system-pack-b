@@ -8,7 +8,7 @@ const ServicesOffering = () => {
   const services = [
     {
       id: 1,
-      title: 'Service One Title',
+      title: 'Service One Title edited',
       description: 'A brief description of this service.',
       fullDescription: 'This is a comprehensive description of Service One. Here you can include detailed information about what this service entails, the benefits it provides, and why customers should choose this option. You can expand this with multiple paragraphs of content.',
       features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'],
