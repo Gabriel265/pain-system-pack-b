@@ -52,7 +52,7 @@ export default function HeroSection() {
             {/* Left Column - Text Content */}
             <div className="text-center lg:text-left order-2 lg:order-1">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-foreground mb-4 md:mb-6 lg:mb-8 tracking-wide leading-tight">
-                Heading of Hero sections
+                HERO SECTION HEADING
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-500 mb-2 uppercase tracking-wider">
                Subtitle text
