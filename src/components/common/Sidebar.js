@@ -222,7 +222,7 @@ export function MobileMenuButton({ isOpen, onToggle }) {
   return (
     <button
       onClick={onToggle}
-      className="lg:hidden fixed bottom-6 right-6 z-50 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
+      className="lg:hidden fixed bottom-6 right-6 z-50 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 Live:scale-95"
       aria-label="Toggle menu"
     >
       {isOpen ? (

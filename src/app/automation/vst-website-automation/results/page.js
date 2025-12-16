@@ -77,7 +77,7 @@ export default function ResultsPage() {
                 </div>
                 
                 {/* Action Button */}
-                <button className="w-full h-10 sm:h-11 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
+                <button className="w-full h-10 sm:h-11 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] Live:scale-[0.98]">
                   View Details
                 </button>
               </div>
@@ -87,7 +87,7 @@ export default function ResultsPage() {
 
         {/* Load More Button */}
         <div className="mt-8 sm:mt-10 flex justify-center">
-          <button className="px-6 sm:px-8 py-3 sm:py-3.5 bg-white dark:bg-gray-800 border-2 border-orange-500 dark:border-orange-600 text-orange-500 dark:text-orange-600 font-semibold rounded-lg hover:bg-orange-50 dark:hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md">
+          <button className="px-6 sm:px-8 py-3 sm:py-3.5 bg-white dark:bg-gray-800 border-2 border-orange-500 dark:border-orange-600 text-orange-500 dark:text-orange-600 font-semibold rounded-lg hover:bg-orange-50 dark:hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 Live:scale-95 shadow-md">
             Load More Results
           </button>
         </div>

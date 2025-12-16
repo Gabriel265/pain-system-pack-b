@@ -27,7 +27,7 @@ export default function PortalProjects() {
     title: '',
     slug: '',
     description: '',
-    status: 'in-progress',
+    status: 'In-Build',
     category: 'website',
   });
   const [loading, setLoading] = useState(true);
@@ -102,7 +102,7 @@ export default function PortalProjects() {
   // Form handlers
   const openCreateModal = () => {
     setEditingProject(null);
-    setFormData({ title: '', slug: '', description: '', status: 'in-progress', category: 'website' });
+    setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' });
     setIsModalOpen(true);
   };
 
@@ -112,7 +112,7 @@ export default function PortalProjects() {
       title: project.title || '',
       slug: project.slug || '',
       description: project.description || '',
-      status: project.status || 'in-progress',
+      status: project.status || 'In-Build',
       category: project.category || 'website',
     });
     setIsModalOpen(true);
@@ -121,7 +121,7 @@ export default function PortalProjects() {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingProject(null);
-    setFormData({ title: '', slug: '', description: '', status: 'in-progress', category: 'website' });
+    setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' });
   };
 
   const handleSubmit = async (e) => {
@@ -164,14 +164,14 @@ export default function PortalProjects() {
   };
 
   const handleToggleStatus = async (project) => {
-    const newStatus = project.status === 'active' ? 'paused' : 'active';
+    const newStatus = project.status === 'Live' ? 'Concept' : 'Live';
     const res = await fetch('/api/projects', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...project, status: newStatus }),
     });
     if (res.ok) {
-      toast.success(newStatus === 'active' ? 'Published' : 'Unpublished');
+      toast.success(newStatus === 'Live' ? 'Published' : 'Unpublished');
       fetchProjects();
     }
   };
@@ -186,9 +186,9 @@ export default function PortalProjects() {
       if (action === 'delete') {
         await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
       } else if (action === 'publish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'active' }) });
+        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Live' }) });
       } else if (action === 'unpublish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'paused' }) });
+        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Concept' }) });
       }
     }
     toast.success(`Bulk ${action} completed`);
@@ -302,7 +302,7 @@ export default function PortalProjects() {
                       <td className="px-4 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-64">{project.title || 'Untitled'}</td>
                       <td className="px-4 py-4 text-sm font-mono text-gray-600 dark:text-gray-400 truncate max-w-48">/{project.slug || '—'}</td>
                       <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400"><div className="line-clamp-2 max-w-96">{project.description || 'No description'}</div></td>
-                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>{project.status || 'paused'}</span></td>
+                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>{project.status || 'Concept'}</span></td>
                       <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 capitalize">{project.category || '—'}</td>
                       <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{formatDate(project.createdAt)}</td>
                       <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{formatDateTime(project.updatedAt)}</td>
@@ -342,8 +342,8 @@ export default function PortalProjects() {
                   <div className="font-mono text-gray-600 dark:text-gray-400">/{project.slug || '—'}</div>
                   <p className="text-gray-600 dark:text-gray-400 line-clamp-2">{project.description || 'No description'}</p>
                   <div className="flex flex-wrap gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
-                      {project.status || 'paused'}
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                      {project.status || 'Concept'}
                     </span>
                     <span className="text-gray-500 capitalize">{project.category || '—'}</span>
                   </div>
@@ -412,9 +412,9 @@ export default function PortalProjects() {
               <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 resize-none transition" />
               <div className="grid grid-cols-2 gap-4">
                 <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
-                  <option value="active">Active</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="paused">Paused</option>
+                  <option value="Live">Live</option>
+                  <option value="In-Build">In Build</option>
+                  <option value="Concept">Concept</option>
                 </select>
                 <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                   <option value="website">Website</option>

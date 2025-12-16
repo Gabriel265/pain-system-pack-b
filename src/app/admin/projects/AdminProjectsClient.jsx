@@ -33,7 +33,7 @@ export default function AdminProjectsClient() {
     title: '',
     slug: '',
     description: '',
-    status: 'in-progress',
+    status: 'In-Build',
     category: 'website',
   });
   const [loading, setLoading] = useState(true);
@@ -133,7 +133,7 @@ export default function AdminProjectsClient() {
     if (res.ok) {
       toast.success(editingProject ? 'Updated!' : 'Created!');
       fetchProjects();
-      setFormData({ title: '', slug: '', description: '', status: 'in-progress', category: 'website' });
+      setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' });
       setEditingProject(null);
       setIsEditorOpen(false);
     } else {
@@ -147,7 +147,7 @@ export default function AdminProjectsClient() {
       title: project.title || '',
       slug: project.slug || '',
       description: project.description || '',
-      status: project.status || 'in-progress',
+      status: project.status || 'In-Build',
       category: project.category || 'website',
     });
     setIsEditorOpen(true);
@@ -164,14 +164,14 @@ export default function AdminProjectsClient() {
   };
 
   const handleToggleStatus = async (project) => {
-    const newStatus = project.status === 'active' ? 'paused' : 'active';
+    const newStatus = project.status === 'Live' ? 'In-Build' : 'Concept';
     const res = await fetch('/api/projects', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...project, status: newStatus }),
     });
     if (res.ok) {
-      toast.success(newStatus === 'active' ? 'Published' : 'Unpublished');
+      toast.success(newStatus === 'Live' ? 'Published' : 'Unpublished');
       fetchProjects();
     }
   };
@@ -187,9 +187,9 @@ export default function AdminProjectsClient() {
       if (action === 'delete') {
         await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
       } else if (action === 'publish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'active' }) });
+        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Live' }) });
       } else if (action === 'unpublish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'paused' }) });
+        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Concept' }) });
       }
     }
     toast.success(`Bulk ${action} completed`);
@@ -247,7 +247,7 @@ export default function AdminProjectsClient() {
               </div>
               {!isEditorOpen && (
                 <button 
-                  onClick={(e) => { e.stopPropagation(); setIsEditorOpen(true); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'in-progress', category: 'website' }); }}
+                  onClick={(e) => { e.stopPropagation(); setIsEditorOpen(true); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' }); }}
                   className="text-sm font-medium text-orange-600 hover:text-orange-700"
                 >
                   + New Project
@@ -263,9 +263,9 @@ export default function AdminProjectsClient() {
                   <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 resize-none transition" />
                   <div className="grid grid-cols-2 gap-4">
                     <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
-                      <option value="active">Active</option>
-                      <option value="in-progress">In Progress</option>
-                      <option value="paused">Paused</option>
+                      <option value="Live">Live</option>
+                      <option value="In-Build">In Build</option>
+                      <option value="Concept">Concept</option>
                     </select>
                     <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                       <option value="website">Website</option>
@@ -278,7 +278,7 @@ export default function AdminProjectsClient() {
                   <button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-5 rounded-xl text-lg shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3">
                     {editingProject ? 'Update Project' : 'Create Project'}
                   </button>
-                  <button type="button" onClick={() => { setIsEditorOpen(false); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'in-progress', category: 'website' }); }} className="w-full text-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                  <button type="button" onClick={() => { setIsEditorOpen(false); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' }); }} className="w-full text-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                     Cancel
                   </button>
                 </form>
@@ -377,11 +377,11 @@ export default function AdminProjectsClient() {
               </td>
               <td className="px-3 py-4">
                 <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                  project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
-                  project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
+                  project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                  project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
                   'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
                 }`}>
-                  {project.status || 'paused'}
+                  {project.status || 'Concept'}
                 </span>
               </td>
               <td className="px-3 py-4 text-sm text-gray-600 dark:text-gray-400 capitalize">
@@ -432,8 +432,8 @@ export default function AdminProjectsClient() {
                           </div>
                           <p className="text-gray-600 dark:text-gray-400 line-clamp-2">{project.description || 'No description'}</p>
                           <div className="flex flex-wrap gap-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
-                              {project.status || 'paused'}
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                              {project.status || 'Concept'}
                             </span>
                             <span className="text-gray-500 capitalize">{project.category || '—'}</span>
                           </div>

@@ -28,9 +28,9 @@ export default function AdminDashboard() {
 
   // === REAL METRICS ===
   const total = projects.length;
-  const active = projects.filter(p => p.status === "active").length;
-  const inProgress = projects.filter(p => p.status === "in-progress").length;
-  const paused = projects.filter(p => p.status === "paused").length;
+  const Live = projects.filter(p => p.status === "Live").length;
+  const inProgress = projects.filter(p => p.status === "In-Build").length;
+  const Concept = projects.filter(p => p.status === "Concept").length;
 
   const categories = projects.reduce((acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1;
@@ -72,15 +72,15 @@ export default function AdminDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 dark:text-gray-400">Total Projects</p>
           <p className="text-4xl font-bold mt-2">{total}</p>
-          <p className="text-xs text-green-600 mt-1">{active} active</p>
+          <p className="text-xs text-green-600 mt-1">{Live} Live</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Active</p>
-          <p className="text-4xl font-bold mt-2 text-green-600">{active}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Live</p>
+          <p className="text-4xl font-bold mt-2 text-green-600">{Live}</p>
           <p className="text-xs mt-1">Live & running</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">In Progress</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">In Build</p>
           <p className="text-4xl font-bold mt-2 text-blue-600">{inProgress}</p>
           <p className="text-xs mt-1">Under development</p>
         </div>
@@ -99,27 +99,27 @@ export default function AdminDashboard() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <div className="relative w-48 h-48">
               <svg viewBox="0 0 36 36" className="w-full h-full">
-                {/* Active */}
+                {/* Live */}
                 <circle
                   cx="18" cy="18" r="15.9"
                   fill="none" stroke="#10b981" strokeWidth="3.8"
-                  strokeDasharray={`${(active / total) * 100 || 0} 100`}
+                  strokeDasharray={`${(Live / total) * 100 || 0} 100`}
                   className="transition-all duration-1000"
                 />
-                {/* In Progress */}
+                {/* In Build */}
                 <circle
                   cx="18" cy="18" r="15.9"
                   fill="none" stroke="#3b82f6" strokeWidth="3.8"
                   strokeDasharray={`${(inProgress / total) * 100 || 0} 100`}
-                  strokeDashoffset={-(active / total) * 100 || 0}
+                  strokeDashoffset={-(Live / total) * 100 || 0}
                   className="transition-all duration-1000"
                 />
-                {/* Paused */}
+                {/* Concept */}
                 <circle
                   cx="18" cy="18" r="15.9"
                   fill="none" stroke="#ef4444" strokeWidth="3.8"
-                  strokeDasharray={`${(paused / total) * 100 || 0} 100`}
-                  strokeDashoffset={-((active + inProgress) / total) * 100 || 0}
+                  strokeDasharray={`${(Concept / total) * 100 || 0} 100`}
+                  strokeDashoffset={-((Live + inProgress) / total) * 100 || 0}
                   className="transition-all duration-1000"
                 />
               </svg>
@@ -133,15 +133,15 @@ export default function AdminDashboard() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <span>Active <strong className="ml-2">{active}</strong></span>
+                <span>Live <strong className="ml-2">{Live}</strong></span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                <span>In Progress <strong className="ml-2">{inProgress}</strong></span>
+                <span>In Build <strong className="ml-2">{inProgress}</strong></span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <span>Paused <strong className="ml-2">{paused}</strong></span>
+                <span>Concept <strong className="ml-2">{Concept}</strong></span>
               </div>
             </div>
           </div>
@@ -237,8 +237,8 @@ export default function AdminDashboard() {
                     </td>
                     <td className="py-4 px-2">
                       <span className={`px-3 py-1 text-xs rounded-full ${
-                        p.status === "active" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
-                        p.status === "in-progress" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
+                        p.status === "Live" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                        p.status === "In-Build" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
                         "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                       }`}>
                         {p.status}

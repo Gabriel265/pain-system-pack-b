@@ -24,7 +24,7 @@ function readProjects() {
 function normalizeStatus(status) {
   if (!status) return "concept";
   const s = status.toLowerCase().trim();
-  if (s === "active") return "live";
+  if (s === "Live") return "live";
   if (s.includes("build") || s.includes("development")) return "in-build";
   return ["live", "in-build", "concept"].includes(s) ? s : "concept";
 }

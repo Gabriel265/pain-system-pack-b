@@ -126,7 +126,7 @@ export default function ProjectsPage() {
 function normalizeStatus(status) {
   if (!status) return 'concept';
   const value = status.toLowerCase().trim();
-  if (value === 'active') return 'live';
+  if (value === 'Live') return 'live';
   if (value.includes('build') || value.includes('dev')) return 'in-build';
   if (['live', 'concept'].includes(value)) return value;
   return 'concept';
