@@ -28,15 +28,5 @@
     "id": "XxtfUUV4N2_AGN5FIojM_",
     "updatedAt": "2025-12-21T09:38:27.125Z",
     "createdAt": "2025-12-16T11:28:20.335Z"
-  },
-  {
-    "title": "Test Live web",
-    "slug": "test-live-web",
-    "description": "testing crud in production environment",
-    "status": "Live",
-    "category": "system",
-    "id": "1K3qfzgEAzFT0iZPKy-xo",
-    "updatedAt": "2025-12-21T09:39:34.777Z",
-    "createdAt": "2025-12-21T09:39:34.777Z"
   }
 ]
