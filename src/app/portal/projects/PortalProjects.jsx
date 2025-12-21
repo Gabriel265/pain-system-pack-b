@@ -215,11 +215,64 @@ export default function PortalProjects() {
   const formatDate = (d) => d ? format(new Date(d), 'MMM d, yyyy') : '—';
   const formatDateTime = (d) => d ? format(new Date(d), 'MMM d, yyyy • h:mm a') : '—';
 
+  //table column resizing
+const [colWidths, setColWidths] = useState({
+  select: 48,
+  title: 100,
+  slug: 100,
+  description: 100,
+  status: 80,
+  category: 100,
+  created: 100,
+  updated: 100,
+  actions: 110,
+});
+
+
+//resize handler
+
+const startResize = (key, startX) => {
+  const startWidth = colWidths[key];
+
+  const onMouseMove = (e) => {
+    const delta = e.clientX - startX;
+
+    setColWidths((prev) => {
+      const next = {
+        ...prev,
+        [key]: Math.max(80, startWidth + delta),
+      };
+
+      return next;
+    });
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', () => {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.body.style.cursor = 'col-resize';
+document.body.style.userSelect = 'none';
+document.body.style.cursor = '';
+document.body.style.userSelect = '';
+
+
+  }, { once: true });
+};
+
   return (
     <>
       <Toaster position="top-right" />
 
-      <div className="container mx-auto px-4 py-8 lg:px-8 lg:py-12 max-w-7xl">
+      <div
+  className="
+    px-4 py-8
+    sm:px-6
+    lg:px-8 lg:py-12
+    w-full
+    max-w-none
+    overflow-x-hidden
+  "
+>
         <div className="h-16 md:h-20"></div>
 
         {/* Header */}
@@ -267,28 +320,125 @@ export default function PortalProjects() {
         </div>
 
         {/* Table (Desktop) */}
-        <div className="hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px]">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+        <div className="hidden lg:block relative">
+  <div className="overflow-x-auto overscroll-x-contain max-h-[70vh]">
+
+<div className="w-full align-middle">
+
+    <table
+  className="
+    w-full
+    table-fixed
+    border-collapse
+    divide-y divide-gray-200 dark:divide-gray-700
+  "
+>
+
+      <thead className="bg-gray-50 dark:bg-gray-700 sticky top-0 z-20 shadow-sm">
                 <tr>
-                  <th className="w-12 px-4 py-4 text-left">
-                    <button onClick={selectAll}>
-                      {selectedIds.size === currentProjects.length && currentProjects.length > 0 ? 
-                        <CheckSquare className="w-5 h-5 text-orange-600" /> : 
-                        <Square className="w-5 h-5 text-gray-400" />
-                      }
-                    </button>
-                  </th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-48">Title</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-32">Slug</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider min-w-64 max-w-96">Description</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-28">Status</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-32">Category</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-36">Created</th>
-                  <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-36">Updated</th>
-                  <th className="px-4 py-4 text-right text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider w-40">Actions</th>
-                </tr>
+          <th className="w-12 px-3 py-4">
+            <button onClick={selectAll}>
+              {selectedIds.size === currentProjects.length && currentProjects.length > 0 ? 
+                <CheckSquare className="w-5 h-5 text-orange-600" /> : 
+                <Square className="w-5 h-5 text-gray-400" />
+              }
+            </button>
+          </th>
+        <th
+  style={{ width: colWidths.title }}
+  className="relative px-3 py-4 text-left font-semibold"
+>
+  Title
+  <span
+    onMouseDown={(e) => startResize('title', e.clientX)}
+    className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+  />
+</th>
+
+
+          {/* Slug */}
+  <th
+    style={{ width: colWidths.slug }}
+    className="relative px-3 py-4 text-left font-semibold"
+  >
+    Slug
+    <span
+      onMouseDown={(e) => startResize('slug', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+          <th
+  style={{ width: colWidths.description }}
+  className="relative px-3 py-4 text-left font-semibold"
+>
+
+  Description
+  <span
+    onMouseDown={(e) => startResize('description', e.clientX)}
+    className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+  />
+</th>
+
+
+          {/* Status */}
+  <th
+    style={{ width: colWidths.status }}
+    className="relative px-3 py-4 text-left font-semibold"
+  >
+    Status
+    <span
+      onMouseDown={(e) => startResize('status', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+          {/* Category */}
+  <th
+    style={{ width: colWidths.category }}
+    className="relative px-3 py-4 text-left font-semibold"
+  >
+    Category
+    <span
+      onMouseDown={(e) => startResize('category', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+
+  {/* Created */}
+  <th
+    style={{ width: colWidths.created }}
+    className="relative px-3 py-4 text-left font-semibold"
+  >
+    Created
+    <span
+      onMouseDown={(e) => startResize('created', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+
+  {/* Updated */}
+  <th
+    style={{ width: colWidths.updated }}
+    className="relative px-3 py-4 text-left font-semibold"
+  >
+    Updated
+    <span
+      onMouseDown={(e) => startResize('updated', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+
+  {/* Actions */}
+  <th
+    style={{ width: colWidths.actions }}
+    className="relative px-3 py-4 text-right font-semibold"
+  >
+    Actions
+    <span
+      onMouseDown={(e) => startResize('actions', e.clientX)}
+      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
+    />
+  </th>
+        </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {loading ? (
@@ -320,6 +470,7 @@ export default function PortalProjects() {
             </table>
           </div>
         </div>
+      </div>
 
         {/* Mobile Cards */}
         <div className="lg:hidden space-y-4">
