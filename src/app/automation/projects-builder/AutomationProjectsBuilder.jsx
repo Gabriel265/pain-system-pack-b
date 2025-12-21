@@ -23,7 +23,7 @@ import {
   ChevronsRight,
 } from 'lucide-react';
 
-export default function ProjectsBuilder() {
+export default function AutomationProjectsBuilder() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [selectedIds, setSelectedIds] = useState(new Set());

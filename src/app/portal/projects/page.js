@@ -1,10 +1,9 @@
 // src/app/admin/projects/page.jsx
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import PortalProjects from './PortalProjects';
+import PortalProjectsClient from './PortalProjectsClient';
 
-export default async function AdminProjects() {
-  // AWAIT cookies() — THIS IS THE KEY FOR NEXT.JS 15+
+export default async function PortalProjects() {
   const cookieStore = await cookies();
   const userRole = cookieStore.get('user_role')?.value;
 
@@ -12,5 +11,5 @@ export default async function AdminProjects() {
     redirect('/login');
   }
 
-  return <PortalProjects />;
+  return <PortalProjectsClient />;
 }

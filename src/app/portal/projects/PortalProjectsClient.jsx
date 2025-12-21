@@ -17,7 +17,7 @@ import {
   X,
 } from 'lucide-react';
 
-export default function PortalProjects() {
+export default function PortalProjectsClient() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [selectedIds, setSelectedIds] = useState(new Set());

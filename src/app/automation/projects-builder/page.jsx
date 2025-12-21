@@ -1,9 +1,9 @@
 // src/app/admin/projects/page.jsx
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import ProjectsBuilder from './ProjectsBuilder';
+import AutomationProjectsBuilder from './AutomationProjectsBuilder';
 
-export default async function AdminProjects() {
+export default async function AutomationProjects() {
   const cookieStore = await cookies();
   const userRole = cookieStore.get('user_role')?.value;
 
@@ -11,5 +11,5 @@ export default async function AdminProjects() {
     redirect('/login');
   }
 
-  return <ProjectsBuilder />;
+  return <AutomationProjectsBuilder />;
 }
