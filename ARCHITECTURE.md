@@ -1,91 +1,81 @@
-## Features & Structure
 
-### Public Website
+1. High-level architecture
 
-- Home
-- About
-- Services
-- Accessibility & Inclusion
-- Contact
-- Projects (dynamic)
-- Each project has its own slug route
-- Login entry point
+   - We have two applications sharing one source of data (GitHub):
+   - Public Site (Frontend / Read-only)
+   - Reads data from a static data store: src/projects-store/projects.json
+   - No direct database
+   - No auth
+   - Deployed on Vercel
 
-### Admin Authentication
+2. Admin Backend (Control Panel / CMS)
+   - Authenticated admin UI
+   - Performs CRUD operations
+   - Does NOT talk to a database
+   - Instead, it:
+   - Modifies files in GitHub
+   - Commits changes
+   - Pushes to a branch
 
-- Login uses variables:
-  - `ADMIN_EMAIL`
-  - `ADMIN_PASSWORD`
-- Signup & reset pages exist as placeholders
+3. Data flow (step-by-step)
+    A. Read path (Public site)
 
-### Portal Application
+        User
+         ↓
+        Public Website
+         ↓
+        imports projects.json at build time
+         ↓
+        Static / ISR pages served by Vercel
 
-- Dashboard
-- My Projects
-- Builder
-- Notifications
-- Logout
+    B. Write path (Admin)
 
-### Automations & Project Builder
+    Admin User
+     ↓
+    Admin UI
+     ↓
+    POST / PUT / DELETE
+     ↓
+    app/api/projects/route.js
+     ↓
+    GitHub API (commit file changes)
+     ↓
+    Push to ai-deploy (dev) branch
+     ↓
+    GitHub Action
+     ↓
+    Merge ai-deploy → main
+     ↓
+    Vercel rebuild triggered
+     ↓
+    Public site updated
 
-- CRUD for `projects.json`
-- GitHub write operations
-- Safe validation
 
 
-### Folder Structure (Visualized)
+4. Architecture diagram
 
-- src/
-  - app/
-    - (auth)/
-      - login/page.js
-      - signup/page.js
-      - forgot-password/page.js
-    - website
-      - about/page.js
-      - contact/page.js
-      - services/page.js
-      - accessibility-&-inclusion/page.js
-      - projects
-        - [slug]
-          - page.jsx
-        - page.jsx
-    - api
-      - auth
-        - check/route.js - checking if user is admin to make changes to rojects.json
-        - login/route.js - logging in
-      -projects
-        - route.js - holds all logic for projects admin CRUD operations to projects.json
-    - admin
-      - projects
-        - AdminProjectsClient.jsx
-        - page.jsx
-    - portal/
-      - dashboard/page.js
-      - builder/page.js
-      - my-projects/page.js
-      - notifications/page.js
-      - logout/page.js
-    - automations
-      - vst-website-automation/
-        - home/page.js
-        - search/page.js
-        - results/page.js
-        - map/page.js
-        - safety/page.js
-      - projects-builder
-        -page.jsx
-  - components/
-    - common/
-      - Footer.js
-      - Header.js
-      - Sidebar.js
-      - ThemeToggle.js
-    - sections/
-      - AboutSection.jsx
-      - ContactSection.jsx
-      - Hero.jsx
-      - MeetTeam.jsx
-      - ServicesOffering.jsx
-      - Testimonial.js
-  - assets/
+
+           ┌──────────────┐
+           │   Admin UI   │
+           └──────┬───────┘
+                  │
+          API Route (CRUD)
+                  │
+           ┌──────▼───────┐
+           │   GitHub     │
+           │ projects.json│
+           └──────┬───────┘
+                  │
+         GitHub Action (merge)
+                  │
+           ┌──────▼───────┐
+           │   Vercel     │
+           │   Build      │
+           └──────┬───────┘
+                  │
+           ┌──────▼───────┐
+           │ Public Site  │
+           └──────────────┘
+
+
+

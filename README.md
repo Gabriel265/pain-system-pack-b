@@ -1,78 +1,235 @@
-pain-system-pack-b Website Application
-Overview 
-The websitesholds both placeholder pages and functional pages.
-Placeholder pages include: Functionality starts from login where we use environmental variables no hardcoded credentials. The other functionality is on projects with with CRUD operations working with the projects.json file as the database.
+# Pain System Pack-B – Website Application
 
-1. Website (Public Area) 
+## Overview
 
-Header 
-The top navigation includes: - Home - About - Contact - Accessibility - Login (Button)
+This application consists of a public-facing website and a private backend administration system.
+The system has placeholder pages, fully functional pages, and a complete Projects CRUD workflow backed by a JSON data store synchronized with GitHub.
 
-Footer 
-Mirrors the header for consistent navigation with some additional links if need be. 
+Authentication is handled via environment variables, no credentials are hardcoded.
 
-Homepage 
+---
 
-The homepage contains: - Hero area - About section - Services preview - Contact section
+## 1. Public Website (Frontend)
 
-header and footer files are in src/components/common/ folder. home page sections are in src/components/sections/ folder. 
-Website pages are in src/app/website/ folder.
+The public website consumes data from `projects.json` and displays it to end users.
 
-2. Administrator Area
-Entry point is the Login
+### Header Navigation
 
-Uses environmental variables that have to be set in .env file locally or in vercel/netlify environmental variables sections.
-variable names are ADMIN_EMAIL & ADMIN_PASSWORD. here we have three main sections admin, portal and automation folders. admin folders holds a projects folder that holds the CRUD operations on the projects. Automation has two folders projects-builder also projects CRUD operations and vst-website-sutomation for vst place holder. Laastly we have the portal folder which has /builder, /dashboard, /notifcation and /projects folders. in each main folder for the three sections there is alayout file that hold the rules on which buttons from the sidebar, to display depensing on which section we are for easy navigation between the three sections.
+The top navigation includes:
 
-          i. ADMIN SYSTEM
-              - Admin login; project table; create/edit/delete; JSON sync
+* Home
+* About
+* Contact
+* Accessibility
+* Login (button)
 
-          ii.PORTAL (PRIVATE / ADMIN — PHASE 1)
-              - Admin login only
-              - Project CRUD (create, read, update, delete)
-              - Status tagging: idea / build / live
+### Footer
 
-          iii. Autmation
+The footer mirrors the header for consistent navigation and may include additional links when required.
 
-              i. PROJECTS BUILDER
-                    - Create, edit, delete projects; toggle Draft/Live; write to JSON.
+### Homepage Sections
 
-              ii. VST AUTOMATION FOLDER
-                    - VST-specific only; no global logic.
+The homepage includes:
 
-3. All routing is done with files in the folder src/app/api/ folder. 
-  i.auth - this holds route for login credentials check and also a route to check if user is admin or not
-  ii. projects - this now hold the admin side logic for CRUD operation to the projects.json file in github. Since we cant change the fie directly in production in vercel/netlif since its all static after build, we use this fiel which changes the actual projects.json file stored in github.
+* Hero section
+* About section
+* Services preview
+* Contact section
 
-4. FOLDER STRUCTURE
-/src/components
-    - /common - footer, header and sidebar
-    - /section - landing page sections (hero,about,services,contact)
-/src/app/
-    - /(auth) - login page(login)
-    - /project-store/projects.json
-    - /admin
-    - /portal
-      - /builder
-      - /dashboard
-      - /notifications
-      - /projects
-    - /website
-      - /about
-      - /accessibility-&-inclusion
-      - /contact
-      - /projects
-      - /services
-    - /automation/projects-builder
-    - /automation/vst-website-automation
-    - /api
-      - /auth
-        - check
-        - login
-      - /projects
+### File Locations
 
-/src/project-store/projects.json
+* Header & Footer: `src/components/common/`
+* Homepage sections: `src/components/sections/`
+* Website pages: `src/app/website/`
 
-5. Deloyemnt. Now we use two main branches for this, the main branch which is set for deployment for production in vercel and the ai-deploy branch which is used for development. When there is a push on ai-deploy branch 
+---
 
-6. code is in easy structure and format for easy AI assited development. Code can be given to ai models and can easily understand structure with the imports and comments in most files.
+## 2. Administrator Area (Private Backend)
+
+The admin system is a secured area accessible only after login.
+
+### Authentication
+
+Authentication uses environment variables that must be defined locally or in Vercel/Netlify:
+
+```env
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+```
+
+### System Sections
+
+The backend is divided into three main areas, each with its own layout and navigation rules.
+
+Each section contains a `layout` file that controls sidebar navigation visibility based on the active system area.
+
+---
+
+### i. Admin System
+
+* Admin login
+* Projects table
+* Create / Edit / Delete projects
+* JSON data synchronization with GitHub
+
+---
+
+### ii. Portal (Admin)
+
+* Admin-only access
+* Project CRUD operations
+* Project status tagging:
+
+  * `idea`
+  * `build`
+  * `live`
+
+Portal Routes:
+
+* `/builder`
+* `/dashboard`
+* `/notifications`
+* `/projects`
+
+---
+
+### iii. Automation
+
+#### a. Projects Builder
+
+* Create, edit, delete projects
+* Toggle Draft / Live status
+* Writes changes to `projects.json`
+
+#### b. VST Website Automation
+
+* VST-specific automation logic
+* Placeholder pages
+
+---
+
+## 3. API Routing & Data Management
+
+All authentication and project CRUD logic is handled via API routes.
+
+### API Location
+
+```
+src/app/api/
+```
+
+### API Routes
+
+#### Auth
+
+```
+/api/auth
+  ├── login
+  └── check
+```
+
+* Handles login validation
+* Verifies admin access
+
+#### Projects
+
+```
+/api/projects
+```
+
+* Handles admin-side CRUD operations
+* Updates the GitHub-hosted `projects.json` file
+
+> Since Vercel/Netlify deployments are static after build, direct file mutation is not possible in production.
+> Instead, API routes update the JSON file in GitHub, triggering a rebuild.
+
+---
+
+## 4. Folder Structure
+
+```
+root folder
+.github
+ ___ /workflows
+     ___ pain-system-auto-deploy.yml #auto deploy script 
+
+/src
+├── /components
+│   ├── /common        # Header, Footer, Sidebar
+│   └── /sections      # Hero, About, Services, Contact
+│
+├── /app
+│   ├── /(auth)        # Login page
+│   ├── /admin
+│   ├── /portal
+│   │   ├── /builder
+│   │   ├── /dashboard
+│   │   ├── /notifications
+│   │   └── /projects
+│   │
+│   ├── /website
+│   │   ├── /about
+│   │   ├── /accessibility-&-inclusion
+│   │   ├── /contact
+│   │   ├── /projects
+│   │   │   └── [slug]
+│   │   └── /services
+│   │
+│   ├── /automation
+│   │   ├── /projects-builder
+│   │   └── /vst-website-automation
+│   │
+│   └── /api
+│       ├── /auth
+│       │   ├── check
+│       │   └── login
+│       └── /projects
+│
+├── /project-store
+│   └── projects.json
+```
+
+---
+
+## 5. Deployment Strategy
+
+The system uses two primary Git branches:
+
+### Branches
+
+* `main` → Production
+* `ai-deploy` → Development
+
+### Deployment Flow
+
+1. Changes are pushed to `ai-deploy`
+2. A GitHub Action automatically merges `ai-deploy` → `main`
+3. Vercel detects the update on `main`
+4. Production rebuild and deployment is triggered
+
+Both branches are deployed, but only `main` is used for production.
+
+---
+
+## 6. AI-Assisted Development
+
+The codebase is intentionally structured for AI-assisted development:
+
+* Clear folder separation
+* Predictable imports
+* Descriptive naming
+* Inline comments where necessary
+
+This allows AI models to easily understand context, structure, and intent when working with the codebase.
+
+---
+
+## 7. Additional Documentation
+
+For more details:
+
+* System Architecture: `ARCHITECTURE.md`
+* Run & Operations Guide: `RUNBOOK.md`
+
+---
+
