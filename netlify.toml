@@ -1,6 +1,12 @@
 [build]
   command = "npm run build"
-  publish = ".netlify/functions-internal"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[context.production]
+  branch = "main"
+
+[context.ai-deploy]
+  branch = "ai-deploy"
+  environment = { NODE_ENV = "development" }
