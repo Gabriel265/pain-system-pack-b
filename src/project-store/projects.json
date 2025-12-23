@@ -38,5 +38,15 @@
     "id": "5HXEvGILAVTIni9DGeDMf",
     "updatedAt": "2025-12-23T11:14:03.965Z",
     "createdAt": "2025-12-23T11:14:03.965Z"
+  },
+  {
+    "title": "Projects Builder Projects",
+    "slug": "projects-builder-projects",
+    "description": "created from projects builder",
+    "status": "In-Build",
+    "category": "builder",
+    "id": "YY7PZMMM8frG7oMetz7zW",
+    "updatedAt": "2025-12-23T11:14:30.786Z",
+    "createdAt": "2025-12-23T11:14:30.786Z"
   }
 ]
