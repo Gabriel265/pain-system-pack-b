@@ -48,5 +48,15 @@
     "id": "YY7PZMMM8frG7oMetz7zW",
     "updatedAt": "2025-12-23T11:14:30.786Z",
     "createdAt": "2025-12-23T11:14:30.786Z"
+  },
+  {
+    "title": "portal builder ",
+    "slug": "portal-builder",
+    "description": "created from portal ",
+    "status": "In-Build",
+    "category": "portal",
+    "id": "6f0SscSt-hKJiy7tNhs7c",
+    "updatedAt": "2025-12-23T11:14:59.557Z",
+    "createdAt": "2025-12-23T11:14:59.557Z"
   }
 ]
