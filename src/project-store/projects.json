@@ -2,31 +2,31 @@
   {
     "title": "TwinAccess",
     "slug": "twinaccess",
-    "description": "An evolving accessibility layer",
+    "description": "An evolving accessibility layer.",
     "status": "Live",
-    "category": "portal",
+    "category": "website",
     "id": "LO1rLCqiBjn_sFfsVd9yq",
-    "updatedAt": "2025-12-16T11:27:32.854Z",
+    "updatedAt": "2025-12-21T09:38:47.693Z",
     "createdAt": "2025-12-16T11:15:26.554Z"
   },
   {
     "title": "Hangar",
     "slug": "hangar",
-    "description": "An  idea-to-build space",
+    "description": "An  idea-to-build space.",
     "status": "In-Build",
-    "category": "builder",
+    "category": "portal",
     "id": "cakKHBHTo3sECAUGQqLRk",
-    "updatedAt": "2025-12-16T11:24:09.205Z",
+    "updatedAt": "2025-12-21T09:38:15.901Z",
     "createdAt": "2025-12-16T11:16:03.340Z"
   },
   {
     "title": "Showroom",
     "slug": "showroom",
-    "description": " Future showcase (Phase 2+)",
+    "description": " Future showcase (Phase 2+).",
     "status": "Concept",
-    "category": "website",
+    "category": "portal",
     "id": "XxtfUUV4N2_AGN5FIojM_",
-    "updatedAt": "2025-12-16T11:28:29.066Z",
+    "updatedAt": "2025-12-21T09:38:27.125Z",
     "createdAt": "2025-12-16T11:28:20.335Z"
   }
 ]
