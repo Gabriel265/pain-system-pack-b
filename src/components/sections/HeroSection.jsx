@@ -7,12 +7,13 @@ export default function HeroSection() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const slides = [
-    { id: 1, label: 'Interface example' },
-    { id: 2, label: 'Readable layouts' },
-    { id: 3, label: 'Clear navigation' },
-    { id: 4, label: 'Accessible components' },
-    { id: 5, label: 'Inclusive design' },
-  ];
+  { id: 1, label: 'Build → Launch → Prove → Monetise' },
+  { id: 2, label: 'Fast builds. Clean delivery.' },
+  { id: 3, label: 'Admin-ready. Client-ready.' },
+  { id: 4, label: 'Security + compliance first.' },
+  { id: 5, label: 'IP protected by design.' },
+];
+  
 
   useEffect(() => {
     if (!isAutoPlaying) return;
