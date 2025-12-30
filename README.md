@@ -233,4 +233,6 @@ For more details:
 
 --- 
 
-###just a foot note to initiate redeploy automatically
+###final footnote for changes.
+  - chaanges jsconfig.json to tsconfig.json to meet with vercel inconsistencies.
+  - removed .jsx extensions on imports in app/page.js(landing page)
