@@ -1,7 +1,7 @@
-import HeroSection from "@/components/sections/HeroSection.jsx";
-import ServicesOffering from "@/components/sections/ServicesOffering.jsx";
-import AboutSection from "@/components/sections/AboutSection.jsx";
-import ContactSection from "@/components/sections/ContactSection.jsx";
+import HeroSection from "@/components/sections/HeroSection";
+import ServicesOffering from "@/components/sections/ServicesOffering";
+import AboutSection from "@/components/sections/AboutSection";
+import ContactSection from "@/components/sections/ContactSection";
 
 export default function Home() {
   return (
