@@ -96,49 +96,86 @@ Deployment to Netlify/Vercel
 
     Value: your GitHub Personal Access Token
 
-5. Connect Netlify to GitHub
+5. ## Netlify Deployment Steps
 
-    Go to Netlify → Add new site → Import from Git
+### 1. Connect Your Repository
 
-    Choose GitHub
+* Make sure your project is on **GitHub**.
+* In Netlify, click **“Connect to Git”**.
+* If already connected, go straight to **“Deploy Project”**.
 
-    Select your repository
+---
 
-    Use the default build settings:
+### 2. Select Repository
 
-    Build command: npm run build
+* Choose your repository (e.g., `pain-system-pack-b`).
 
-    Publish directory: .next
+---
 
-6. Configure Environment Variables in Netlify
+### 3. Configure Build Settings
 
-    Go to:
+* **Project name:** Enter any name you like.
+* **Branch to deploy:** `main` (this will be your production branch)
+* **Base directory:** leave **blank**
+* **Build command:** `npm run build`
+* **Publish directory:** `.next`
+* **Functions directory:** leave **blank/as is**
 
-    Site Settings → Environment Variables
+---
 
-    Add the following:
+### 4. Set Environment Variables
 
-    ADMIN_EMAIL
+Add the following environment variables with your actual values:
 
-    ADMIN_PASSWORD
+```
+ADMIN_EMAIL=youremail@email.com
+ADMIN_PASSWORD=yourpassword
+GITHUB_TOKEN=github_pat****
+GITHUB_OWNER=your-github-username
+GITHUB_REPO=your-repo-name
+GITHUB_BRANCH=main
+```
 
-    GITHUB_TOKEN
+---
 
-    GITHUB_OWNER
+### 5. Deploy
 
-    GITHUB_REPO
+* Leave other settings as default.
+* Click **“Deploy”**.
 
-    GITHUB_BRANCH
+---
 
-7. Enable Auto-Redeploy
+### 6. Set Up Domains
 
-    Go to Site Settings → Build & Deploy → Continuous Deployment
+Go to **Site Settings → Domain Management**:
 
-    Enable:
+* **Production:** `domain.com` (from `main` branch)
+* **Development:** `dev.domain.com` (from `ai-deploy` branch)
 
-    Auto Publish Deploys
+#### Option A: Single Netlify Site with Branch Deploys
 
-8. How Updates Work
+1. Go to **Deploys → Branches**
+2. Add `ai-deploy` branch
+3. Enable **Branch deploys** and assign it to `dev.domain.com`
+
+#### Option B: Separate Netlify Site (optional)
+
+1. Create a new site from the same repo
+2. Set the branch to `ai-deploy`
+3. Assign it to `dev.domain.com`
+
+> Option A is simpler; Option B allows fully independent environments.
+
+---
+
+This version is clearer, structured, and easier to follow for anyone deploying the project.
+
+If you want, I can also **update it for the `@netlify/plugin-nextjs` plugin** with `.netlify/output` instead of `.next`, which is the correct setup for Next.js v13+ on Netlify.
+
+Do you want me to do that?
+
+
+6. How Updates Work
 
     Admin updates projects via the admin portal → updates projects.json in GitHub
     OR
@@ -157,7 +194,7 @@ Deployment to Netlify/Vercel
 
     Website displays updated data
 
-9. Domain Configuration
+7. Domain Configuration
 
     ⚠️ Note:
     The domain should be configured in Vercel/Netlify settings buy going to domains and adding the domain, which later you wll be given dns records to add to your domain records.
