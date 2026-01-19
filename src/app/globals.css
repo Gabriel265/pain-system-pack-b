@@ -15,6 +15,7 @@
   --muted-foreground: #94a3b8;
   --primary: #f97316;
   --primary-foreground: #ffffff;
+  --header-background: #f5f5dc; /* White cream color */
 }
 
 /* Dark mode */
@@ -28,6 +29,7 @@
   --muted-foreground: #a1a1aa;
   --primary: #fb923c;
   --primary-foreground: #0f172a;
+  --header-background: #f5f5dc; /* White cream color */
 }
 
 /* Your custom sidebar width */
@@ -56,6 +58,8 @@ body {
 
 .bg-primary         { background-color: var(--primary); }
 .text-primary       { color: var(--primary); }
+
+.bg-header          { background-color: var(--header-background); }
 
 @keyframes slideDown {
   from {
