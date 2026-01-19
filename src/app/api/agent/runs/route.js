@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOctokit } from './_shared';
+import { getOctokit } from '../_shared';
 
 export async function GET() {
   try {
