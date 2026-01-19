@@ -1,4 +1,7 @@
+// src/app/layout.js (or your RootLayout file)
 import "./globals.css";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 
 export const metadata = {
   title: "The Pain System",
@@ -7,7 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
