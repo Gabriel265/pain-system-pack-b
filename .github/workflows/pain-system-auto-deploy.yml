@@ -1,4 +1,4 @@
-name: Pain System Auto-Deploy Pipeline
+name: Pain System Auto-Merge to Production
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - ai-deploy
 
 jobs:
-  build-and-merge:
+  merge-to-main:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,19 +16,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
       - name: Configure Git user
         run: |
           git config user.name "pain-system-bot"
@@ -36,9 +23,7 @@ jobs:
 
       - name: Merge ai-deploy into main
         run: |
-          git checkout ai-deploy
-          git fetch origin main:main
-          git merge main --no-edit || true
+          git fetch origin
           git checkout main
-          git merge ai-deploy --no-edit
+          git merge origin/ai-deploy --no-edit
           git push origin main
