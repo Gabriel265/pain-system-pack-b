@@ -7,8 +7,6 @@ export async function GET(request, context) {
     const params = await context.params;
     const pull_number = Number(params.id);
 
-    console.log('Fetching PR details for #', pull_number); // debug
-
     const octokit = await getOctokit();
 
     const { data: pr } = await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
@@ -39,7 +37,6 @@ export async function GET(request, context) {
 
     return NextResponse.json(run);
   } catch (e) {
-    console.error('Error in /api/agent/runs/[id]:', e);
     return NextResponse.json({ error: 'Failed to load proposal: ' + e.message }, { status: 500 });
   }
 }

@@ -187,7 +187,6 @@ Respond with:
       status: 'Proposal created – awaiting review',
     });
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ error: error.message || 'Internal error' }, { status: 500 });
   }
 }

@@ -18,7 +18,6 @@ export async function GET(request) {
 
     return NextResponse.json(files);
   } catch (e) {
-    console.error(e);
     return NextResponse.json({ error: 'Failed to fetch tree' }, { status: 500 });
   }
 }

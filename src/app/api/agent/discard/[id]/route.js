@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../../_shared';
 
-export async function POST(req, { params }) {
+export async function POST(request, context) {
   try {
-    const octokit = await getOctokit();
+    const params = await context.params;
     const pull_number = Number(params.id);
 
+    console.log('Discarding PR #', pull_number); 
+
+    const octokit = await getOctokit();
+
+    // Close the PR
     await octokit.request('PATCH /repos/{owner}/{repo}/pulls/{pull_number}', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
@@ -13,14 +18,15 @@ export async function POST(req, { params }) {
       state: 'closed',
     });
 
+    // Delete the ai-agent branch (safe if already gone)
     await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-agent', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
-    }).catch(() => {});
+    }).catch(() => {}); // ignore errors like branch not found
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: 'PR closed and branch deleted' });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error('Discard error:', e);
+    return NextResponse.json({ error: e.message || 'Failed to discard' }, { status: 500 });
   }
 }

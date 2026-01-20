@@ -24,7 +24,6 @@ export async function GET() {
 
     return NextResponse.json(runs);
   } catch (e) {
-    console.error(e);
     return NextResponse.json({ error: 'Failed to list proposals' }, { status: 500 });
   }
 }

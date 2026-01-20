@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
-import { getOctokit } from '../../_shared';
+import { getOctokit } from '../../_shared';  
 
-export async function POST(req, { params }) {
+export async function POST(request, context) {
   try {
-    const octokit = await getOctokit();
+    const params = await context.params;
     const pull_number = Number(params.id);
 
+    console.log('Merging PR #', pull_number); 
+
+    const octokit = await getOctokit();
+
+    // Merge the PR
     await octokit.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
@@ -15,15 +20,15 @@ export async function POST(req, { params }) {
       commit_message: 'Merged via AI Lab review interface',
     });
 
-    // Optional: clean up branch
+    // Optional: clean up ai-agent branch after successful merge
     await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-agent', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
     }).catch(() => {}); // ignore if already gone
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: 'PR merged successfully' });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error('Merge error:', e);
+    return NextResponse.json({ error: e.message || 'Failed to merge' }, { status: 500 });
   }
 }
