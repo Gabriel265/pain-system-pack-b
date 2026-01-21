@@ -9,12 +9,18 @@ export default function AiAgentDashboard() {
   const [isLoadingRuns, setIsLoadingRuns] = useState(true);
   const [files, setFiles] = useState([]);
   const [isLoadingFiles, setIsLoadingFiles] = useState(true);
+  const [fileError, setFileError] = useState(null);
   const [expandedFolders, setExpandedFolders] = useState({});
+  const [selectedPaths, setSelectedPaths] = useState(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [viewedFile, setViewedFile] = useState(null);
+  const [fileContent, setFileContent] = useState('');
+  const [contentLoading, setContentLoading] = useState(false);
+  const [contentError, setContentError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  
+
   const observerTarget = useRef(null);
 
   const loadRuns = async (pageNum = 1, append = false) => {
@@ -23,7 +29,6 @@ export default function AiAgentDashboard() {
     } else {
       setLoadingMore(true);
     }
-    
     try {
       const res = await fetch(`/api/agent/runs?page=${pageNum}&limit=10`);
       if (!res.ok) throw new Error(await res.text());
@@ -35,7 +40,6 @@ export default function AiAgentDashboard() {
         setRuns(data);
       }
       
-      // If we received fewer items than the limit, we've reached the end
       if (data.length < 10) {
         setHasMore(false);
       }
@@ -50,12 +54,15 @@ export default function AiAgentDashboard() {
 
   const loadFiles = async () => {
     setIsLoadingFiles(true);
+    setFileError(null);
     try {
       const res = await fetch('/api/agent/repo-tree');
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFiles(data);
     } catch (err) {
+      console.error('Failed to load files:', err);
+      setFileError(err.message);
       setFiles([]);
     } finally {
       setIsLoadingFiles(false);
@@ -67,7 +74,6 @@ export default function AiAgentDashboard() {
     loadFiles();
   }, []);
 
-  // Infinite scroll observer
   const handleObserver = useCallback((entries) => {
     const [target] = entries;
     if (target.isIntersecting && hasMore && !loadingMore && !isLoadingRuns) {
@@ -79,9 +85,8 @@ export default function AiAgentDashboard() {
     const element = observerTarget.current;
     const option = { threshold: 0.5 };
     const observer = new IntersectionObserver(handleObserver, option);
-    
     if (element) observer.observe(element);
-    
+
     return () => {
       if (element) observer.unobserve(element);
     };
@@ -93,15 +98,64 @@ export default function AiAgentDashboard() {
     }
   }, [page]);
 
+  const toggleSelect = (path) => {
+    setSelectedPaths(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(path)) {
+        newSet.delete(path);
+      } else {
+        newSet.add(path);
+      }
+      return newSet;
+    });
+  };
+
+  const removeSelected = (path) => {
+    setSelectedPaths(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(path);
+      return newSet;
+    });
+  };
+
+  const loadFileContent = async (path) => {
+    setViewedFile(path);
+    setContentLoading(true);
+    setContentError(null);
+    try {
+      const res = await fetch(`/api/agent/file-content?path=${encodeURIComponent(path)}`);
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setFileContent(data.content);
+    } catch (err) {
+      console.error('Failed to load file content:', err);
+      setContentError(err.message);
+    } finally {
+      setContentLoading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(fileContent).then(() => {
+      alert('Copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+    });
+  };
+
   const handleRun = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
     setError(null);
     try {
+      const selectedList = Array.from(selectedPaths);
+      const appendText = selectedList.length ? `\n\nFocus on these files/folders: ${selectedList.join(', ')}` : '';
+      const fullPrompt = prompt + appendText;
+
       const res = await fetch('/api/agent/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: fullPrompt }),
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
@@ -112,6 +166,7 @@ export default function AiAgentDashboard() {
         setPage(1);
         setHasMore(true);
         loadRuns(1, false);
+        setSelectedPaths(new Set()); // Clear selections after run
       }
     } catch (err) {
       setError(err.message);
@@ -123,12 +178,10 @@ export default function AiAgentDashboard() {
   const buildTree = (paths) => {
     const root = [];
     const map = new Map();
-
     paths.forEach(({ path }) => {
       const parts = path.split('/');
       let current = root;
       let currentPath = '';
-
       parts.forEach((part, i) => {
         currentPath += (currentPath ? '/' : '') + part;
         if (i === parts.length - 1) {
@@ -144,7 +197,6 @@ export default function AiAgentDashboard() {
         }
       });
     });
-
     return root;
   };
 
@@ -158,21 +210,37 @@ export default function AiAgentDashboard() {
     <ul className={`space-y-0.5 ${level > 0 ? 'ml-4' : ''}`}>
       {nodes.map((node) => (
         <li key={node.path}>
-          {node.type === 'folder' ? (
-            <div
-              className="flex items-center cursor-pointer py-1.5 px-2 hover:bg-gray-100 rounded text-sm transition"
-              onClick={() => toggleFolder(node.path)}
-            >
-              <span className="mr-2 text-gray-400 text-xs">
-                {expandedFolders[node.path] ? '▼' : '▶'}
+          <div className="flex items-center py-1.5 px-2 hover:bg-gray-100 rounded text-sm transition">
+            <input
+              type="checkbox"
+              checked={selectedPaths.has(node.path)}
+              onChange={() => toggleSelect(node.path)}
+              className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            {node.type === 'folder' ? (
+              <>
+                <span 
+                  className="cursor-pointer mr-2 text-gray-400 text-xs"
+                  onClick={() => toggleFolder(node.path)}
+                >
+                  {expandedFolders[node.path] ? '▼' : '▶'}
+                </span>
+                <span 
+                  className="font-medium text-gray-700 cursor-pointer"
+                  onClick={() => toggleFolder(node.path)}
+                >
+                  {node.name}/
+                </span>
+              </>
+            ) : (
+              <span 
+                className="text-gray-600 truncate hover:text-blue-600 hover:underline cursor-pointer"
+                onClick={() => loadFileContent(node.path)}
+              >
+                {node.name}
               </span>
-              <span className="font-medium text-gray-700">{node.name}/</span>
-            </div>
-          ) : (
-            <div className="py-1.5 px-2 pl-6 text-gray-600 truncate text-sm hover:text-blue-600 hover:bg-gray-50 rounded transition cursor-default">
-              {node.name}
-            </div>
-          )}
+            )}
+          </div>
           {node.type === 'folder' && expandedFolders[node.path] && renderTree(node.children, level + 1)}
         </li>
       ))}
@@ -182,7 +250,6 @@ export default function AiAgentDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="h-16 md:h-20"></div>
-      
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 max-w-[1600px] mx-auto p-4 md:p-6">
         {/* Collapsible Sidebar */}
         <div
@@ -217,8 +284,30 @@ export default function AiAgentDashboard() {
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                 </div>
+              ) : fileError ? (
+                <p className="text-red-600 text-sm text-center py-4">{fileError}</p>
               ) : files.length > 0 ? (
-                renderTree(treeData)
+                <>
+                  {renderTree(treeData)}
+                  {selectedPaths.size > 0 && (
+                    <div className="mt-6 border-t border-gray-200 pt-4">
+                      <h4 className="font-medium text-sm mb-2">Selected for Prompt:</h4>
+                      <ul className="space-y-1">
+                        {Array.from(selectedPaths).map(path => (
+                          <li key={path} className="flex items-center justify-between text-sm text-gray-700 bg-gray-50 p-2 rounded">
+                            <span className="truncate">{path}</span>
+                            <button 
+                              onClick={() => removeSelected(path)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              ×
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               ) : (
                 <p className="text-gray-500 italic text-sm text-center py-4">No files found.</p>
               )}
@@ -294,17 +383,14 @@ export default function AiAgentDashboard() {
                     </div>
                   ))}
                 
-                {/* Infinite scroll loading indicator */}
                 {loadingMore && (
                   <div className="flex items-center justify-center py-6">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                   </div>
                 )}
                 
-                {/* Intersection observer target */}
                 <div ref={observerTarget} className="h-4"></div>
                 
-                {/* End of list indicator */}
                 {!hasMore && runs.length > 0 && (
                   <p className="text-center text-gray-500 text-sm py-4">No more prompts to load</p>
                 )}
@@ -319,6 +405,42 @@ export default function AiAgentDashboard() {
             )}
           </div>
         </div>
+
+        {/* File Viewer Panel */}
+        {viewedFile && (
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 w-full lg:w-96 xl:w-[400px] flex-shrink-0 overflow-hidden transition-all duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-base truncate">Viewing: {viewedFile}</h3>
+              <button 
+                onClick={() => setViewedFile(null)}
+                className="p-1 hover:bg-gray-200 rounded"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {contentLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              </div>
+            ) : contentError ? (
+              <p className="text-red-600 text-sm">{contentError}</p>
+            ) : (
+              <>
+                <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-[calc(100vh-20rem)] text-sm">
+                  <code>{fileContent}</code>
+                </pre>
+                <button 
+                  onClick={copyToClipboard}
+                  className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  Copy to Clipboard
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
