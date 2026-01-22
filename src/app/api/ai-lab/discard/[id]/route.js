@@ -1,3 +1,7 @@
+/*
+This route is used to discard the changes made by the AI agent on the ai-lab branch
+*/
+
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../../_shared';
 
@@ -18,8 +22,8 @@ export async function POST(request, context) {
       state: 'closed',
     });
 
-    // Delete the ai-agent branch (safe if already gone)
-    await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-agent', {
+    // Delete the ai-lab branch (safe if already gone)
+    await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-lab', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
     }).catch(() => {}); // ignore errors like branch not found

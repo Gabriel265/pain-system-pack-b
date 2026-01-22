@@ -1,10 +1,12 @@
-// app/api/agent/file-content/route.js
+/*
+This file gets content from the main development repo which is 'ai-deploy'
+This content is used to display on the code preview in the AI lab dashboard
+*/
 
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../_shared';
 
-// ← Add this line
-import { Buffer } from 'node:buffer';   // or just 'buffer' — both work
+import { Buffer } from 'node:buffer'; 
 
 export async function GET(request) {
   try {
@@ -21,10 +23,10 @@ export async function GET(request) {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
       path,
-      ref: 'ai-deploy',  // or 'main' — whatever your stable branch is
+      ref: 'ai-deploy', 
     });
 
-    // Now safe with Turbopack + works everywhere
+  
     const content = Buffer.from(data.content, 'base64').toString('utf-8');
 
     return NextResponse.json({ content });

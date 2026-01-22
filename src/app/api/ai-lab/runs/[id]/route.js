@@ -1,3 +1,6 @@
+/*
+this route gets the changed files and prompts done, to dispay to the user in detail.
+*/
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../../_shared';
 
@@ -27,7 +30,7 @@ export async function GET(request, context) {
       prompt: pr.body?.match(/\*\*Prompt:\*\* (.+)/)?.[1] || 'Unknown',
       status: pr.state === 'open' ? 'Pending' : pr.merged_at ? 'Merged' : 'Closed',
       created_at: pr.created_at,
-      previewUrl: `https://ai-agent-${process.env.GITHUB_REPO}.vercel.app`,
+      previewUrl: `https://ai-lab-${process.env.GITHUB_REPO}.vercel.app`,
       files: files.map(f => ({
         path: f.filename,
         status: f.status,

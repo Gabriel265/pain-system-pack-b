@@ -1,3 +1,7 @@
+/*
+This route gets the list of all AI lab changes
+*/
+
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../_shared';
 
@@ -9,7 +13,7 @@ export async function GET() {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
       base: 'ai-deploy',
-      head: `${process.env.GITHUB_OWNER}:ai-agent`,
+      head: `${process.env.GITHUB_OWNER}:ai-lab`,
       state: 'all',
       per_page: 30,
     });

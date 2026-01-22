@@ -30,7 +30,7 @@ export default function AiAgentDashboard() {
       setLoadingMore(true);
     }
     try {
-      const res = await fetch(`/api/agent/runs?page=${pageNum}&limit=10`);
+      const res = await fetch(`/api/ai-lab/runs?page=${pageNum}&limit=10`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       
@@ -56,7 +56,7 @@ export default function AiAgentDashboard() {
     setIsLoadingFiles(true);
     setFileError(null);
     try {
-      const res = await fetch('/api/agent/repo-tree');
+      const res = await fetch('/api/ai-lab/repo-tree');
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFiles(data);
@@ -123,7 +123,7 @@ export default function AiAgentDashboard() {
     setContentLoading(true);
     setContentError(null);
     try {
-      const res = await fetch(`/api/agent/file-content?path=${encodeURIComponent(path)}`);
+      const res = await fetch(`/api/ai-lab/file-content?path=${encodeURIComponent(path)}`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFileContent(data.content);
@@ -152,14 +152,14 @@ export default function AiAgentDashboard() {
       const appendText = selectedList.length ? `\n\nFocus on these files/folders: ${selectedList.join(', ')}` : '';
       const fullPrompt = prompt + appendText;
 
-      const res = await fetch('/api/agent/run', {
+      const res = await fetch('/api/ai-lab/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: fullPrompt }),
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || 'Failed to run agent');
+        throw new Error(errData.error || 'Failed to run AI Lab');
       }
       const data = await res.json();
       if (data.success) {
@@ -372,7 +372,7 @@ export default function AiAgentDashboard() {
                       className="p-4 md:p-5 bg-gray-50 border border-gray-200 rounded-lg hover:shadow-md hover:border-gray-300 transition-all"
                     >
                       <a
-                        href={`/ai-agent/runs/${run.id}`}
+                        href={`/ai-lab/runs/${run.id}`}
                         className="block text-base md:text-lg font-medium text-blue-600 hover:underline break-words"
                       >
                         {run.summary}

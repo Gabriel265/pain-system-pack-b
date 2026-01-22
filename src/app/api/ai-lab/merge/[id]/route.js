@@ -1,3 +1,8 @@
+/*
+This rote merges the AI agent changes on ai-lab branch with the production. Only after the user clicks the merge button on the 
+prompts detail page.
+*/
+
 import { NextResponse } from 'next/server';
 import { getOctokit } from '../../_shared';  
 
@@ -20,11 +25,11 @@ export async function POST(request, context) {
       commit_message: 'Merged via AI Lab review interface',
     });
 
-    // Optional: clean up ai-agent branch after successful merge
-    await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-agent', {
+    // Optional: clean up ai-lab branch after successful merge
+    await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/heads/ai-lab', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
-    }).catch(() => {}); // ignore if already gone
+    }).catch(() => {});
 
     return NextResponse.json({ success: true, message: 'PR merged successfully' });
   } catch (e) {

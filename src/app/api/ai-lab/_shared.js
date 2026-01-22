@@ -1,3 +1,7 @@
+/*
+This handles authentication fro github app to allow AI agent to make read from gihhub,
+and make changes to create branch ad make changes
+*/
 import { Octokit } from '@octokit/core';
 import { createAppAuth } from '@octokit/auth-app';
 

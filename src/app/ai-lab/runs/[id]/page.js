@@ -17,7 +17,7 @@ export default function RunDetailPage() {
   useEffect(() => {
     const fetchRun = async () => {
       try {
-        const res = await fetch(`/api/agent/runs/${id}`);
+        const res = await fetch(`/api/ai-lab/runs/${id}`);
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         setRun(data);
@@ -31,7 +31,7 @@ export default function RunDetailPage() {
     const loadBranchFiles = async () => {
       setIsLoadingBranchFiles(true);
       try {
-        const res = await fetch('/api/agent/repo-tree?branch=ai-agent');
+        const res = await fetch('/api/ai-lab/repo-tree?branch=ai-lab');
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         setBranchFiles(data);
@@ -107,10 +107,10 @@ export default function RunDetailPage() {
   const handleAction = async (action) => {
     setActionLoading(true);
     try {
-      const res = await fetch(`/api/agent/${action}/${id}`, { method: 'POST' });
+      const res = await fetch(`/api/ai-lab/${action}/${id}`, { method: 'POST' });
       if (!res.ok) throw new Error(await res.text());
       alert(action === 'merge' ? 'Merged successfully!' : 'Discarded successfully');
-      window.location.href = '/ai-agent';
+      window.location.href = '/ai-lab';
     } catch (err) {
       setError(err.message);
     } finally {
@@ -155,7 +155,7 @@ export default function RunDetailPage() {
         >
           <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-gray-50">
             <h3 className={`font-semibold text-base transition-all duration-300 whitespace-nowrap overflow-hidden ${!sidebarOpen ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
-              ai-agent files
+              ai-lab files
             </h3>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -183,7 +183,7 @@ export default function RunDetailPage() {
               ) : branchFiles.length > 0 ? (
                 renderTree(treeData)
               ) : (
-                <p className="text-gray-500 italic text-sm text-center py-4">No files in ai-agent yet.</p>
+                <p className="text-gray-500 italic text-sm text-center py-4">No files in ai-lab yet.</p>
               )}
             </div>
           )}
@@ -194,7 +194,7 @@ export default function RunDetailPage() {
           {/* Header */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 mb-4 lg:mb-6">
             <Link 
-              href="/ai-agent" 
+              href="/ai-lab" 
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

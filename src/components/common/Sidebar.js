@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { 
-  Home, FolderOpen, Bell, Hammer, Search, MapPin, Shield, X, LogOut, ChevronDown, ChevronRight 
+  Home, FolderOpen, Bell, Hammer, Search, MapPin, Shield, X, LogOut, ChevronDown, ChevronRight, Codesandbox 
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -16,6 +16,8 @@ const adminLinks = [
   { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
   { divider: true },
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
+  { divider: true },
+  { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
 
 const builderLinks = [
@@ -24,6 +26,8 @@ const builderLinks = [
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
   { divider: true },
   { href: "/portal/dashboard", label: "Portal Dashboard", icon: Home },
+  { divider: true },
+  { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
 
 const portalLinks = [
@@ -37,6 +41,8 @@ const portalLinks = [
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
   { divider: true },
   { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  { divider: true },
+  { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
 
 const vstLinks = [
@@ -51,7 +57,21 @@ const vstLinks = [
   { href: "/portal/dashboard", label: "Portal", icon: Home },
   { divider: true },
   { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  { divider: true },
+  { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
+
+
+const aiLabLinks = [
+  { href: "/automation/vst-website-automation", label: "Home", icon: Home },
+  { divider: true },
+  { href: "/admin/projects", label: "Admin Panel", icon: FolderOpen },
+  { divider: true },
+  { href: "/portal/dashboard", label: "Portal", icon: Home },
+  { divider: true },
+  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  ];
+
 
 
 export default function Sidebar({ type }) {
@@ -62,7 +82,8 @@ export default function Sidebar({ type }) {
     type === "portal" ? portalLinks :
     type === "vst" ? vstLinks :
     type === "builder" ? builderLinks :
-    type === "admin" ? adminLinks : [];
+    type === "admin" ? adminLinks :
+    type === "ai-lab" ? aiLabLinks : [];
 
   // Mobile menu open state
   const [isOpen, setIsOpen] = useState(false);
@@ -92,8 +113,9 @@ export default function Sidebar({ type }) {
   const getTitle = () => {
     if (pathname.startsWith("/admin")) return "Admin Panel";
     if (pathname.startsWith("/portal")) return "Pain Portal";
-    if (pathname.startsWith("vst-website-automation")) return "VST System";
-    if (pathname.startsWith("project-builder")) return "Projects Builder";
+    if (pathname.startsWith("/vst-website-automation")) return "VST System";
+    if (pathname.startsWith("/project-builder")) return "Projects Builder";
+    if (pathname.startsWith("/ai-lab")) return "AI Lab";
     return "Menu";
   };
 

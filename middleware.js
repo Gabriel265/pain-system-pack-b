@@ -12,10 +12,10 @@ export function middleware(request) {
     }
   }
 
-  // NEW: Protect AI Agent dashboard + all its APIs
+  // NEW: Protect AI Lab dashboard + all its APIs
   if (
-    pathname.startsWith('/ai-agent') ||
-    pathname.startsWith('/api/agent')
+    pathname.startsWith('/ai-lab') ||
+    pathname.startsWith('/api/ai-lab')
   ) {
     if (role !== 'admin') {
       // Redirect to login (consistent with admin)
@@ -30,7 +30,7 @@ export function middleware(request) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/ai-agent/:path*',
+    '/ai-lab/:path*',
     '/api/agent/:path*',
   ],
 };

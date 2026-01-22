@@ -1,3 +1,6 @@
+/*
+This the main route that runs everything for the AI agent to get the propmt and rrepo tree
+*/
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { Octokit } from '@octokit/core';
@@ -91,14 +94,14 @@ Respond with:
       throw new Error('Invalid AI response format');
     }
 
-    // Reset or create ai-agent branch from ai-deploy
+    // Reset or create ai-lab branch from ai-deploy
     const { data: base } = await octokit.request('GET /repos/{owner}/{repo}/git/refs/heads/ai-deploy', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
     });
 
     try {
-      await octokit.request('PATCH /repos/{owner}/{repo}/git/refs/heads/ai-agent', {
+      await octokit.request('PATCH /repos/{owner}/{repo}/git/refs/heads/ai-lab', {
         owner: process.env.GITHUB_OWNER,
         repo: process.env.GITHUB_REPO,
         sha: base.object.sha,
@@ -109,7 +112,7 @@ Respond with:
         await octokit.request('POST /repos/{owner}/{repo}/git/refs', {
           owner: process.env.GITHUB_OWNER,
           repo: process.env.GITHUB_REPO,
-          ref: 'refs/heads/ai-agent',
+          ref: 'refs/heads/ai-lab',
           sha: base.object.sha,
         });
       } else {
@@ -127,7 +130,7 @@ Respond with:
           owner: process.env.GITHUB_OWNER,
           repo: process.env.GITHUB_REPO,
           path: file.path,
-          ref: 'ai-agent',
+          ref: 'ai-lab',
         });
         sha = data.sha;
       } catch (e) {
@@ -141,7 +144,7 @@ Respond with:
         message: `AI proposal: ${response.summary}`,
         content: Buffer.from(file.content).toString('base64'),
         sha,
-        branch: 'ai-agent',
+        branch: 'ai-lab',
       });
     }
 
@@ -153,7 +156,7 @@ Respond with:
     const { data: existing } = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
-      head: `ai-agent`,
+      head: `ai-lab`,
       base: 'ai-deploy',
       state: 'open',
     });
@@ -172,12 +175,12 @@ Respond with:
         repo: process.env.GITHUB_REPO,
         title: prTitle,
         body: prBody,
-        head: 'ai-agent',
+        head: 'ai-lab',
         base: 'ai-deploy',
       });
     }
 
-    const previewUrl = `https://ai-agent-${process.env.GITHUB_REPO}.vercel.app`;
+    const previewUrl = `https://ai-lab-${process.env.GITHUB_REPO}.vercel.app`;
 
     return NextResponse.json({
       success: true,
