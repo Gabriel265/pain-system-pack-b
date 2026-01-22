@@ -24,13 +24,20 @@ export async function GET(request, context) {
       pull_number,
     });
 
+    // Generate preview URL
+    const projectSlug = (process.env.VERCEL_PROJECT_SLUG || process.env.GITHUB_REPO || 'unknown-project')
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-');
+
+    const teamSlug = process.env.VERCEL_TEAM_SLUG ? `-${process.env.VERCEL_TEAM_SLUG}` : '';
+
     const run = {
       id: pr.number.toString(),
       summary: pr.title.replace(/^AI Proposal: /, ''),
       prompt: pr.body?.match(/\*\*Prompt:\*\* (.+)/)?.[1] || 'Unknown',
       status: pr.state === 'open' ? 'Pending' : pr.merged_at ? 'Merged' : 'Closed',
       created_at: pr.created_at,
-      previewUrl: `https://ai-lab-${process.env.GITHUB_REPO}.vercel.app`,
+      previewUrl: `https://${projectSlug}-git-ai-lab${teamSlug}.vercel.app`,
       files: files.map(f => ({
         path: f.filename,
         status: f.status,

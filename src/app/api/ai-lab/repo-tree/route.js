@@ -1,5 +1,5 @@
 /*
-This route is used to get thee folder structure from github and display it on the AI Lab
+This route is used to get the folder structure from github and display it on the AI Lab
 dashboard (ai-deploy branch) and the detail page (ai-lab branch)
 */
 import { NextResponse } from 'next/server';
