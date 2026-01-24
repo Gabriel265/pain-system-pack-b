@@ -81,619 +81,269 @@ const startResize = (key, startX) => {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', () => {
     document.removeEventListener('mousemove', onMouseMove);
-    document.body.style.cursor = 'col-resize';
-document.body.style.userSelect = 'none';
-document.body.style.cursor = '';
-document.body.style.userSelect = '';
-
-
-  }, { once: true });
+    document.removeEventListener('mouseup', onMouseMove);
+  });
 };
 
-
-
-
-  // Auto-generate slug
-  useEffect(() => {
-    if (formData.title && !editingProject?.id) {
-      const slug = formData.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-        .replace(/-+/g, '-');
-      setFormData(prev => ({ ...prev, slug }));
-    }
-  }, [formData.title, editingProject?.id]);
-
-  // Fetch projects
+useEffect(() => {
+  // Fetch projects data
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/projects?limit=1000');
-      if (res.ok) {
-        const data = await res.json();
-        setProjects(data);
-        setFilteredProjects(data);
-      } else {
-        toast.error('Failed to load projects');
-      }
-    } catch {
-      toast.error('Network error');
+      const res = await fetch('/api/projects');
+      const data = await res.json();
+      setProjects(data);
+      setFilteredProjects(data);
+    } catch (error) {
+      toast.error('Failed to fetch projects');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchProjects(); }, []);
+  fetchProjects();
+}, []);
 
-  // Search filter
-  useEffect(() => {
-    const query = searchQuery.toLowerCase().trim();
-    if (!query) {
-      setFilteredProjects(projects);
-      return;
+// Handle search
+const handleSearch = (e) => {
+  setSearchQuery(e.target.value);
+  const query = e.target.value.toLowerCase();
+  setFilteredProjects(
+    projects.filter((project) =>
+      project.title.toLowerCase().includes(query)
+    )
+  );
+};
+
+// Handle project selection
+const toggleSelect = (id) => {
+  setSelectedIds((prev) => {
+    const next = new Set(prev);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
     }
-    const filtered = projects.filter(p =>
-      p.title?.toLowerCase().includes(query) ||
-      p.slug?.toLowerCase().includes(query) ||
-      p.description?.toLowerCase().includes(query) ||
-      p.category?.toLowerCase().includes(query) ||
-      p.status?.toLowerCase().includes(query)
-    );
-    setFilteredProjects(filtered);
-    setCurrentPage(1); // Reset to first page on search
-  }, [searchQuery, projects]);
+    return next;
+  });
+};
 
-  // Pagination logic
-  const totalItems = filteredProjects.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentProjects = filteredProjects.slice(startIndex, endIndex);
+// Handle project editing
+const handleEdit = (project) => {
+  setEditingProject(project);
+  setFormData(project);
+  setIsEditorOpen(true);
+};
 
-  const goToPage = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+// Handle project deletion
+const handleDelete = async (id) => {
+  try {
+    await fetch(`/api/projects/${id}`, {
+      method: 'DELETE',
+    });
+    setProjects((prev) => prev.filter((project) => project.id !== id));
+    setFilteredProjects((prev) => prev.filter((project) => project.id !== id));
+    toast.success('Project deleted');
+  } catch (error) {
+    toast.error('Failed to delete project');
+  }
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.title.trim() || !formData.slug.trim() || !formData.description.trim()) {
-      toast.error('Title, slug, and description are required');
-      return;
-    }
+// Handle form submission
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const method = editingProject ? 'PUT' : 'POST';
+    const url = editingProject ? `/api/projects/${editingProject.id}` : '/api/projects';
 
-    const payload = {
-      ...formData,
-      id: editingProject?.id || nanoid(),
-      updatedAt: new Date().toISOString(),
-      ...(editingProject ? {} : { createdAt: new Date().toISOString() }),
-    };
-
-    const res = await fetch('/api/projects', {
-      method: editingProject ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+    await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
     });
 
-    if (res.ok) {
-      toast.success(editingProject ? 'Updated!' : 'Created!');
-      fetchProjects();
-      setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' });
-      setEditingProject(null);
-      setIsEditorOpen(false);
+    if (editingProject) {
+      setProjects((prev) =>
+        prev.map((project) =>
+          project.id === editingProject.id ? formData : project
+        )
+      );
+      setFilteredProjects((prev) =>
+        prev.map((project) =>
+          project.id === editingProject.id ? formData : project
+        )
+      );
+      toast.success('Project updated');
     } else {
-      toast.error('Failed to save');
+      const newProject = { ...formData, id: nanoid() };
+      setProjects((prev) => [newProject, ...prev]);
+      setFilteredProjects((prev) => [newProject, ...prev]);
+      toast.success('Project created');
     }
-  };
 
-  const handleEdit = (project) => {
-    setEditingProject(project);
+    setIsEditorOpen(false);
+    setEditingProject(null);
     setFormData({
-      title: project.title || '',
-      slug: project.slug || '',
-      description: project.description || '',
-      status: project.status || 'In-Build',
-      category: project.category || 'website',
+      title: '',
+      slug: '',
+      description: '',
+      status: 'In-Build',
+      category: 'website',
     });
-    setIsEditorOpen(true);
-  };
+  } catch (error) {
+    toast.error('Failed to save project');
+  }
+};
 
-  const handleDelete = async (id) => {
-    if (!confirm('Delete permanently?')) return;
-    const res = await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      toast.success('Deleted');
-      fetchProjects();
-      setSelectedIds(prev => { const n = new Set(prev); n.delete(id); return n; });
-    }
-  };
+return (
+  <div className="p-4 bg-black text-white min-h-screen">
+    <Toaster />
+    <div className="flex justify-between items-center mb-4">
+      <h1 className="text-2xl font-bold">Projects</h1>
+      <button
+        className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200"
+        onClick={() => setIsEditorOpen(true)}
+      >
+        <Plus className="inline-block mr-2" /> Add Project
+      </button>
+    </div>
 
-  const handleToggleStatus = async (project) => {
-    const newStatus = project.status === 'Live' ? 'In-Build' : 'Concept';
-    const res = await fetch('/api/projects', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...project, status: newStatus }),
-    });
-    if (res.ok) {
-      toast.success(newStatus === 'Live' ? 'Published' : 'Unpublished');
-      fetchProjects();
-    }
-  };
+    <div className="mb-4">
+      <input
+        type="text"
+        placeholder="Search projects..."
+        value={searchQuery}
+        onChange={handleSearch}
+        className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400"
+      />
+    </div>
 
-  const bulkAction = async (action) => {
-    if (selectedIds.size === 0) return;
-    if (!confirm(`Apply "${action}" to ${selectedIds.size} projects?`)) return;
-
-    for (const id of selectedIds) {
-      const project = projects.find(p => p.id === id);
-      if (!project) continue;
-
-      if (action === 'delete') {
-        await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
-      } else if (action === 'publish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Live' }) });
-      } else if (action === 'unpublish') {
-        await fetch('/api/projects', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, status: 'Concept' }) });
-      }
-    }
-    toast.success(`Bulk ${action} completed`);
-    setSelectedIds(new Set());
-    fetchProjects();
-  };
-
-  const toggleSelect = (id) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
-
-  const selectAll = () => {
-    if (selectedIds.size === currentProjects.length && currentProjects.length > 0) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(currentProjects.map(p => p.id)));
-    }
-  };
-
-  const formatDate = (d) => d ? format(new Date(d), 'MMM d, yyyy') : '—';
-  const formatDateTime = (d) => d ? format(new Date(d), 'MMM d, yyyy • h:mm a') : '—';
-
-  return (
-    <>
-      <Toaster position="top-right" />
-
-      <div
-  className="
-    px-4 py-8
-    sm:px-6
-    lg:px-8 lg:py-12
-    w-full
-    max-w-none
-    overflow-x-hidden
-  "
->
-
-        {/* Header Space */}
-      <div className="h-16 md:h-20"></div>
-        {/* Page Title */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">
-            Admin • Projects
-          </h1>
-          <p className="text-gray-600  mt-2">Manage all your projects</p>
-        </div>
-
-        <div className="space-y-8">
-
-          {/* Editor Panel */}
-          <div className="bg-white  rounded-2xl shadow-lg overflow-hidden">
-            <div 
-              className="px-6 py-5 border-b border-gray-200  cursor-pointer select-none flex items-center justify-between"
-              onClick={() => setIsEditorOpen(!isEditorOpen)}
-            >
-              <div className="flex items-center gap-3">
-                {isEditorOpen ? <ChevronDown className="w-5 h-5 text-orange-600" /> : <ChevronRight className="w-5 h-5 text-orange-600" />}
-                <h2 className="text-xl font-bold text-gray-900 ">
-                  {isEditorOpen ? (editingProject ? 'Edit Project' : 'Create New Project') : 'Project Editor'}
-                </h2>
-              </div>
-              {!isEditorOpen && (
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setIsEditorOpen(true); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' }); }}
-                  className="text-sm font-medium text-orange-600 hover:text-orange-700"
+    <div className="overflow-x-auto">
+      <table className="w-full text-left">
+        <thead>
+          <tr className="border-b border-gray-700">
+            <th className="p-2">Select</th>
+            <th className="p-2">Title</th>
+            <th className="p-2">Slug</th>
+            <th className="p-2">Description</th>
+            <th className="p-2">Status</th>
+            <th className="p-2">Category</th>
+            <th className="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredProjects.map((project) => (
+            <tr key={project.id} className="border-b border-gray-800 hover:bg-gray-900">
+              <td className="p-2">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(project.id)}
+                  onChange={() => toggleSelect(project.id)}
+                  className="form-checkbox h-4 w-4 text-gray-600"
+                />
+              </td>
+              <td className="p-2">{project.title}</td>
+              <td className="p-2">{project.slug}</td>
+              <td className="p-2">{project.description}</td>
+              <td className="p-2">{project.status}</td>
+              <td className="p-2">{project.category}</td>
+              <td className="p-2">
+                <button
+                  className="text-blue-500 hover:text-blue-700 mr-2"
+                  onClick={() => handleEdit(project)}
                 >
-                  + New Project
+                  <Edit className="inline-block" />
                 </button>
-              )}
-            </div>
-
-            {isEditorOpen && (
-              <div className="p-6">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition" />
-                  <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
-                  <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 resize-none transition" />
-                  <div className="grid grid-cols-2 gap-4">
-                    <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
-                      <option value="Live">Live</option>
-                      <option value="In-Build">In Build</option>
-                      <option value="Concept">Concept</option>
-                    </select>
-                    <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
-                      <option value="website">Website</option>
-                      <option value="portal">Portal</option>
-                      <option value="app">App</option>
-                      <option value="builder">Builder</option>
-                      <option value="system">System</option>
-                    </select>
-                  </div>
-                  <button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-5 rounded-xl text-lg shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3">
-                    {editingProject ? 'Update Project' : 'Create Project'}
-                  </button>
-                  <button type="button" onClick={() => { setIsEditorOpen(false); setEditingProject(null); setFormData({ title: '', slug: '', description: '', status: 'In-Build', category: 'website' }); }} className="w-full text-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            )}
-          </div>
-
-          {/* Projects Section */}
-          <div className="bg-white  rounded-2xl shadow-lg overflow-hidden">
-            <div 
-              className="px-6 py-5 border-b border-gray-200  cursor-pointer select-none flex items-center justify-between"
-              onClick={() => setIsTableCollapsed(!isTableCollapsed)}
-            >
-              <div className="flex items-center gap-3">
-                {isTableCollapsed ? <ChevronRight className="w-5 h-5 text-orange-600" /> : <ChevronDown className="w-5 h-5 text-orange-600" />}
-                <h2 className="text-xl font-bold text-gray-900 ">
-                  Projects ({totalItems})
-                </h2>
-              </div>
-            </div>
-
-            {!isTableCollapsed && (
-              <div className="p-6 space-y-6">
-
-                {/* Search + Bulk Actions */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-                  <div className="relative w-full sm:max-w-md">
-                    <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
-                    <input type="text" placeholder="Search projects..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition" />
-                  </div>
-                  {selectedIds.size > 0 && (
-                    <div className="flex flex-wrap gap-3">
-                      <button onClick={() => bulkAction('publish')} className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium flex items-center gap-2">
-                        Publish ({selectedIds.size})
-                      </button>
-                      <button onClick={() => bulkAction('unpublish')} className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm font-medium">
-                        Unpublish
-                      </button>
-                      <button onClick={() => bulkAction('delete')} className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium flex items-center gap-2">
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Desktop: Fully Responsive Table */}
-<div className="hidden lg:block relative">
-  <div className="overflow-x-auto overscroll-x-contain max-h-[70vh]">
-
-<div className="w-full align-middle">
-
-    <table
-  className="
-    w-full
-    table-fixed
-    border-collapse
-    divide-y divide-gray-200 dark:divide-gray-700
-  "
->
-
-      <thead className="bg-white  sticky top-0 z-20 shadow-sm">
-
-        <tr>
-          <th className="w-12 px-3 py-4">
-            <button onClick={selectAll}>
-              {selectedIds.size === currentProjects.length && currentProjects.length > 0 ? 
-                <CheckSquare className="w-5 h-5 text-orange-600" /> : 
-                <Square className="w-5 h-5 text-gray-400" />
-              }
-            </button>
-          </th>
-        <th
-  style={{ width: colWidths.title }}
-  className="relative px-3 py-4 text-left font-semibold"
->
-  Title
-  <span
-    onMouseDown={(e) => startResize('title', e.clientX)}
-    className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-  />
-</th>
-
-
-          {/* Slug */}
-  <th
-    style={{ width: colWidths.slug }}
-    className="relative px-3 py-4 text-left font-semibold"
-  >
-    Slug
-    <span
-      onMouseDown={(e) => startResize('slug', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-          <th
-  style={{ width: colWidths.description }}
-  className="relative px-3 py-4 text-left font-semibold"
->
-
-  Description
-  <span
-    onMouseDown={(e) => startResize('description', e.clientX)}
-    className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-  />
-</th>
-
-
-          {/* Status */}
-  <th
-    style={{ width: colWidths.status }}
-    className="relative px-3 py-4 text-left font-semibold"
-  >
-    Status
-    <span
-      onMouseDown={(e) => startResize('status', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-          {/* Category */}
-  <th
-    style={{ width: colWidths.category }}
-    className="relative px-3 py-4 text-left font-semibold"
-  >
-    Category
-    <span
-      onMouseDown={(e) => startResize('category', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-
-  {/* Created */}
-  <th
-    style={{ width: colWidths.created }}
-    className="relative px-3 py-4 text-left font-semibold"
-  >
-    Created
-    <span
-      onMouseDown={(e) => startResize('created', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-
-  {/* Updated */}
-  <th
-    style={{ width: colWidths.updated }}
-    className="relative px-3 py-4 text-left font-semibold"
-  >
-    Updated
-    <span
-      onMouseDown={(e) => startResize('updated', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-
-  {/* Actions */}
-  <th
-    style={{ width: colWidths.actions }}
-    className="relative px-3 py-4 text-right font-semibold"
-  >
-    Actions
-    <span
-      onMouseDown={(e) => startResize('actions', e.clientX)}
-      className="absolute right-0 top-0 h-full w-1 cursor-col-resize bg-black/20"
-    />
-  </th>
-        </tr>
-      </thead>
-      <tbody className="bg-white  divide-y divide-gray-200 dark:divide-gray-700">
-        {loading ? (
-          <tr><td colSpan={9} className="text-center py-16 text-gray-500">Loading...</td></tr>
-        ) : currentProjects.length === 0 ? (
-          <tr><td colSpan={9} className="text-center py-16 text-gray-500">No projects found</td></tr>
-        ) : (
-          currentProjects.map(project => (
-            <tr key={project.id} className="hover:bg-white dark:hover:bg-gray-700 transition">
-              <td className="px-3 py-4">
-                <button onClick={() => toggleSelect(project.id)}>
-                  {selectedIds.has(project.id) ? 
-                    <CheckSquare className="w-5 h-5 text-orange-600" /> : 
-                    <Square className="w-5 h-5 text-gray-400" />
-                  }
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => handleDelete(project.id)}
+                >
+                  <Trash2 className="inline-block" />
                 </button>
-              </td>
-              <td className="px-3 py-4 font-medium text-gray-900  truncate max-w-xs">
-                {project.title || 'Untitled'}
-              </td>
-              <td className="px-3 py-4 text-sm font-mono text-gray-600  truncate max-w-48">
-                /{project.slug || '—'}
-              </td>
-              <td className="px-3 py-4 text-sm text-gray-600 ">
-                <div className="line-clamp-2 max-w-md">
-                  {project.description || 'No description'}
-                </div>
-              </td>
-              <td className="px-3 py-4">
-                <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                  project.status === 'Live' ? 'bg-green-100 text-green-800 ' : 
-                  project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
-                  'bg-gray-100 text-gray-700  '
-                }`}>
-                  {project.status || 'Concept'}
-                </span>
-              </td>
-              <td className="px-3 py-4 text-sm text-gray-600  capitalize">
-                {project.category || '—'}
-              </td>
-              <td className="px-3 py-4 text-xs text-gray-500  whitespace-nowrap">
-                {formatDate(project.createdAt)}
-              </td>
-              <td className="px-3 py-4 text-xs text-gray-500  whitespace-nowrap">
-                {formatDateTime(project.updatedAt)}
-              </td>
-              <td className="px-3 py-4 text-right">
-                <div className="inline-flex items-center gap-1 bg-gray-100  rounded-lg p-1.5">
-                  <button onClick={() => handleEdit(project)} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition"><Edit className="w-4 h-4" /></button>
-                  <button onClick={() => handleToggleStatus(project)} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900 rounded transition"><Globe className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(project.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"><Trash2 className="w-4 h-4" /></button>
-                </div>
               </td>
             </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
-</div>
-</div>
+          ))}
+        </tbody>
+      </table>
+    </div>
 
-                {/* Mobile: Cards */}
-                <div className="lg:hidden space-y-4">
-                  {loading ? (
-                    <div className="text-center py-12 text-gray-500">Loading projects...</div>
-                  ) : currentProjects.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">No projects found</div>
-                  ) : (
-                    currentProjects.map(project => (
-                      <div key={project.id} className={`bg-white  rounded-xl shadow-md p-5 border ${selectedIds.has(project.id) ? 'border-orange-500' : 'border-gray-200 '} transition-all`}>
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <button onClick={() => toggleSelect(project.id)}>
-                              {selectedIds.has(project.id) ? <CheckSquare className="w-6 h-6 text-orange-600" /> : <Square className="w-6 h-6 text-gray-400" />}
-                            </button>
-                            <h3 className="text-lg font-bold text-gray-900 ">{project.title || 'Untitled'}</h3>
-                          </div>
-                        </div>
-
-                        <div className="space-y-3 text-sm">
-                          <div className="flex items-center gap-2 text-gray-600 ">
-                            <span className="font-mono">/{project.slug || '—'}</span>
-                          </div>
-                          <p className="text-gray-600  line-clamp-2">{project.description || 'No description'}</p>
-                          <div className="flex flex-wrap gap-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 ' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  '}`}>
-                              {project.status || 'Concept'}
-                            </span>
-                            <span className="text-gray-500 capitalize">{project.category || '—'}</span>
-                          </div>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <div className="flex items-center gap-1"><Calendar className="w-4 h-4" />{formatDate(project.createdAt)}</div>
-                            <div className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDateTime(project.updatedAt)}</div>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 flex justify-end gap-2">
-                          <button onClick={() => handleEdit(project)} className="p-2.5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition"><Edit className="w-4 h-4" /></button>
-                          <button onClick={() => handleToggleStatus(project)} className="p-2.5 bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-800 transition"><Globe className="w-4 h-4" /></button>
-                          <button onClick={() => handleDelete(project.id)} className="p-2.5 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition"><Trash2 className="w-4 h-4" /></button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
-                    <div className="text-sm text-gray-600 ">
-                      Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems} projects
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => goToPage(1)}
-                        disabled={currentPage === 1}
-                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronsLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                          let pageNum;
-                          if (totalPages <= 5) {
-                            pageNum = i + 1;
-                          } else if (currentPage <= 3) {
-                            pageNum = i + 1;
-                          } else if (currentPage >= totalPages - 2) {
-                            pageNum = totalPages - 4 + i;
-                          } else {
-                            pageNum = currentPage - 2 + i;
-                          }
-
-                          return (
-                            <button
-                              key={pageNum}
-                              onClick={() => goToPage(pageNum)}
-                              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                                currentPage === pageNum
-                                  ? 'bg-orange-500 text-white'
-                                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                              }`}
-                            >
-                              {pageNum}
-                            </button>
-                          );
-                        })}
-                        {totalPages > 5 && currentPage < totalPages - 2 && (
-                          <>
-                            <span className="px-2 text-gray-500">...</span>
-                            <button
-                              onClick={() => goToPage(totalPages)}
-                              className="px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                            >
-                              {totalPages}
-                            </button>
-                          </>
-                        )}
-                      </div>
-
-                      <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => goToPage(totalPages)}
-                        disabled={currentPage === totalPages}
-                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronsRight className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+    {isEditorOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+        <div className="bg-white text-black p-6 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-xl font-bold mb-4">{editingProject ? 'Edit Project' : 'Add Project'}</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block mb-2">Title</label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full p-2 rounded bg-gray-200"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Slug</label>
+              <input
+                type="text"
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                className="w-full p-2 rounded bg-gray-200"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Description</label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full p-2 rounded bg-gray-200"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Status</label>
+              <select
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                className="w-full p-2 rounded bg-gray-200"
+              >
+                <option value="In-Build">In-Build</option>
+                <option value="Live">Live</option>
+                <option value="Archived">Archived</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Category</label>
+              <input
+                type="text"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="w-full p-2 rounded bg-gray-200"
+                required
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                onClick={() => setIsEditorOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </>
-  );
+    )}
+  </div>
+);
 }
