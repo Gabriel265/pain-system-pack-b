@@ -94,7 +94,7 @@ export default function RunDetailPage() {
               <span className="font-medium text-gray-700 truncate">{node.name}/</span>
             </div>
           ) : (
-            <div className="py-1.5 px-2 pl-6 text-gray-600 truncate text-sm hover:text-blue-600 hover:bg-gray-50 rounded transition cursor-default">
+            <div className="py-1.5 px-2 pl-6 text-gray-600 truncate text-sm hover:text-blue-600 hover:bg-white rounded transition cursor-default">
               {node.name}
             </div>
           )}
@@ -143,7 +143,7 @@ export default function RunDetailPage() {
   );
 
   return (
-    <div className="fixed inset-0 bg-gray-50 overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-white overflow-hidden flex flex-col">
       <div className="h-16 md:h-20 flex-shrink-0"></div>
 
       <div className="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 lg:gap-6 w-full max-w-[1600px] mx-auto px-4 md:px-6 py-4 md:py-6">
@@ -153,7 +153,7 @@ export default function RunDetailPage() {
             sidebarOpen ? 'w-full lg:w-72 xl:w-80' : 'w-full lg:w-12'
           }`}
         >
-          <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-gray-50 flex-shrink-0">
+          <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-white flex-shrink-0">
             <h3 className={`font-semibold text-base transition-all duration-300 whitespace-nowrap overflow-hidden ${!sidebarOpen ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
               ai-lab files
             </h3>
@@ -292,7 +292,7 @@ export default function RunDetailPage() {
                         </div>
                       </div>
                       <div className="overflow-auto max-h-96 w-full">
-                        <pre className="p-4 md:p-6 bg-gray-50 text-xs md:text-sm font-mono leading-relaxed min-w-0">
+                        <pre className="p-4 md:p-6 bg-white text-xs md:text-sm font-mono leading-relaxed min-w-0">
                           <code className="block whitespace-pre">{file.diff}</code>
                         </pre>
                       </div>

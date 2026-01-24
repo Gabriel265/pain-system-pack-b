@@ -104,7 +104,7 @@ export default function PortalBuilderClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white  flex items-center justify-center">
         <div className="text-xl">Loading...</div>
       </div>
     );
@@ -114,8 +114,11 @@ export default function PortalBuilderClient() {
     <>
       <Toaster position="top-right" />
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="min-h-screen bg-white ">
+      {/* Header Spacer */}
+      <div className=" bg-white h-16 md:h-20 lg:h-24"></div>
+        <div className=" bg-white container mx-auto px-4 py-8 max-w-4xl">
+
 
           {/* Header */}
           <div className="mb-8">
@@ -132,9 +135,9 @@ export default function PortalBuilderClient() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-8">
+          <form onSubmit={handleSubmit} className="bg-white  rounded-2xl shadow-xl p-8 space-y-8">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-gray-700  mb-2">
                 Project Title *
               </label>
               <input
@@ -142,13 +145,13 @@ export default function PortalBuilderClient() {
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
                 placeholder="My Awesome Project"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-gray-700  mb-2">
                 Slug {isEditing && '(cannot change when editing)'}
               </label>
               <input
@@ -157,12 +160,12 @@ export default function PortalBuilderClient() {
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                 required
                 readOnly={isEditing}
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-gray-700  mb-2">
                 Description *
               </label>
               <textarea
@@ -170,20 +173,20 @@ export default function PortalBuilderClient() {
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 rows={8}
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 resize-none transition"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 resize-none transition"
                 placeholder="Describe your project..."
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-semibold text-gray-700  mb-2">
                   Status
                 </label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="Live">Live (Published)</option>
                   <option value="In-Build">In Build</option>
@@ -192,13 +195,13 @@ export default function PortalBuilderClient() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-semibold text-gray-700  mb-2">
                   Category
                 </label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="portal">Portal</option>
                   <option value="website">Website</option>
@@ -219,7 +222,7 @@ export default function PortalBuilderClient() {
               <button
                 type="button"
                 onClick={() => router.push('/admin/projects')}
-                className="px-8 py-5 bg-gray-200  text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                className="px-8 py-5 bg-gray-200  text-gray-800  font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
                 Cancel
               </button>

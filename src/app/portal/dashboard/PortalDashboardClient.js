@@ -50,16 +50,16 @@ export default function PortalDashboardClient() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl text-gray-600 ">Loading dashboard...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white  text-gray-900  py-8 px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="max-w-7xl mx-auto">
+      <div className=" bg-white max-w-7xl mx-auto">
         <h1 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
           Admin Dashboard
         </h1>
@@ -67,23 +67,23 @@ export default function PortalDashboardClient() {
       </div>
 
       {/* KPI Cards - Mobile Stacked, Desktop Grid */}
-      <div className="max-w-7xl mx-auto mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
+      <div className="bg-white max-w-7xl mx-auto mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="bg-white  rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 ">Total Projects</p>
           <p className="text-4xl font-bold mt-2">{total}</p>
           <p className="text-xs text-green-600 mt-1">{Live} Live</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
+        <div className="bg-white  rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 ">Live</p>
           <p className="text-4xl font-bold mt-2 text-green-600">{Live}</p>
           <p className="text-xs mt-1">Live & running</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
+        <div className="bg-white  rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 ">In Build</p>
           <p className="text-4xl font-bold mt-2 text-blue-600">{inProgress}</p>
           <p className="text-xs mt-1">Under development</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
+        <div className="bg-white  rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 ">Categories</p>
           <p className="text-4xl font-bold mt-2 text-purple-600">{Object.keys(categories).length}</p>
           <p className="text-xs mt-1 capitalize">{Object.keys(categories).join(", ")}</p>
@@ -93,7 +93,7 @@ export default function PortalDashboardClient() {
       {/* Charts Section */}
       <div className="max-w-7xl mx-auto mt-10 grid gap-8 lg:grid-cols-2">
         {/* Status Pie Chart (Inline SVG) */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <div className="bg-white  rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-6">Project Status</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <div className="relative w-48 h-48">
@@ -147,7 +147,7 @@ export default function PortalDashboardClient() {
         </div>
 
         {/* Category Bar Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <div className="bg-white  rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-6">Projects by Category</h2>
           <div className="space-y-4">
             {topCategories.length === 0 ? (
@@ -180,14 +180,14 @@ export default function PortalDashboardClient() {
       {/* Recent Activity + Projects Table */}
       <div className="max-w-7xl mx-auto mt-10 space-y-8">
         {/* Recent Activity */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <div className="bg-white  rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-4">Recent Activity (Last 7 Days)</h2>
           {recent7Days.length === 0 ? (
             <p className="text-center text-gray-500 py-8">No recent activity</p>
           ) : (
             <div className="space-y-3">
               {recent7Days.map(p => (
-                <div key={p.id} className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                <div key={p.id} className="flex items-center justify-between py-3 border-b border-gray-200  last:border-0">
                   <div>
                     <p className="font-medium">{p.title || "Untitled Project"}</p>
                     <p className="text-sm text-gray-500">
@@ -204,7 +204,7 @@ export default function PortalDashboardClient() {
         </div>
 
         {/* Projects Preview Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <div className="bg-white  rounded-2xl shadow-lg p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold">Latest Projects</h2>
             <Link
@@ -217,7 +217,7 @@ export default function PortalDashboardClient() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b border-gray-200 dark:border-gray-700">
+              <thead className="border-b border-gray-200 ">
                 <tr>
                   <th className="text-left py-3 px-2 font-medium">Title</th>
                   <th className="text-left py-3 px-2 font-medium hidden sm:table-cell">Category</th>
@@ -227,7 +227,7 @@ export default function PortalDashboardClient() {
               </thead>
               <tbody>
                 {projects.slice(0, 6).map(p => (
-                  <tr key={p.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr key={p.id} className="border-b border-gray-100  hover:bg-white dark:hover:bg-gray-700">
                     <td className="py-4 px-2 font-medium">{p.title || "Untitled"}</td>
                     <td className="py-4 px-2 hidden sm:table-cell">
                       <span className="px-3 py-1 text-xs rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
@@ -236,7 +236,7 @@ export default function PortalDashboardClient() {
                     </td>
                     <td className="py-4 px-2">
                       <span className={`px-3 py-1 text-xs rounded-full ${
-                        p.status === "Live" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                        p.status === "Live" ? "bg-green-100 text-green-800 " :
                         p.status === "In-Build" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
                         "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                       }`}>

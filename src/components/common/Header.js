@@ -68,7 +68,7 @@ export default function Header() {
                     type="text"
                     disabled
                     placeholder="Search projects (coming soon)"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 cursor-not-allowed text-gray-900"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white cursor-not-allowed text-gray-900"
                   />
                   <p className="mt-3 text-sm text-gray-500">
                     Search is not available in Phase 1.

@@ -58,7 +58,7 @@ export default function VstMapClient() {
 
         {/* Map Controls/Info (Optional) */}
         <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-lg">
+          <div className="bg-white  rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200  transition-all duration-300 hover:shadow-lg">
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature One
             </h3>
@@ -67,7 +67,7 @@ export default function VstMapClient() {
             </p>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-lg">
+          <div className="bg-white  rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200  transition-all duration-300 hover:shadow-lg">
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature Two
             </h3>
@@ -76,7 +76,7 @@ export default function VstMapClient() {
             </p>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-lg sm:col-span-2 lg:col-span-1">
+          <div className="bg-white  rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md border border-gray-200  transition-all duration-300 hover:shadow-lg sm:col-span-2 lg:col-span-1">
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature Three
             </h3>

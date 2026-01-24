@@ -56,10 +56,10 @@ export default function SignIn() {
     >
 
       {/* Overlay for better contrast */}
-      <div className="absolute inset-0 bg-[#fcd5c5]/80 dark:bg-gray-900/80 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-[#fcd5c5]/80 /80 backdrop-blur-sm"></div>
 
       {/* Main card container */}
-      <div className="relative w-full max-w-6xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/20 dark:border-gray-700/20">
+      <div className="relative w-full max-w-6xl bg-white/40 /40 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/20 /20">
         
         <div className="flex flex-col lg:flex-row min-h-[600px]">
           {/* Spacer for top padding */}
@@ -67,7 +67,7 @@ export default function SignIn() {
 
           {/* Left side - Login form */}
           <div className="w-full lg:w-1/2 p-6 md:p-12 lg:p-16 flex items-center justify-center">
-            <div className="w-full max-w-md bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-xl p-8 md:p-10 border border-white/30 dark:border-gray-700/30">
+            <div className="w-full max-w-md bg-white/70 /70 backdrop-blur-xl rounded-2xl shadow-xl p-8 md:p-10 border border-white/30 /30">
               {/* Header */}
               <div className="mb-8">
                 <p className="text-sm text-gray-500  mb-2">Your logo</p>

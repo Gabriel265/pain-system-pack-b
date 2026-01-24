@@ -287,14 +287,14 @@ document.body.style.userSelect = '';
         <div className="space-y-8">
 
           {/* Editor Panel */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-white  rounded-2xl shadow-lg overflow-hidden">
             <div 
-              className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 cursor-pointer select-none flex items-center justify-between"
+              className="px-6 py-5 border-b border-gray-200  cursor-pointer select-none flex items-center justify-between"
               onClick={() => setIsEditorOpen(!isEditorOpen)}
             >
               <div className="flex items-center gap-3">
                 {isEditorOpen ? <ChevronDown className="w-5 h-5 text-orange-600" /> : <ChevronRight className="w-5 h-5 text-orange-600" />}
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-bold text-gray-900 ">
                   {isEditorOpen ? (editingProject ? 'Edit Project' : 'Create New Project') : 'Project Editor'}
                 </h2>
               </div>
@@ -311,16 +311,16 @@ document.body.style.userSelect = '';
             {isEditorOpen && (
               <div className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition" />
-                  <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
-                  <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 resize-none transition" />
+                  <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition" />
+                  <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
+                  <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 resize-none transition" />
                   <div className="grid grid-cols-2 gap-4">
-                    <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
+                    <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
                       <option value="Live">Live</option>
                       <option value="In-Build">In Build</option>
                       <option value="Concept">Concept</option>
                     </select>
-                    <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
+                    <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
                       <option value="builder">Builder</option>
                       <option value="website">Website</option>
                       <option value="portal">Portal</option>
@@ -340,14 +340,14 @@ document.body.style.userSelect = '';
           </div>
 
           {/* Projects Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-white  rounded-2xl shadow-lg overflow-hidden">
             <div 
-              className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 cursor-pointer select-none flex items-center justify-between"
+              className="px-6 py-5 border-b border-gray-200  cursor-pointer select-none flex items-center justify-between"
               onClick={() => setIsTableCollapsed(!isTableCollapsed)}
             >
               <div className="flex items-center gap-3">
                 {isTableCollapsed ? <ChevronRight className="w-5 h-5 text-orange-600" /> : <ChevronDown className="w-5 h-5 text-orange-600" />}
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-bold text-gray-900 ">
                   Projects ({totalItems})
                 </h2>
               </div>
@@ -360,7 +360,7 @@ document.body.style.userSelect = '';
                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                   <div className="relative w-full sm:max-w-md">
                     <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
-                    <input type="text" placeholder="Search projects..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition" />
+                    <input type="text" placeholder="Search projects..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition" />
                   </div>
                   {selectedIds.size > 0 && (
                     <div className="flex flex-wrap gap-3">
@@ -388,7 +388,7 @@ document.body.style.userSelect = '';
     border-collapse
     divide-y divide-gray-200 dark:divide-gray-700
   "
->     <thead className="bg-gray-50  sticky top-0 z-20 shadow-sm">
+>     <thead className="bg-white  sticky top-0 z-20 shadow-sm">
       <tr>
           <th className="w-12 px-3 py-4">
             <button onClick={selectAll}>
@@ -501,7 +501,7 @@ document.body.style.userSelect = '';
         <tr><td colSpan={9} className="text-center py-16 text-gray-500">No projects found</td></tr>
       ) : (
         currentProjects.map(project => (
-          <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+          <tr key={project.id} className="hover:bg-white dark:hover:bg-gray-700 transition">
             <td className="px-4 py-4">
               <button onClick={() => toggleSelect(project.id)}>
                 {selectedIds.has(project.id) ? 
@@ -510,7 +510,7 @@ document.body.style.userSelect = '';
                 }
               </button>
             </td>
-            <td className="px-4 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-64">
+            <td className="px-4 py-4 font-medium text-gray-900  truncate max-w-64">
               {project.title || 'Untitled'}
             </td>
             <td className="px-4 py-4 text-sm font-mono text-gray-600  truncate max-w-48">
@@ -523,9 +523,9 @@ document.body.style.userSelect = '';
             </td>
             <td className="px-4 py-4">
               <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                project.status === 'Live' ? 'bg-green-100 text-green-800 ' : 
                 project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
-                'bg-gray-100 text-gray-700  dark:text-gray-300'
+                'bg-gray-100 text-gray-700  '
               }`}>
                 {project.status || 'Concept'}
               </span>
@@ -563,13 +563,13 @@ document.body.style.userSelect = '';
                     <div className="text-center py-12 text-gray-500">No projects found</div>
                   ) : (
                     currentProjects.map(project => (
-                      <div key={project.id} className={`bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border ${selectedIds.has(project.id) ? 'border-orange-500' : 'border-gray-200 dark:border-gray-700'} transition-all`}>
+                      <div key={project.id} className={`bg-white  rounded-xl shadow-md p-5 border ${selectedIds.has(project.id) ? 'border-orange-500' : 'border-gray-200 '} transition-all`}>
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
                             <button onClick={() => toggleSelect(project.id)}>
                               {selectedIds.has(project.id) ? <CheckSquare className="w-6 h-6 text-orange-600" /> : <Square className="w-6 h-6 text-gray-400" />}
                             </button>
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{project.title || 'Untitled'}</h3>
+                            <h3 className="text-lg font-bold text-gray-900 ">{project.title || 'Untitled'}</h3>
                           </div>
                         </div>
 
@@ -579,7 +579,7 @@ document.body.style.userSelect = '';
                           </div>
                           <p className="text-gray-600  line-clamp-2">{project.description || 'No description'}</p>
                           <div className="flex flex-wrap gap-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  dark:text-gray-300'}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 ' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  '}`}>
                               {project.status || 'Concept'}
                             </span>
                             <span className="text-gray-500 capitalize">{project.category || '—'}</span>

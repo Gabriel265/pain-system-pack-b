@@ -45,7 +45,7 @@ export default function NotificationsPage() {
           
           {/* Action Buttons */}
           <div className="flex gap-2 sm:gap-3">
-            <button className="px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+            <button className="px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium text-black  hover:text-orange-600  transition-colors">
               Mark all read
             </button>
             <button className="px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors shadow-sm hover:shadow-md">
@@ -55,7 +55,7 @@ export default function NotificationsPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="mt-6 flex gap-2 overflow-x-auto pb-2 border-b border-gray-200 dark:border-gray-800">
+        <div className="mt-6 flex gap-2 overflow-x-auto pb-2 border-b border-gray-200 ">
           {['all', 'unread', 'archived'].map((tab) => (
             <button
               key={tab}
@@ -63,7 +63,7 @@ export default function NotificationsPage() {
               className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-all whitespace-nowrap ${
                 filter === tab
                   ? 'text-orange-600 dark:text-orange-400 border-b-2 border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                  : 'text-gray-600  hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900/50'
+                  : 'text-gray-600  hover:text-gray-900 dark:hover:text-gray-200 hover:bg-white dark:hover:bg-gray-900/50'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -77,10 +77,10 @@ export default function NotificationsPage() {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`group relative bg-white dark:bg-gray-900 rounded-xl p-4 sm:p-5 border transition-all duration-200 hover:shadow-lg hover:scale-[1.01] cursor-pointer ${
+            className={`group relative bg-white  rounded-xl p-4 sm:p-5 border transition-all duration-200 hover:shadow-lg hover:scale-[1.01] cursor-pointer ${
               notification.unread
                 ? 'border-orange-200 dark:border-orange-900/50 bg-orange-50/30 dark:bg-orange-900/10'
-                : 'border-gray-200 dark:border-gray-800 hover:border-orange-300 dark:hover:border-orange-800'
+                : 'border-gray-200  hover:border-orange-300 dark:hover:border-orange-800'
             }`}
           >
             <div className="flex gap-3 sm:gap-4">
@@ -101,8 +101,8 @@ export default function NotificationsPage() {
 
                 {/* Description Placeholders */}
                 <div className="space-y-1.5">
-                  <div className="h-3 sm:h-3.5 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
-                  <div className="h-3 sm:h-3.5 bg-gray-200 dark:bg-gray-800 rounded w-11/12"></div>
+                  <div className="h-3 sm:h-3.5 bg-gray-200  rounded w-full"></div>
+                  <div className="h-3 sm:h-3.5 bg-gray-200  rounded w-11/12"></div>
                 </div>
 
                 {/* Footer */}
@@ -132,7 +132,7 @@ export default function NotificationsPage() {
 
       {/* Load More Button */}
       <div className="max-w-4xl mx-auto pb-8 text-center">
-        <button className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 border border-gray-300 dark:border-gray-700 hover:border-orange-400 dark:hover:border-orange-600 rounded-lg transition-all duration-200 hover:shadow-md">
+        <button className="px-6 py-3 text-sm font-medium text-gray-700  hover:text-orange-600  border border-gray-300  hover:border-orange-400 dark:hover:border-orange-600 rounded-lg transition-all duration-200 hover:shadow-md">
           Load More Notifications
         </button>
       </div>

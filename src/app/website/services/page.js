@@ -95,7 +95,7 @@ const Services = () => {
                 {/* Textual content only */}
                 <div className="space-y-4">
                   {/* Category label */}
-                  <p className="text-xs sm:text-sm font-semibold tracking-wider text-gray-700 dark:text-gray-300">
+                  <p className="text-xs sm:text-sm font-semibold tracking-wider text-gray-700 ">
                     {service.category}
                   </p>
 
@@ -105,7 +105,7 @@ const Services = () => {
                   </h2>
 
                   {/* Short description */}
-                  <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                  <p className="text-sm sm:text-base text-gray-700 ">
                     {service.description}
                   </p>
                 </div>

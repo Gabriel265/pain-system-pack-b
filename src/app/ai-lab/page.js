@@ -248,7 +248,7 @@ export default function AiAgentDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="h-16 md:h-20"></div>
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 max-w-[1600px] mx-auto p-4 md:p-6">
         {/* Collapsible Sidebar */}
@@ -257,7 +257,7 @@ export default function AiAgentDashboard() {
             sidebarOpen ? 'w-full lg:w-72 xl:w-80' : 'w-full lg:w-12'
           }`}
         >
-          <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-gray-50">
+          <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-white">
             <h3 className={`font-semibold text-base transition-all duration-300 whitespace-nowrap overflow-hidden ${!sidebarOpen ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
               Project Files
             </h3>
@@ -294,7 +294,7 @@ export default function AiAgentDashboard() {
                       <h4 className="font-medium text-sm mb-2">Selected for Prompt:</h4>
                       <ul className="space-y-1">
                         {Array.from(selectedPaths).map(path => (
-                          <li key={path} className="flex items-center justify-between text-sm text-gray-700 bg-gray-50 p-2 rounded">
+                          <li key={path} className="flex items-center justify-between text-sm text-gray-700 bg-white p-2 rounded">
                             <span className="truncate">{path}</span>
                             <button 
                               onClick={() => removeSelected(path)}
@@ -369,7 +369,7 @@ export default function AiAgentDashboard() {
                   .map((run) => (
                     <div
                       key={run.id}
-                      className="p-4 md:p-5 bg-gray-50 border border-gray-200 rounded-lg hover:shadow-md hover:border-gray-300 transition-all"
+                      className="p-4 md:p-5 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-gray-300 transition-all"
                     >
                       <a
                         href={`/ai-lab/runs/${run.id}`}
@@ -396,7 +396,7 @@ export default function AiAgentDashboard() {
                 )}
               </div>
             ) : (
-              <div className="p-8 md:p-12 bg-gray-50 rounded-lg border border-dashed border-gray-300 text-center">
+              <div className="p-8 md:p-12 bg-white rounded-lg border border-dashed border-gray-300 text-center">
                 <svg className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -428,7 +428,7 @@ export default function AiAgentDashboard() {
               <p className="text-red-600 text-sm">{contentError}</p>
             ) : (
               <>
-                <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-[calc(100vh-20rem)] text-sm">
+                <pre className="bg-white p-4 rounded-lg overflow-auto max-h-[calc(100vh-20rem)] text-sm">
                   <code>{fileContent}</code>
                 </pre>
                 <button 

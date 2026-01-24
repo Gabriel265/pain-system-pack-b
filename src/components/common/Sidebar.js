@@ -132,7 +132,7 @@ export default function Sidebar({ type }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800
+          fixed inset-y-0 left-0 z-50 w-72 bg-gray-800  border-r border-gray-200 
           transform transition-all duration-300 ease-in-out flex flex-col
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           lg:relative lg:translate-x-0 lg:z-auto
@@ -146,7 +146,7 @@ export default function Sidebar({ type }) {
 
           {/* Collapsible Header */}
           <div 
-            className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800 cursor-pointer select-none"
+            className="flex items-center justify-between p-6 border-b border-gray-200  cursor-pointer select-none"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             <div className={`flex items-center gap-3 transition-all ${isCollapsed ? "justify-center" : ""}`}>
@@ -166,7 +166,7 @@ export default function Sidebar({ type }) {
                 e.stopPropagation();
                 setIsOpen(false);
               }}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 "
             >
               <X className="w-6 h-6" />
             </button>
@@ -177,7 +177,7 @@ export default function Sidebar({ type }) {
             {links.map((link, index) => {
               if (link.divider) {
                 return (
-                  <div key={`divider-${index}`} className="my-4 border-t border-gray-200 dark:border-gray-700" />
+                  <div key={`divider-${index}`} className="my-4 border-t border-gray-200" />
                 );
               }
 
@@ -193,7 +193,7 @@ export default function Sidebar({ type }) {
                     ${isCollapsed ? "justify-center px-3" : "px-4 gap-3"}
                     ${isActive
                       ? "bg-orange-500 text-white shadow-md"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      : "text-white  hover:bg-gray-500 "
                     }
                   `}
                   title={isCollapsed ? link.label : ""}
@@ -208,7 +208,7 @@ export default function Sidebar({ type }) {
           </nav>
 
           {/* Logout + Copyright */}
-          <div className={`border-t border-gray-200 dark:border-gray-800 p-4 space-y-4 ${isCollapsed ? "px-3" : ""}`}>
+          <div className={`border-t border-gray-200  p-4 space-y-4 ${isCollapsed ? "px-3" : ""}`}>
             <button
               onClick={handleLogout}
               className={`

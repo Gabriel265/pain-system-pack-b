@@ -39,7 +39,7 @@ const AboutSection = () => {
             </div>
 
             {/* MOBILE IMAGE PLACEHOLDER */}
-            <div className="lg:hidden rounded-2xl overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-800 h-64 sm:h-80 flex items-center justify-center">
+            <div className="lg:hidden rounded-2xl overflow-hidden shadow-lg bg-gray-200  h-64 sm:h-80 flex items-center justify-center">
               <span className="text-gray-500  text-sm">
                 [Image Placeholder – Mobile View]
               </span>
@@ -52,14 +52,14 @@ const AboutSection = () => {
             
             
             {/*  IMAGE PLACEHOLDER */}
-            <div className="hidden lg:block rounded-2xl overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-800 h-80 xl:h-96 flex items-center justify-center">
+            <div className="hidden lg:block rounded-2xl overflow-hidden shadow-lg bg-gray-200  h-80 xl:h-96 flex items-center justify-center">
               <span className="text-gray-500  text-sm">
                 [Main Image Placeholder – Desktop View]
               </span>
             </div>
 
             {/* PHILOSOPHY / FEATURE CARD */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg transition-colors duration-300">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100  rounded-2xl p-6 sm:p-8 shadow-lg transition-colors duration-300">
 
               <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 mb-6">
                 

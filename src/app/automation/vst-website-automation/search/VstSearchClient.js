@@ -25,7 +25,7 @@ export default function VstSearchClient() {
             <input
               type="text"
               placeholder="Search for anything..."
-              className="w-full h-12 sm:h-14 px-5 pr-12 bg-gray-100 dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-800 focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none transition-all duration-300 text-sm sm:text-base"
+              className="w-full h-12 sm:h-14 px-5 pr-12 bg-gray-100  rounded-xl border-2 border-gray-200  focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none transition-all duration-300 text-sm sm:text-base"
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <button
@@ -43,16 +43,16 @@ export default function VstSearchClient() {
           {[...Array(8)].map((_, i) => (
             <div 
               key={i} 
-              className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-5 sm:p-6 lg:p-7 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-300 hover:shadow-lg cursor-pointer group"
+              className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-5 sm:p-6 lg:p-7 rounded-xl border border-gray-200  hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-300 hover:shadow-lg cursor-pointer group"
             >
               {/* Title Placeholder */}
               <div className="h-5 sm:h-6 bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-700 dark:to-gray-600 rounded-lg w-2/3 sm:w-1/2 group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300"></div>
               
               {/* Description Placeholders */}
               <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
-                <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md w-5/6"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md w-3/4"></div>
+                <div className="h-4 bg-gray-200  rounded-md"></div>
+                <div className="h-4 bg-gray-200  rounded-md w-5/6"></div>
+                <div className="h-4 bg-gray-200  rounded-md w-3/4"></div>
               </div>
               
               {/* Metadata Placeholder */}

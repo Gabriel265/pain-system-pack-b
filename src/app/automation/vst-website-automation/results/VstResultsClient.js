@@ -18,10 +18,10 @@ export default function VstResultsClient() {
           
           {/* Filter/Sort Controls */}
           <div className="flex gap-3">
-            <button className="px-4 py-2 text-sm sm:text-base bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+            <button className="px-4 py-2 text-sm sm:text-base bg-white  border border-gray-300  rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors duration-200">
               Filter
             </button>
-            <button className="px-4 py-2 text-sm sm:text-base bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+            <button className="px-4 py-2 text-sm sm:text-base bg-white  border border-gray-300  rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors duration-200">
               Sort
             </button>
           </div>
@@ -34,7 +34,7 @@ export default function VstResultsClient() {
           {[...Array(9)].map((_, i) => (
             <div 
               key={i} 
-              className="bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+              className="bg-white  rounded-xl sm:rounded-2xl border border-gray-200  overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
             >
               {/* Image Placeholder */}
               <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 h-48 sm:h-52 lg:h-56 overflow-hidden">
@@ -72,8 +72,8 @@ export default function VstResultsClient() {
                 
                 {/* Description Placeholder */}
                 <div className="space-y-2">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-5/6"></div>
+                  <div className="h-3 bg-gray-200  rounded w-full"></div>
+                  <div className="h-3 bg-gray-200  rounded w-5/6"></div>
                 </div>
                 
                 {/* Action Button */}
@@ -87,7 +87,7 @@ export default function VstResultsClient() {
 
         {/* Load More Button */}
         <div className="mt-8 sm:mt-10 flex justify-center">
-          <button className="px-6 sm:px-8 py-3 sm:py-3.5 bg-white dark:bg-gray-800 border-2 border-orange-500 dark:border-orange-600 text-orange-500 dark:text-orange-600 font-semibold rounded-lg hover:bg-orange-50 dark:hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 Live:scale-95 shadow-md">
+          <button className="px-6 sm:px-8 py-3 sm:py-3.5 bg-white  border-2 border-orange-500 dark:border-orange-600 text-orange-500 dark:text-orange-600 font-semibold rounded-lg hover:bg-orange-50 dark:hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 Live:scale-95 shadow-md">
             Load More Results
           </button>
         </div>

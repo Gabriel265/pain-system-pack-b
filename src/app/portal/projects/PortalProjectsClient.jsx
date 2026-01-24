@@ -301,7 +301,7 @@ document.body.style.userSelect = '';
               placeholder="Search projects..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition"
+              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition"
             />
           </div>
           {selectedIds.size > 0 && (
@@ -334,7 +334,7 @@ document.body.style.userSelect = '';
   "
 >
 
-      <thead className="bg-gray-50  sticky top-0 z-20 shadow-sm">
+      <thead className="bg-white  sticky top-0 z-20 shadow-sm">
                 <tr>
           <th className="w-12 px-3 py-4">
             <button onClick={selectAll}>
@@ -447,12 +447,12 @@ document.body.style.userSelect = '';
                   <tr><td colSpan={9} className="text-center py-16 text-gray-500">No projects found</td></tr>
                 ) : (
                   currentProjects.map(project => (
-                    <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    <tr key={project.id} className="hover:bg-white dark:hover:bg-gray-700 transition">
                       <td className="px-4 py-4"><button onClick={() => toggleSelect(project.id)}>{selectedIds.has(project.id) ? <CheckSquare className="w-5 h-5 text-orange-600" /> : <Square className="w-5 h-5 text-gray-400" />}</button></td>
-                      <td className="px-4 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-64">{project.title || 'Untitled'}</td>
+                      <td className="px-4 py-4 font-medium text-black  truncate max-w-64">{project.title || 'Untitled'}</td>
                       <td className="px-4 py-4 text-sm font-mono text-gray-600  truncate max-w-48">/{project.slug || '—'}</td>
                       <td className="px-4 py-4 text-sm text-gray-600 "><div className="line-clamp-2 max-w-96">{project.description || 'No description'}</div></td>
-                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  dark:text-gray-300'}`}>{project.status || 'Concept'}</span></td>
+                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'Live' ? 'bg-green-100 text-green-800 ' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'}`}>{project.status || 'Concept'}</span></td>
                       <td className="px-4 py-4 text-sm text-gray-600  capitalize">{project.category || '—'}</td>
                       <td className="px-4 py-4 text-xs text-gray-500  whitespace-nowrap">{formatDate(project.createdAt)}</td>
                       <td className="px-4 py-4 text-xs text-gray-500  whitespace-nowrap">{formatDateTime(project.updatedAt)}</td>
@@ -480,20 +480,20 @@ document.body.style.userSelect = '';
             <div className="text-center py-12 text-gray-500">No projects found</div>
           ) : (
             currentProjects.map(project => (
-              <div key={project.id} className={`bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border ${selectedIds.has(project.id) ? 'border-orange-500' : 'border-gray-200 dark:border-gray-700'} transition-all`}>
+              <div key={project.id} className={`bg-white  rounded-xl shadow-md p-5 border ${selectedIds.has(project.id) ? 'border-orange-500' : 'border-gray-200 '} transition-all`}>
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <button onClick={() => toggleSelect(project.id)}>
                       {selectedIds.has(project.id) ? <CheckSquare className="w-6 h-6 text-orange-600" /> : <Square className="w-6 h-6 text-gray-400" />}
                     </button>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{project.title || 'Untitled'}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 ">{project.title || 'Untitled'}</h3>
                   </div>
                 </div>
                 <div className="space-y-3 text-sm">
                   <div className="font-mono text-gray-600 ">/{project.slug || '—'}</div>
                   <p className="text-gray-600  line-clamp-2">{project.description || 'No description'}</p>
                   <div className="flex flex-wrap gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  dark:text-gray-300'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 ' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  '}`}>
                       {project.status || 'Concept'}
                     </span>
                     <span className="text-gray-500 capitalize">{project.category || '—'}</span>
@@ -548,9 +548,9 @@ document.body.style.userSelect = '';
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="bg-white  rounded-2xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 ">
+              <h2 className="text-2xl font-bold text-gray-900 ">
                 {editingProject ? 'Edit Project' : 'Create New Project'}
               </h2>
               <button onClick={closeModal} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
@@ -558,16 +558,16 @@ document.body.style.userSelect = '';
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
-              <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition" />
-              <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
-              <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 resize-none transition" />
+              <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition" />
+              <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
+              <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 resize-none transition" />
               <div className="grid grid-cols-2 gap-4">
-                <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
+                <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
                   <option value="Live">Live</option>
                   <option value="In-Build">In Build</option>
                   <option value="Concept">Concept</option>
                 </select>
-                <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
+                <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white ">
                   <option value="website">Website</option>
                   <option value="portal">Portal</option>
                   <option value="app">App</option>
@@ -579,7 +579,7 @@ document.body.style.userSelect = '';
                 <button type="submit" className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-4 rounded-xl text-lg shadow-xl transition transform hover:scale-105">
                   {editingProject ? 'Update Project' : 'Create Project'}
                 </button>
-                <button type="button" onClick={closeModal} className="px-8 py-4 bg-gray-200  text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                <button type="button" onClick={closeModal} className="px-8 py-4 bg-gray-200  text-gray-800  font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                   Cancel
                 </button>
               </div>

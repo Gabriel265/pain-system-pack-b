@@ -66,7 +66,7 @@ export default function ContactSection() {
             LEFT COLUMN — STRUCTURAL PLACEHOLDER
             Can be replaced later with media, illustration, map, or removed entirely
           */}
-          <div className="hidden lg:block h-[500px] rounded-2xl border border-dashed border-gray-400 dark:border-gray-700 flex items-center justify-center">
+          <div className="hidden lg:block h-[500px] rounded-2xl border border-dashed border-gray-400  flex items-center justify-center">
             <span className="text-sm text-gray-500">
               Visual placeholder
             </span>
@@ -113,7 +113,7 @@ export default function ContactSection() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Text input"
-                className="w-full px-5 py-4 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-500"
+                className="w-full px-5 py-4 bg-gray-100  border border-gray-300  rounded-lg focus:ring-2 focus:ring-gray-500"
                 required
               />
 
@@ -123,7 +123,7 @@ export default function ContactSection() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email input"
-                className="w-full px-5 py-4 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-500"
+                className="w-full px-5 py-4 bg-gray-100  border border-gray-300  rounded-lg focus:ring-2 focus:ring-gray-500"
                 required
               />
 
@@ -133,7 +133,7 @@ export default function ContactSection() {
                 onChange={handleChange}
                 placeholder="Textarea input"
                 rows={6}
-                className="w-full px-5 py-4 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-500 resize-none"
+                className="w-full px-5 py-4 bg-gray-100  border border-gray-300  rounded-lg focus:ring-2 focus:ring-gray-500 resize-none"
                 required
               />
 
