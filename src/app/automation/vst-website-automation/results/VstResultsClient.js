@@ -11,7 +11,7 @@ export default function VstResultsClient() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">
               Search Results
             </h1>
-            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-base sm:text-lg text-gray-600 ">
               Found 9 items matching your criteria
             </p>
           </div>

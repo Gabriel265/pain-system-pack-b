@@ -23,7 +23,7 @@ const AboutSection = () => {
               <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
                 Heading
               </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-500  text-sm sm:text-base leading-relaxed">
                 Paragraph 
               </p>
             </div>
@@ -33,14 +33,14 @@ const AboutSection = () => {
               <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
                 Heading
               </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-500  text-sm sm:text-base leading-relaxed">
                 Paragraph
               </p>
             </div>
 
             {/* MOBILE IMAGE PLACEHOLDER */}
             <div className="lg:hidden rounded-2xl overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-800 h-64 sm:h-80 flex items-center justify-center">
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
+              <span className="text-gray-500  text-sm">
                 [Image Placeholder – Mobile View]
               </span>
             </div>
@@ -53,7 +53,7 @@ const AboutSection = () => {
             
             {/*  IMAGE PLACEHOLDER */}
             <div className="hidden lg:block rounded-2xl overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-800 h-80 xl:h-96 flex items-center justify-center">
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
+              <span className="text-gray-500  text-sm">
                 [Main Image Placeholder – Desktop View]
               </span>
             </div>
@@ -66,8 +66,8 @@ const AboutSection = () => {
                 
                 {/* SMALL IMAGE PLACEHOLDER */}
                 
-                <div className="w-full sm:w-32 h-32 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-300 dark:bg-gray-700 shadow-md flex items-center justify-center">
-                  <span className="text-gray-500 dark:text-gray-400 text-xs text-center px-2">
+                <div className="w-full sm:w-32 h-32 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-300  shadow-md flex items-center justify-center">
+                  <span className="text-gray-500  text-xs text-center px-2">
                     [Image Placeholder]
                   </span>
                 </div>
@@ -79,7 +79,7 @@ const AboutSection = () => {
               </div>
 
               {/* Card description */}
-              <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-500  text-sm sm:text-base leading-relaxed">
                 Paragraph
               </p>
             </div>

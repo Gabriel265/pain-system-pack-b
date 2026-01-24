@@ -240,7 +240,7 @@ const ServicesOffering = () => {
                 {selectedService.title}
               </h2>
 
-              <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+              <p className="text-base text-gray-600  leading-relaxed mb-8">
                 {selectedService.fullDescription}
               </p>
 
@@ -251,7 +251,7 @@ const ServicesOffering = () => {
                   {selectedService.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600 ">
                         {feature}
                       </span>
                     </div>

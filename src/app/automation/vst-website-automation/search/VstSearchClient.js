@@ -57,9 +57,9 @@ export default function VstSearchClient() {
               
               {/* Metadata Placeholder */}
               <div className="mt-4 flex items-center gap-3 flex-wrap">
-                <div className="h-3 w-16 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
-                <div className="h-3 w-20 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
-                <div className="h-3 w-24 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                <div className="h-3 w-16 bg-gray-300  rounded-full"></div>
+                <div className="h-3 w-20 bg-gray-300  rounded-full"></div>
+                <div className="h-3 w-24 bg-gray-300  rounded-full"></div>
               </div>
             </div>
           ))}

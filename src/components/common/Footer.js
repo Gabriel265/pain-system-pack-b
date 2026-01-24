@@ -46,7 +46,7 @@ export default function Footer() {
               <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
                 Stay Updated
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 ">
                 Subscribe to our newsletter for the latest insights and updates.
               </p>
             </div>
@@ -73,19 +73,19 @@ export default function Footer() {
                 Website Name
               </span>
             </a>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+            <p className="text-gray-600  mb-6 leading-relaxed">
               Description
             </p>
             <div className="space-y-3">
-              <a href="mailto:hello@thepainsystem.com" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-orange-500 transition">
+              <a href="mailto:hello@thepainsystem.com" className="flex items-center text-gray-600  hover:text-orange-500 transition">
                 <Mail className="w-4 h-4 mr-3" />
                Email
               </a>
-              <a href="#" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-orange-500 transition">
+              <a href="#" className="flex items-center text-gray-600  hover:text-orange-500 transition">
                 <Phone className="w-4 h-4 mr-3" />
                 Phone Number
               </a>
-              <div className="flex items-start text-gray-600 dark:text-gray-400">
+              <div className="flex items-start text-gray-600 ">
                 <MapPin className="w-4 h-4 mr-3 mt-1 flex-shrink-0" />
                 <span>Street<br />Address</span>
               </div>
@@ -98,7 +98,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition">
+                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
                     {link.name}
                   </a>
                 </li>
@@ -111,7 +111,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition">
+                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
                     {link.name}
                   </a>
                 </li>
@@ -124,7 +124,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition">
+                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
                     {link.name}
                   </a>
                 </li>
@@ -136,7 +136,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-200 dark:border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-gray-600 dark:text-gray-400 text-sm text-center md:text-left">
+            <p className="text-gray-600  text-sm text-center md:text-left">
               © {currentYear} The Pain System. All rights reserved.
             </p>
             
@@ -147,7 +147,7 @@ export default function Footer() {
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-orange-500 dark:hover:bg-orange-500 text-gray-600 dark:text-gray-400 hover:text-white transition-all transform hover:scale-110"
+                  className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-orange-500 dark:hover:bg-orange-500 text-gray-600  hover:text-white transition-all transform hover:scale-110"
                 >
                   <social.icon className="w-5 h-5" />
                 </a>

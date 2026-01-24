@@ -142,7 +142,7 @@ export default function PortalBuilderClient() {
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
                 placeholder="My Awesome Project"
               />
             </div>
@@ -157,7 +157,7 @@ export default function PortalBuilderClient() {
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                 required
                 readOnly={isEditing}
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
               />
             </div>
 
@@ -170,7 +170,7 @@ export default function PortalBuilderClient() {
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 rows={8}
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 resize-none transition"
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 resize-none transition"
                 placeholder="Describe your project..."
               />
             </div>
@@ -183,7 +183,7 @@ export default function PortalBuilderClient() {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="Live">Live (Published)</option>
                   <option value="In-Build">In Build</option>
@@ -198,7 +198,7 @@ export default function PortalBuilderClient() {
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="portal">Portal</option>
                   <option value="website">Website</option>
@@ -219,7 +219,7 @@ export default function PortalBuilderClient() {
               <button
                 type="button"
                 onClick={() => router.push('/admin/projects')}
-                className="px-8 py-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                className="px-8 py-5 bg-gray-200  text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
                 Cancel
               </button>

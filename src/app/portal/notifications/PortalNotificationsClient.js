@@ -38,7 +38,7 @@ export default function NotificationsPage() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
               Notifications
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm sm:text-base text-gray-500 ">
               Stay updated with your latest activity
             </p>
           </div>
@@ -63,7 +63,7 @@ export default function NotificationsPage() {
               className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-all whitespace-nowrap ${
                 filter === tab
                   ? 'text-orange-600 dark:text-orange-400 border-b-2 border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900/50'
+                  : 'text-gray-600  hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900/50'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -93,7 +93,7 @@ export default function NotificationsPage() {
               <div className="flex-1 min-w-0 space-y-2 sm:space-y-2.5">
                 {/* Title Placeholder */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="h-4 sm:h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                  <div className="h-4 sm:h-5 bg-gray-300  rounded w-3/4 animate-pulse"></div>
                   {notification.unread && (
                     <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0 mt-1.5"></div>
                   )}
@@ -107,7 +107,7 @@ export default function NotificationsPage() {
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                  <span className="text-xs sm:text-sm text-gray-500 ">
                     {notification.time}
                   </span>
                   
@@ -116,7 +116,7 @@ export default function NotificationsPage() {
                     <button className="text-xs sm:text-sm text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">
                       View
                     </button>
-                    <button className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <button className="text-xs sm:text-sm text-gray-500  hover:text-gray-700 dark:hover:text-gray-300">
                       Dismiss
                     </button>
                   </div>

@@ -281,7 +281,7 @@ document.body.style.userSelect = '';
             <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">
               Portal • Projects
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage all your projects</p>
+            <p className="text-gray-600  mt-2">Manage all your projects</p>
           </div>
           <button
             onClick={openCreateModal}
@@ -301,7 +301,7 @@ document.body.style.userSelect = '';
               placeholder="Search projects..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 transition"
+              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition"
             />
           </div>
           {selectedIds.size > 0 && (
@@ -334,7 +334,7 @@ document.body.style.userSelect = '';
   "
 >
 
-      <thead className="bg-gray-50 dark:bg-gray-700 sticky top-0 z-20 shadow-sm">
+      <thead className="bg-gray-50  sticky top-0 z-20 shadow-sm">
                 <tr>
           <th className="w-12 px-3 py-4">
             <button onClick={selectAll}>
@@ -450,14 +450,14 @@ document.body.style.userSelect = '';
                     <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                       <td className="px-4 py-4"><button onClick={() => toggleSelect(project.id)}>{selectedIds.has(project.id) ? <CheckSquare className="w-5 h-5 text-orange-600" /> : <Square className="w-5 h-5 text-gray-400" />}</button></td>
                       <td className="px-4 py-4 font-medium text-gray-900 dark:text-gray-100 truncate max-w-64">{project.title || 'Untitled'}</td>
-                      <td className="px-4 py-4 text-sm font-mono text-gray-600 dark:text-gray-400 truncate max-w-48">/{project.slug || '—'}</td>
-                      <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400"><div className="line-clamp-2 max-w-96">{project.description || 'No description'}</div></td>
-                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>{project.status || 'Concept'}</span></td>
-                      <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 capitalize">{project.category || '—'}</td>
-                      <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{formatDate(project.createdAt)}</td>
-                      <td className="px-4 py-4 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{formatDateTime(project.updatedAt)}</td>
+                      <td className="px-4 py-4 text-sm font-mono text-gray-600  truncate max-w-48">/{project.slug || '—'}</td>
+                      <td className="px-4 py-4 text-sm text-gray-600 "><div className="line-clamp-2 max-w-96">{project.description || 'No description'}</div></td>
+                      <td className="px-4 py-4"><span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  dark:text-gray-300'}`}>{project.status || 'Concept'}</span></td>
+                      <td className="px-4 py-4 text-sm text-gray-600  capitalize">{project.category || '—'}</td>
+                      <td className="px-4 py-4 text-xs text-gray-500  whitespace-nowrap">{formatDate(project.createdAt)}</td>
+                      <td className="px-4 py-4 text-xs text-gray-500  whitespace-nowrap">{formatDateTime(project.updatedAt)}</td>
                       <td className="px-4 py-4 text-right">
-                        <div className="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1.5">
+                        <div className="inline-flex items-center gap-1 bg-gray-100  rounded-lg p-1.5">
                           <button onClick={() => openEditModal(project)} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition"><Edit className="w-4 h-4" /></button>
                           <button onClick={() => handleToggleStatus(project)} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900 rounded transition"><Globe className="w-4 h-4" /></button>
                           <button onClick={() => handleDelete(project.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"><Trash2 className="w-4 h-4" /></button>
@@ -490,10 +490,10 @@ document.body.style.userSelect = '';
                   </div>
                 </div>
                 <div className="space-y-3 text-sm">
-                  <div className="font-mono text-gray-600 dark:text-gray-400">/{project.slug || '—'}</div>
-                  <p className="text-gray-600 dark:text-gray-400 line-clamp-2">{project.description || 'No description'}</p>
+                  <div className="font-mono text-gray-600 ">/{project.slug || '—'}</div>
+                  <p className="text-gray-600  line-clamp-2">{project.description || 'No description'}</p>
                   <div className="flex flex-wrap gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Live' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : project.status === 'In-Build' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-700  dark:text-gray-300'}`}>
                       {project.status || 'Concept'}
                     </span>
                     <span className="text-gray-500 capitalize">{project.category || '—'}</span>
@@ -516,7 +516,7 @@ document.body.style.userSelect = '';
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 ">
               Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
             </div>
             <div className="flex items-center gap-2">
@@ -558,16 +558,16 @@ document.body.style.userSelect = '';
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
-              <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 transition" />
-              <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
-              <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-500 resize-none transition" />
+              <input type="text" placeholder="Project Title *" value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 transition" />
+              <input type="text" placeholder="Slug (auto-generated)" value={formData.slug} onChange={e => setFormData(prev => ({ ...prev, slug: e.target.value }))} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition" />
+              <textarea placeholder="Description *" value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} rows={5} required className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50  focus:ring-2 focus:ring-orange-500 resize-none transition" />
               <div className="grid grid-cols-2 gap-4">
-                <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                <select value={formData.status} onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
                   <option value="Live">Live</option>
                   <option value="In-Build">In Build</option>
                   <option value="Concept">Concept</option>
                 </select>
-                <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                <select value={formData.category} onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))} className="px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 ">
                   <option value="website">Website</option>
                   <option value="portal">Portal</option>
                   <option value="app">App</option>
@@ -579,7 +579,7 @@ document.body.style.userSelect = '';
                 <button type="submit" className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-4 rounded-xl text-lg shadow-xl transition transform hover:scale-105">
                   {editingProject ? 'Update Project' : 'Create Project'}
                 </button>
-                <button type="button" onClick={closeModal} className="px-8 py-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                <button type="button" onClick={closeModal} className="px-8 py-4 bg-gray-200  text-gray-800 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                   Cancel
                 </button>
               </div>

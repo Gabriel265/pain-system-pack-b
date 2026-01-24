@@ -9,7 +9,7 @@ export default function VstMapClient() {
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3">
           Explore Our Map
         </h1>
-        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+        <p className="text-base sm:text-lg text-gray-600 ">
           Discover locations, routes, and points of interest
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function VstMapClient() {
               
               {/* Text Content */}
               <div>
-                <p className="text-xl sm:text-2xl lg:text-4xl font-semibold text-gray-500 dark:text-gray-400">
+                <p className="text-xl sm:text-2xl lg:text-4xl font-semibold text-gray-500 ">
                   Map View
                 </p>
                 <p className="text-sm sm:text-base lg:text-lg text-gray-400 dark:text-gray-500 mt-2">
@@ -62,7 +62,7 @@ export default function VstMapClient() {
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature One
             </h3>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 ">
               Description of map feature or capability
             </p>
           </div>
@@ -71,7 +71,7 @@ export default function VstMapClient() {
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature Two
             </h3>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 ">
               Description of map feature or capability
             </p>
           </div>
@@ -80,7 +80,7 @@ export default function VstMapClient() {
             <h3 className="text-base sm:text-lg font-semibold mb-2 text-orange-500 dark:text-orange-600">
               Feature Three
             </h3>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 ">
               Description of map feature or capability
             </p>
           </div>

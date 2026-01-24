@@ -51,7 +51,7 @@ export default function PortalDashboardClient() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="text-xl text-gray-600 dark:text-gray-400">Loading dashboard...</div>
+        <div className="text-xl text-gray-600 ">Loading dashboard...</div>
       </div>
     );
   }
@@ -63,28 +63,28 @@ export default function PortalDashboardClient() {
         <h1 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
           Admin Dashboard
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Your project ecosystem at a glance</p>
+        <p className="mt-2 text-gray-600 ">Your project ecosystem at a glance</p>
       </div>
 
       {/* KPI Cards - Mobile Stacked, Desktop Grid */}
       <div className="max-w-7xl mx-auto mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Projects</p>
+          <p className="text-sm text-gray-500 ">Total Projects</p>
           <p className="text-4xl font-bold mt-2">{total}</p>
           <p className="text-xs text-green-600 mt-1">{Live} Live</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Live</p>
+          <p className="text-sm text-gray-500 ">Live</p>
           <p className="text-4xl font-bold mt-2 text-green-600">{Live}</p>
           <p className="text-xs mt-1">Live & running</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">In Build</p>
+          <p className="text-sm text-gray-500 ">In Build</p>
           <p className="text-4xl font-bold mt-2 text-blue-600">{inProgress}</p>
           <p className="text-xs mt-1">Under development</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center sm:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Categories</p>
+          <p className="text-sm text-gray-500 ">Categories</p>
           <p className="text-4xl font-bold mt-2 text-purple-600">{Object.keys(categories).length}</p>
           <p className="text-xs mt-1 capitalize">{Object.keys(categories).join(", ")}</p>
         </div>
@@ -159,7 +159,7 @@ export default function PortalDashboardClient() {
                     <span className="capitalize font-medium">{cat}</span>
                     <span>{count}</span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8">
+                  <div className="w-full bg-gray-200  rounded-full h-8">
                     <div
                       className={`h-full rounded-full transition-all duration-1000 ${
                         cat === "builder" ? "bg-orange-500" :
