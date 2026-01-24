@@ -78,7 +78,7 @@ export default function ContactSection() {
           */}
           <div className="w-full max-w-xl mx-auto lg:mx-0">
             <div className="mb-8 text-center lg:text-left">
-              <h1 className="text-4xl lg:text-5xl font-semibold text-foreground mb-6">
+              <h1 className="text-4xl lg:text-5xl font-semibold text-gray-800 mb-6">
                 Contact Page
               </h1>
 
@@ -91,13 +91,13 @@ export default function ContactSection() {
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">
                     Label
                   </p>
-                  <p className="text-foreground">Placeholder value</p>
+                  <p className="text-gray-800">Placeholder value</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">
                     Label
                   </p>
-                  <p className="text-foreground">Placeholder value</p>
+                  <p className="text-gray-800">Placeholder value</p>
                 </div>
               </div>
             </div>
@@ -158,19 +158,19 @@ export default function ContactSection() {
                 <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">
                   Label
                 </p>
-                <p className="text-foreground">Placeholder</p>
+                <p className="text-gray-800">Placeholder</p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">
                   Label
                 </p>
-                <p className="text-foreground">Placeholder</p>
+                <p className="text-gray-800">Placeholder</p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">
                   Label
                 </p>
-                <p className="text-foreground">Placeholder</p>
+                <p className="text-gray-800">Placeholder</p>
               </div>
             </div>
           </div>

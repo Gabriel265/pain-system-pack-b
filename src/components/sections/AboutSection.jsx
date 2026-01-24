@@ -4,7 +4,7 @@ import React from 'react';
 
 const AboutSection = () => {
   return (
-    <section className="w-full bg-white text-foreground py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section className="w-full bg-white text-gray-800 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
    
       <div className="max-w-7xl mx-auto">
         {/* SECTION HEADER */}

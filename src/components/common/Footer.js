@@ -43,7 +43,7 @@ export default function Footer() {
         <div className="mb-16 pb-16 border-b border-gray-200 dark:border-gray-800">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
                 Stay Updated
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
@@ -54,7 +54,7 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="flex-1 px-6 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               <button className="inline-flex items-center justify-center px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full transition transform hover:scale-105 whitespace-nowrap">
                 Subscribe <ArrowRight className="ml-2 w-4 h-4" />
@@ -69,7 +69,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <a href="#" className="flex items-center space-x-2 mb-6">
               <TrendingUp className="w-8 h-8 text-orange-500" />
-              <span className="text-xl font-bold text-foreground">
+              <span className="text-xl font-bold text-gray-800">
                 Website Name
               </span>
             </a>
@@ -94,7 +94,7 @@ export default function Footer() {
 
           {/* Links Columns */}
           <div>
-            <h4 className="font-bold text-foreground mb-4">Company</h4>
+            <h4 className="font-bold text-gray-800 mb-4">Company</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -107,7 +107,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-foreground mb-4">Services</h4>
+            <h4 className="font-bold text-gray-800 mb-4">Services</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
@@ -120,7 +120,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-foreground mb-4">Legal</h4>
+            <h4 className="font-bold text-gray-800 mb-4">Legal</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>

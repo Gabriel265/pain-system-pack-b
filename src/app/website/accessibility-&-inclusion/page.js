@@ -73,7 +73,7 @@ export default function AccessibilityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-foreground">
+    <div className="min-h-screen bg-white text-gray-800">
       <div className="h-16 md:h-20" />
 
       {/* HERO */}
@@ -198,7 +198,7 @@ export default function AccessibilityPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                   readingMode
                     ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-foreground'
+                    : 'border border-border text-gray-800'
                 }`}
               >
                 {readingMode ? 'Disable' : 'Enable'}

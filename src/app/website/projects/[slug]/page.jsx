@@ -152,7 +152,7 @@ export default async function ProjectPage({ params }) {
   const StatusIcon = cfg.icon;
 
   return (
-    <div className="min-h-screen bg-white text-foreground">
+    <div className="min-h-screen bg-white text-gray-800">
       {/* Spacer for fixed navigation */}
       <div className="h-16 md:h-20" />
 
@@ -258,7 +258,7 @@ export default async function ProjectPage({ params }) {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 border-2 border-border hover:border-primary text-foreground hover:text-primary px-6 py-3 md:px-8 md:py-4 rounded-full text-sm md:text-base font-medium transition text-center"
+                  className="flex-1 border-2 border-border hover:border-primary text-gray-800 hover:text-primary px-6 py-3 md:px-8 md:py-4 rounded-full text-sm md:text-base font-medium transition text-center"
                 >
                   Launch Project
                 </a>

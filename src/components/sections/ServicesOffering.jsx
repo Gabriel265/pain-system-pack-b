@@ -96,7 +96,7 @@ const ServicesOffering = () => {
   return (
     <>
       {/* ===================== MAIN SERVICES SECTION ===================== */}
-      <section className="min-h-screen bg-white text-foreground py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+      <section className="min-h-screen bg-white text-gray-800 py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
 
           {/* ---------- HEADER / INTRO ---------- */}
@@ -216,7 +216,7 @@ const ServicesOffering = () => {
           onClick={closeModal} // Click outside closes modal
         >
           <div
-            className="relative bg-white text-foreground rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="relative bg-white text-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()} // Prevent accidental close
           >
             {/* Close icon */}

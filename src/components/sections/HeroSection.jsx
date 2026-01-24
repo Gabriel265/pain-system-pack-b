@@ -40,7 +40,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="bg-white text-foreground">
+    <section className="bg-white text-gray-800">
       {/* Header Offset */}
       <div className="h-16 md:h-20" />
 

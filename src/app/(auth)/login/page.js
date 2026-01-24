@@ -71,7 +71,7 @@ export default function SignIn() {
               {/* Header */}
               <div className="mb-8">
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Your logo</p>
-                <h1 className="text-4xl font-bold text-foreground">Login</h1>
+                <h1 className="text-4xl font-bold text-gray-800">Login</h1>
               </div>
 
               {/* Login form */}
@@ -82,7 +82,7 @@ export default function SignIn() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
                 />
                 <input 
                   type="password" 
@@ -90,7 +90,7 @@ export default function SignIn() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
                 />
 
                 <button 

@@ -47,7 +47,7 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-foreground py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white text-gray-800 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* ===================== Page Hero SECTION ===================== */}
