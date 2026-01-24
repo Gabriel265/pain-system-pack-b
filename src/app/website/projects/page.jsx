@@ -44,7 +44,7 @@ export default function ProjectsPage() {
             Projects, built in phases
           </h1>
 
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-lg text-gray-600 leading-relaxed">
             Every project is shown exactly as it is — live, in development, or
             still in concept. No guesswork, no inflated claims.
           </p>
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
                 <h2 className="text-2xl font-serif font-light mb-2">
                   Project showroom (planned)
                 </h2>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-gray-600 leading-relaxed">
                   A curated space to explore confirmed launches and community
                   work. This will be introduced after the core platform is
                   complete.
@@ -170,7 +170,7 @@ function StatusGuide({ icon: Icon, title, description, color }) {
       <Icon className={`w-5 h-5 mt-1 ${colors[color]}`} />
       <div>
         <h3 className="font-medium">{title}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-gray-600">{description}</p>
       </div>
     </div>
   );
@@ -226,7 +226,7 @@ function ProjectCard({ project, clickable }) {
         <StatusBadge status={project.status} />
       </div>
 
-      <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
+      <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-4">
         {project.description}
       </p>
 
@@ -236,7 +236,7 @@ function ProjectCard({ project, clickable }) {
           View project →
         </span>
       ) : (
-        <span className="text-sm text-muted-foreground italic">
+        <span className="text-sm text-gray-600 italic">
           Not yet available
         </span>
       )}

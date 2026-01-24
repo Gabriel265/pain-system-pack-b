@@ -56,14 +56,14 @@ export default function HeroSection() {
               A platform for everyone
             </h1>
 
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
               Designed to work for all people, regardless of ability. Not a
               disability-only site — a platform built with accessibility as a
               foundation.
             </p>
 
             <blockquote className="border-l-2 border-primary pl-4 mb-8">
-              <p className="text-sm md:text-base italic text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base italic text-gray-600 leading-relaxed">
                 “People should not adapt to suit the machine. The machine should
                 adapt to suit the person.”
               </p>
@@ -98,7 +98,7 @@ export default function HeroSection() {
                 >
                   {/* Placeholder visual */}
                   <div className="w-full h-full flex items-center justify-center bg-muted/10">
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-gray-600">
                       {slide.label}
                     </span>
                   </div>

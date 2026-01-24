@@ -87,7 +87,7 @@ export default function AccessibilityPage() {
             from the ground up
           </h1>
 
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-lg text-gray-600 leading-relaxed">
             TwinAccess is not an add-on or a separate experience. Accessibility is
             embedded into how our platform is designed, written, and built.
           </p>
@@ -102,12 +102,12 @@ export default function AccessibilityPage() {
               Not a separate site. Not a workaround.
             </h2>
 
-            <p className="text-muted-foreground leading-relaxed mb-4">
+            <p className="text-gray-600 leading-relaxed mb-4">
               Many platforms treat accessibility as an afterthought — a checkbox
               or a parallel version of the product.
             </p>
 
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-gray-600 leading-relaxed">
               TwinAccess is different. Every layout, interaction, and content
               decision is reviewed through an accessibility lens from day one.
             </p>
@@ -131,7 +131,7 @@ export default function AccessibilityPage() {
                     <Icon className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h3 className="font-medium mb-2">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-gray-600 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -167,13 +167,13 @@ export default function AccessibilityPage() {
                           className={`text-xs px-2 py-1 rounded-full ${
                             item.status === 'Active'
                               ? 'bg-green-500/10 text-green-600'
-                              : 'bg-muted/20 text-muted-foreground'
+                              : 'bg-muted/20 text-gray-600'
                           }`}
                         >
                           {item.status}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-gray-600 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -206,7 +206,7 @@ export default function AccessibilityPage() {
             </div>
 
             <div
-              className={`text-muted-foreground transition ${
+              className={`text-gray-600 transition ${
                 readingMode
                   ? 'text-lg leading-loose'
                   : 'text-base leading-relaxed'

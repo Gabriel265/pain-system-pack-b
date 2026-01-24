@@ -181,7 +181,7 @@ export default async function ProjectPage({ params }) {
               </span>
 
               {project.category && (
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm md:text-base bg-muted/20 text-muted-foreground border border-border">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm md:text-base bg-muted/20 text-gray-600 border border-border">
                   <Tag className="w-4 h-4" />
                   {project.category}
                 </span>
@@ -212,7 +212,7 @@ export default async function ProjectPage({ params }) {
               <h2 className="text-xl md:text-2xl font-semibold mb-4">
                 Description
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                 {project.description}
               </p>
             </section>
@@ -236,7 +236,7 @@ export default async function ProjectPage({ params }) {
                   <h3 className="text-lg md:text-xl font-semibold mb-3">
                     Coming in Future Phases
                   </h3>
-                  <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+                  <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
                     This project is in the concept stage. Check back later for updates.
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export default async function ProjectPage({ params }) {
               <h3 className="text-lg md:text-xl font-semibold mb-4">
                 Need Help?
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-4">
+              <p className="text-sm md:text-base text-gray-600 mb-4">
                 This project is live. If something breaks, contact support.
               </p>
               <Link
@@ -303,7 +303,7 @@ function Detail({ label, value }) {
         <Calendar className="w-4 h-4 md:w-5 md:h-5 text-primary" />
         <span className="text-sm md:text-base font-semibold">{label}</span>
       </div>
-      <p className="text-sm md:text-base text-muted-foreground">{value}</p>
+      <p className="text-sm md:text-base text-gray-600">{value}</p>
     </div>
   );
 }
