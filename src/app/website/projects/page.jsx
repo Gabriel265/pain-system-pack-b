@@ -29,7 +29,7 @@ export default function ProjectsPage() {
   const conceptProjects = normalizedProjects.filter(p => p.status === 'concept');
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-foreground">
       {/* Spacer to offset fixed header */}
       <div className="h-16 md:h-20" />
 

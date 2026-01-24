@@ -73,7 +73,7 @@ export default function AccessibilityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-foreground">
       <div className="h-16 md:h-20" />
 
       {/* HERO */}

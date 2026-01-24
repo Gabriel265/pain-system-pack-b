@@ -46,7 +46,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="min-h-screen bg-background transition-colors duration-300">
+    <section className="min-h-screen bg-white transition-colors duration-300">
     {/* Header Space */}
       <div className="h-16 md:h-20"></div>
       {/* 

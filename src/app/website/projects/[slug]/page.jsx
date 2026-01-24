@@ -152,7 +152,7 @@ export default async function ProjectPage({ params }) {
   const StatusIcon = cfg.icon;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-foreground">
       {/* Spacer for fixed navigation */}
       <div className="h-16 md:h-20" />
 

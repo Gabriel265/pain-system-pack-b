@@ -96,7 +96,7 @@ const ServicesOffering = () => {
   return (
     <>
       {/* ===================== MAIN SERVICES SECTION ===================== */}
-      <section className="min-h-screen bg-background text-foreground py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+      <section className="min-h-screen bg-white text-foreground py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
 
           {/* ---------- HEADER / INTRO ---------- */}
@@ -149,7 +149,7 @@ const ServicesOffering = () => {
                 className={`group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl ${
                   service.dark
                     ? 'bg-foreground text-background shadow-xl'
-                    : 'bg-background border-2 border-foreground/10 dark:border-foreground/20 hover:border-orange-500/30'
+                    : 'bg-white border-2 border-foreground/10 dark:border-foreground/20 hover:border-orange-500/30'
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }} // Staggered entrance animation
               >
@@ -216,7 +216,7 @@ const ServicesOffering = () => {
           onClick={closeModal} // Click outside closes modal
         >
           <div
-            className="relative bg-background text-foreground rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="relative bg-white text-foreground rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()} // Prevent accidental close
           >
             {/* Close icon */}

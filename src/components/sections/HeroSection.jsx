@@ -40,7 +40,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="bg-background text-foreground">
+    <section className="bg-white text-foreground">
       {/* Header Offset */}
       <div className="h-16 md:h-20" />
 
@@ -110,8 +110,8 @@ export default function HeroSection() {
                 onClick={prevSlide}
                 aria-label="Previous slide"
                 className="absolute left-3 top-1/2 -translate-y-1/2
-                           bg-background/90 border border-border
-                           p-2 rounded-full hover:bg-background transition"
+                           bg-white/90 border border-border
+                           p-2 rounded-full hover:bg-white transition"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -120,8 +120,8 @@ export default function HeroSection() {
                 onClick={nextSlide}
                 aria-label="Next slide"
                 className="absolute right-3 top-1/2 -translate-y-1/2
-                           bg-background/90 border border-border
-                           p-2 rounded-full hover:bg-background transition"
+                           bg-white/90 border border-border
+                           p-2 rounded-full hover:bg-white transition"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
