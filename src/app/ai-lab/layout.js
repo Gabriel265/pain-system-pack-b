@@ -1,18 +1,18 @@
 // layout for everything in this folder
 
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import Sidebar from "@/components/common/Sidebar";
 
 export default function AILabLayout({ children }) {
   useEffect(() => {
     // Add class to body when component mounts
-    document.body.classList.add('ai-lab-active');
+    document.body.classList.add("ai-lab-active");
 
     // Cleanup when unmounting
     return () => {
-      document.body.classList.remove('ai-lab-active');
+      document.body.classList.remove("ai-lab-active");
     };
   }, []);
 
@@ -21,9 +21,7 @@ export default function AILabLayout({ children }) {
       <div className="flex flex-1">
         <Sidebar type="ai-lab" />
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-10">
-          {children}
-        </main>
+        <main className="flex-1 p-4 sm:p-6 lg:p-10">{children}</main>
       </div>
     </div>
   );

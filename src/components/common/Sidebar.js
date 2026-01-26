@@ -3,8 +3,19 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { 
-  Home, FolderOpen, Bell, Hammer, Search, MapPin, Shield, X, LogOut, ChevronDown, ChevronRight, Codesandbox 
+import {
+  Home,
+  FolderOpen,
+  Bell,
+  Hammer,
+  Search,
+  MapPin,
+  Shield,
+  X,
+  LogOut,
+  ChevronDown,
+  ChevronRight,
+  Codesandbox,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -13,7 +24,11 @@ const adminLinks = [
   { divider: true },
   { href: "/portal/dashboard", label: "Portal Dashboard", icon: Home },
   { divider: true },
-  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  {
+    href: "/automation/projects-builder",
+    label: "Projects Builder",
+    icon: Hammer,
+  },
   { divider: true },
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
   { divider: true },
@@ -40,27 +55,50 @@ const portalLinks = [
   { divider: true },
   { href: "/automation/vst-website-automation", label: "VST Home", icon: Home },
   { divider: true },
-  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  {
+    href: "/automation/projects-builder",
+    label: "Projects Builder",
+    icon: Hammer,
+  },
   { divider: true },
   { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
 
 const vstLinks = [
   { href: "/automation/vst-website-automation", label: "Home", icon: Home },
-  { href: "/automation/vst-website-automation/search", label: "Search", icon: Search },
-  { href: "/automation/vst-website-automation/results", label: "Results", icon: FolderOpen },
-  { href: "/automation/vst-website-automation/map", label: "Map", icon: MapPin },
-  { href: "/automation/vst-website-automation/safety", label: "Safety", icon: Shield },
+  {
+    href: "/automation/vst-website-automation/search",
+    label: "Search",
+    icon: Search,
+  },
+  {
+    href: "/automation/vst-website-automation/results",
+    label: "Results",
+    icon: FolderOpen,
+  },
+  {
+    href: "/automation/vst-website-automation/map",
+    label: "Map",
+    icon: MapPin,
+  },
+  {
+    href: "/automation/vst-website-automation/safety",
+    label: "Safety",
+    icon: Shield,
+  },
   { divider: true },
   { href: "/admin/projects", label: "Admin Panel", icon: FolderOpen },
   { divider: true },
   { href: "/portal/dashboard", label: "Portal", icon: Home },
   { divider: true },
-  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
+  {
+    href: "/automation/projects-builder",
+    label: "Projects Builder",
+    icon: Hammer,
+  },
   { divider: true },
   { href: "/ai-lab", label: "AI LAB", icon: Codesandbox },
 ];
-
 
 const aiLabLinks = [
   { href: "/automation/vst-website-automation", label: "Home", icon: Home },
@@ -69,21 +107,29 @@ const aiLabLinks = [
   { divider: true },
   { href: "/portal/dashboard", label: "Portal", icon: Home },
   { divider: true },
-  { href: "/automation/projects-builder", label: "Projects Builder", icon: Hammer },
-  ];
-
-
+  {
+    href: "/automation/projects-builder",
+    label: "Projects Builder",
+    icon: Hammer,
+  },
+];
 
 export default function Sidebar({ type }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const links = 
-    type === "portal" ? portalLinks :
-    type === "vst" ? vstLinks :
-    type === "builder" ? builderLinks :
-    type === "admin" ? adminLinks :
-    type === "ai-lab" ? aiLabLinks : [];
+  const links =
+    type === "portal"
+      ? portalLinks
+      : type === "vst"
+        ? vstLinks
+        : type === "builder"
+          ? builderLinks
+          : type === "admin"
+            ? adminLinks
+            : type === "ai-lab"
+              ? aiLabLinks
+              : [];
 
   // Mobile menu open state
   const [isOpen, setIsOpen] = useState(false);
@@ -105,8 +151,8 @@ export default function Sidebar({ type }) {
   }, [isOpen]);
 
   const handleLogout = () => {
-    document.cookie = 'user_role=; path=/; max-age=0';
-    router.push('/');
+    document.cookie = "user_role=; path=/; max-age=0";
+    router.push("/");
   };
 
   // Dynamic title based on current section
@@ -140,16 +186,17 @@ export default function Sidebar({ type }) {
         `}
       >
         <div className="flex flex-col h-full">
-
           {/* Header Spacer */}
           <div className="h-16 md:h-20 lg:h-24"></div>
 
           {/* Collapsible Header */}
-          <div 
+          <div
             className="flex items-center justify-between p-6 border-b border-gray-200  cursor-pointer select-none"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            <div className={`flex items-center gap-3 transition-all ${isCollapsed ? "justify-center" : ""}`}>
+            <div
+              className={`flex items-center gap-3 transition-all ${isCollapsed ? "justify-center" : ""}`}
+            >
               {isCollapsed ? (
                 <ChevronRight className="w-6 h-6 text-orange-600" />
               ) : (
@@ -173,11 +220,16 @@ export default function Sidebar({ type }) {
           </div>
 
           {/* Navigation */}
-          <nav className={`flex-1 p-4 space-y-1 overflow-y-auto ${isCollapsed ? "px-3" : ""}`}>
+          <nav
+            className={`flex-1 p-4 space-y-1 overflow-y-auto ${isCollapsed ? "px-3" : ""}`}
+          >
             {links.map((link, index) => {
               if (link.divider) {
                 return (
-                  <div key={`divider-${index}`} className="my-4 border-t border-gray-200" />
+                  <div
+                    key={`divider-${index}`}
+                    className="my-4 border-t border-gray-200"
+                  />
                 );
               }
 
@@ -191,16 +243,21 @@ export default function Sidebar({ type }) {
                   className={`
                     flex items-center rounded-lg transition-all duration-200 group
                     ${isCollapsed ? "justify-center px-3" : "px-4 gap-3"}
-                    ${isActive
-                      ? "bg-orange-500 text-white shadow-md"
-                      : "text-white  hover:bg-gray-500 "
+                    ${
+                      isActive
+                        ? "bg-orange-500 text-white shadow-md"
+                        : "text-white  hover:bg-gray-500 "
                     }
                   `}
                   title={isCollapsed ? link.label : ""}
                 >
-                  <div className={`py-3 ${isCollapsed ? "" : "flex items-center gap-3 w-full"}`}>
+                  <div
+                    className={`py-3 ${isCollapsed ? "" : "flex items-center gap-3 w-full"}`}
+                  >
                     <Icon className="w-5 h-5 flex-shrink-0" />
-                    {!isCollapsed && <span className="font-medium">{link.label}</span>}
+                    {!isCollapsed && (
+                      <span className="font-medium">{link.label}</span>
+                    )}
                   </div>
                 </Link>
               );
@@ -208,7 +265,9 @@ export default function Sidebar({ type }) {
           </nav>
 
           {/* Logout + Copyright */}
-          <div className={`border-t border-gray-200  p-4 space-y-4 ${isCollapsed ? "px-3" : ""}`}>
+          <div
+            className={`border-t border-gray-200  p-4 space-y-4 ${isCollapsed ? "px-3" : ""}`}
+          >
             <button
               onClick={handleLogout}
               className={`
@@ -250,8 +309,18 @@ export function MobileMenuButton({ isOpen, onToggle }) {
       {isOpen ? (
         <X className="w-7 h-7" />
       ) : (
-        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
+        <svg
+          className="w-7 h-7"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       )}
     </button>

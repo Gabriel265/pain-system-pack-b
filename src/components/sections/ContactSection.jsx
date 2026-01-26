@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ContactSection() {
   /**
@@ -8,9 +8,9 @@ export default function ContactSection() {
    * Keep keys generic so backend/API mapping stays flexible
    */
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
 
   /**
@@ -30,7 +30,7 @@ export default function ContactSection() {
     setTimeout(() => setShowToast(false), 3000);
 
     // Reset form after submit
-    setFormData({ name: '', email: '', message: '' });
+    setFormData({ name: "", email: "", message: "" });
   };
 
   /**
@@ -58,15 +58,12 @@ export default function ContactSection() {
 
       <div className="container mx-auto px-4 py-12 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-
           {/* 
             LEFT COLUMN — STRUCTURAL PLACEHOLDER
             Can be replaced later with media, illustration, map, or removed entirely
           */}
           <div className="hidden lg:block h-[500px] rounded-2xl border border-dashed border-gray-400  flex items-center justify-center">
-            <span className="text-sm text-gray-500">
-              Visual placeholder
-            </span>
+            <span className="text-sm text-gray-500">Visual placeholder</span>
           </div>
 
           {/* 

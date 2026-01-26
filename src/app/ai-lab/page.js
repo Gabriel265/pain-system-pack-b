@@ -1,5 +1,5 @@
-'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+"use client";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 /*
  * Dashboard page for AI Coding Agent.
@@ -10,7 +10,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
  */
 
 export default function AiAgentDashboard() {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [runs, setRuns] = useState([]);
@@ -22,13 +22,13 @@ export default function AiAgentDashboard() {
   const [selectedPaths, setSelectedPaths] = useState(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [viewedFile, setViewedFile] = useState(null);
-  const [fileContent, setFileContent] = useState('');
+  const [fileContent, setFileContent] = useState("");
   const [contentLoading, setContentLoading] = useState(false);
   const [contentError, setContentError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(''); // New: State for file tree search.
+  const [searchTerm, setSearchTerm] = useState(""); // New: State for file tree search.
 
   const observerTarget = useRef(null);
 
@@ -42,13 +42,13 @@ export default function AiAgentDashboard() {
       const res = await fetch(`/api/ai-lab/runs?page=${pageNum}&limit=10`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      
+
       if (append) {
-        setRuns(prev => [...prev, ...data]);
+        setRuns((prev) => [...prev, ...data]);
       } else {
         setRuns(data);
       }
-      
+
       if (data.length < 10) {
         setHasMore(false);
       }
@@ -65,12 +65,12 @@ export default function AiAgentDashboard() {
     setIsLoadingFiles(true);
     setFileError(null);
     try {
-      const res = await fetch('/api/ai-lab/repo-tree');
+      const res = await fetch("/api/ai-lab/repo-tree");
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFiles(data);
     } catch (err) {
-     setFileError(err.message);
+      setFileError(err.message);
       setFiles([]);
     } finally {
       setIsLoadingFiles(false);
@@ -82,12 +82,15 @@ export default function AiAgentDashboard() {
     loadFiles();
   }, []);
 
-  const handleObserver = useCallback((entries) => {
-    const [target] = entries;
-    if (target.isIntersecting && hasMore && !loadingMore && !isLoadingRuns) {
-      setPage(prev => prev + 1);
-    }
-  }, [hasMore, loadingMore, isLoadingRuns]);
+  const handleObserver = useCallback(
+    (entries) => {
+      const [target] = entries;
+      if (target.isIntersecting && hasMore && !loadingMore && !isLoadingRuns) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [hasMore, loadingMore, isLoadingRuns],
+  );
 
   useEffect(() => {
     const element = observerTarget.current;
@@ -107,7 +110,7 @@ export default function AiAgentDashboard() {
   }, [page]);
 
   const toggleSelect = (path) => {
-    setSelectedPaths(prev => {
+    setSelectedPaths((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(path)) {
         newSet.delete(path);
@@ -119,7 +122,7 @@ export default function AiAgentDashboard() {
   };
 
   const removeSelected = (path) => {
-    setSelectedPaths(prev => {
+    setSelectedPaths((prev) => {
       const newSet = new Set(prev);
       newSet.delete(path);
       return newSet;
@@ -131,23 +134,28 @@ export default function AiAgentDashboard() {
     setContentLoading(true);
     setContentError(null);
     try {
-      const res = await fetch(`/api/ai-lab/file-content?path=${encodeURIComponent(path)}`);
+      const res = await fetch(
+        `/api/ai-lab/file-content?path=${encodeURIComponent(path)}`,
+      );
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFileContent(data.content);
     } catch (err) {
-     setContentError(err.message);
+      setContentError(err.message);
     } finally {
       setContentLoading(false);
     }
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(fileContent).then(() => {
-      alert('Copied to clipboard!');
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-    });
+    navigator.clipboard
+      .writeText(fileContent)
+      .then(() => {
+        alert("Copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy:", err);
+      });
   };
 
   const handleRun = async () => {
@@ -156,17 +164,19 @@ export default function AiAgentDashboard() {
     setError(null);
     try {
       const selectedList = Array.from(selectedPaths);
-      const appendText = selectedList.length ? `\n\nFocus on these files/folders: ${selectedList.join(', ')}` : '';
+      const appendText = selectedList.length
+        ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}`
+        : "";
       const fullPrompt = prompt + appendText;
 
-      const res = await fetch('/api/ai-lab/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/ai-lab/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: fullPrompt }),
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || 'Failed to run AI Lab');
+        throw new Error(errData.error || "Failed to run AI Lab");
       }
       const data = await res.json();
       if (data.success) {
@@ -186,17 +196,22 @@ export default function AiAgentDashboard() {
     const root = [];
     const map = new Map();
     paths.forEach(({ path }) => {
-      const parts = path.split('/');
+      const parts = path.split("/");
       let current = root;
-      let currentPath = '';
+      let currentPath = "";
       parts.forEach((part, i) => {
-        currentPath += (currentPath ? '/' : '') + part;
+        currentPath += (currentPath ? "/" : "") + part;
         if (i === parts.length - 1) {
-          current.push({ name: part, type: 'file', path: currentPath });
+          current.push({ name: part, type: "file", path: currentPath });
         } else {
           let node = map.get(currentPath);
           if (!node) {
-            node = { name: part, type: 'folder', children: [], path: currentPath };
+            node = {
+              name: part,
+              type: "folder",
+              children: [],
+              path: currentPath,
+            };
             map.set(currentPath, node);
             current.push(node);
           }
@@ -214,13 +229,16 @@ export default function AiAgentDashboard() {
     if (!term) return nodes; // No filter if empty.
     const lowerTerm = term.toLowerCase();
     return nodes.reduce((acc, node) => {
-      if (node.type === 'file') {
+      if (node.type === "file") {
         if (node.path.toLowerCase().includes(lowerTerm)) {
           acc.push(node);
         }
       } else {
         const filteredChildren = filterTree(node.children, term);
-        if (filteredChildren.length > 0 || node.path.toLowerCase().includes(lowerTerm)) {
+        if (
+          filteredChildren.length > 0 ||
+          node.path.toLowerCase().includes(lowerTerm)
+        ) {
           acc.push({ ...node, children: filteredChildren });
         }
       }
@@ -232,11 +250,11 @@ export default function AiAgentDashboard() {
   const filteredTreeData = filterTree(treeData, searchTerm); // Apply filter.
 
   const toggleFolder = (path) => {
-    setExpandedFolders(prev => ({ ...prev, [path]: !prev[path] }));
+    setExpandedFolders((prev) => ({ ...prev, [path]: !prev[path] }));
   };
 
   const renderTree = (nodes, level = 0) => (
-    <ul className={`space-y-0.5 ${level > 0 ? 'ml-4' : ''}`}>
+    <ul className={`space-y-0.5 ${level > 0 ? "ml-4" : ""}`}>
       {nodes.map((node) => (
         <li key={node.path}>
           <div className="flex items-center py-1.5 px-2 hover:bg-gray-100 rounded text-sm transition">
@@ -246,15 +264,15 @@ export default function AiAgentDashboard() {
               onChange={() => toggleSelect(node.path)}
               className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            {node.type === 'folder' ? (
+            {node.type === "folder" ? (
               <>
-                <span 
+                <span
                   className="cursor-pointer mr-2 text-gray-400 text-xs"
                   onClick={() => toggleFolder(node.path)}
                 >
-                  {expandedFolders[node.path] ? '▼' : '▶'}
+                  {expandedFolders[node.path] ? "▼" : "▶"}
                 </span>
-                <span 
+                <span
                   className="font-medium text-gray-700 cursor-pointer"
                   onClick={() => toggleFolder(node.path)}
                 >
@@ -262,7 +280,7 @@ export default function AiAgentDashboard() {
                 </span>
               </>
             ) : (
-              <span 
+              <span
                 className="text-gray-600 truncate hover:text-blue-600 hover:underline cursor-pointer"
                 onClick={() => loadFileContent(node.path)}
               >
@@ -270,7 +288,9 @@ export default function AiAgentDashboard() {
               </span>
             )}
           </div>
-          {node.type === 'folder' && expandedFolders[node.path] && renderTree(node.children, level + 1)}
+          {node.type === "folder" &&
+            expandedFolders[node.path] &&
+            renderTree(node.children, level + 1)}
         </li>
       ))}
     </ul>
@@ -283,32 +303,42 @@ export default function AiAgentDashboard() {
         {/* Collapsible Sidebar */}
         <div
           className={`bg-white border border-gray-200 rounded-lg shadow-sm transition-all duration-300 overflow-hidden flex-shrink-0 ${
-            sidebarOpen ? 'w-full lg:w-72 xl:w-80' : 'w-full lg:w-12'
+            sidebarOpen ? "w-full lg:w-72 xl:w-80" : "w-full lg:w-12"
           }`}
         >
           <div className="p-3 flex items-center justify-between border-b border-gray-200 bg-white">
-            <h3 className={`font-semibold text-base transition-all duration-300 whitespace-nowrap overflow-hidden ${!sidebarOpen ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+            <h3
+              className={`font-semibold text-base transition-all duration-300 whitespace-nowrap overflow-hidden ${!sidebarOpen ? "w-0 opacity-0" : "w-auto opacity-100"}`}
+            >
               Project Files
             </h3>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 hover:bg-gray-200 rounded-md transition-colors flex-shrink-0"
-              aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+              aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+              title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
             >
-              <svg 
-                className={`w-4 h-4 text-gray-600 transition-transform duration-300 ${sidebarOpen ? '' : 'rotate-180'}`}
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className={`w-4 h-4 text-gray-600 transition-transform duration-300 ${sidebarOpen ? "" : "rotate-180"}`}
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
           </div>
 
           {sidebarOpen && (
-            <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+            <div
+              className="p-4 overflow-y-auto"
+              style={{ maxHeight: "calc(100vh - 12rem)" }}
+            >
               {/* New: Search input for file tree. */}
               <input
                 type="text"
@@ -322,18 +352,25 @@ export default function AiAgentDashboard() {
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                 </div>
               ) : fileError ? (
-                <p className="text-red-600 text-sm text-center py-4">{fileError}</p>
+                <p className="text-red-600 text-sm text-center py-4">
+                  {fileError}
+                </p>
               ) : files.length > 0 ? (
                 <>
                   {renderTree(filteredTreeData)} {/* Use filtered tree. */}
                   {selectedPaths.size > 0 && (
                     <div className="mt-6 border-t border-gray-200 pt-4">
-                      <h4 className="font-medium text-sm mb-2">Selected for Prompt:</h4>
+                      <h4 className="font-medium text-sm mb-2">
+                        Selected for Prompt:
+                      </h4>
                       <ul className="space-y-1">
-                        {Array.from(selectedPaths).map(path => (
-                          <li key={path} className="flex items-center justify-between text-sm text-gray-700 bg-white p-2 rounded">
+                        {Array.from(selectedPaths).map((path) => (
+                          <li
+                            key={path}
+                            className="flex items-center justify-between text-sm text-gray-700 bg-white p-2 rounded"
+                          >
                             <span className="truncate">{path}</span>
-                            <button 
+                            <button
                               onClick={() => removeSelected(path)}
                               className="text-red-500 hover:text-red-700"
                             >
@@ -346,7 +383,9 @@ export default function AiAgentDashboard() {
                   )}
                 </>
               ) : (
-                <p className="text-gray-500 italic text-sm text-center py-4">No files found.</p>
+                <p className="text-gray-500 italic text-sm text-center py-4">
+                  No files found.
+                </p>
               )}
             </div>
           )}
@@ -355,7 +394,9 @@ export default function AiAgentDashboard() {
         {/* Main Content (unchanged) */}
         <div className="flex-1 min-w-0 transition-all duration-300">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 mb-4 lg:mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">AI Coding Agent</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+              AI Coding Agent
+            </h1>
 
             <textarea
               value={prompt}
@@ -370,8 +411,8 @@ export default function AiAgentDashboard() {
               disabled={loading || !prompt.trim()}
               className={`w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 rounded-lg font-medium text-white shadow-md transition-all ${
                 loading || !prompt.trim()
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 active:scale-98'
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 active:scale-98"
               }`}
             >
               {loading ? (
@@ -380,7 +421,7 @@ export default function AiAgentDashboard() {
                   Processing...
                 </span>
               ) : (
-                'Generate Changes'
+                "Generate Changes"
               )}
             </button>
 
@@ -393,7 +434,9 @@ export default function AiAgentDashboard() {
 
           {/* Recent Prompts Section (unchanged) */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5">Recent Prompts</h2>
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5">
+              Recent Prompts
+            </h2>
 
             {isLoadingRuns ? (
               <div className="flex items-center justify-center py-12">
@@ -402,7 +445,9 @@ export default function AiAgentDashboard() {
             ) : runs.length > 0 ? (
               <div className="space-y-3 md:space-y-4">
                 {runs
-                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                  .sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                  )
                   .map((run) => (
                     <div
                       key={run.id}
@@ -415,29 +460,45 @@ export default function AiAgentDashboard() {
                         {run.summary}
                       </a>
                       <p className="text-xs md:text-sm text-gray-600 mt-2">
-                        Status: <span className="font-medium">{run.status}</span> • {new Date(run.created_at).toLocaleString()}
+                        Status:{" "}
+                        <span className="font-medium">{run.status}</span> •{" "}
+                        {new Date(run.created_at).toLocaleString()}
                       </p>
                     </div>
                   ))}
-                
+
                 {loadingMore && (
                   <div className="flex items-center justify-center py-6">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                   </div>
                 )}
-                
+
                 <div ref={observerTarget} className="h-4"></div>
-                
+
                 {!hasMore && runs.length > 0 && (
-                  <p className="text-center text-gray-500 text-sm py-4">No more prompts to load</p>
+                  <p className="text-center text-gray-500 text-sm py-4">
+                    No more prompts to load
+                  </p>
                 )}
               </div>
             ) : (
               <div className="p-8 md:p-12 bg-white rounded-lg border border-dashed border-gray-300 text-center">
-                <svg className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-3 md:mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
-                <p className="text-gray-500 text-sm md:text-base">No prompts yet. Submit your first prompt above.</p>
+                <p className="text-gray-500 text-sm md:text-base">
+                  No prompts yet. Submit your first prompt above.
+                </p>
               </div>
             )}
           </div>
@@ -447,13 +508,25 @@ export default function AiAgentDashboard() {
         {viewedFile && (
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 w-full lg:w-96 xl:w-[400px] flex-shrink-0 overflow-hidden transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-base truncate">Viewing: {viewedFile}</h3>
-              <button 
+              <h3 className="font-semibold text-base truncate">
+                Viewing: {viewedFile}
+              </h3>
+              <button
                 onClick={() => setViewedFile(null)}
                 className="p-1 hover:bg-gray-200 rounded"
               >
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -468,7 +541,7 @@ export default function AiAgentDashboard() {
                 <pre className="bg-white p-4 rounded-lg overflow-auto max-h-[calc(100vh-20rem)] text-sm">
                   <code>{fileContent}</code>
                 </pre>
-                <button 
+                <button
                   onClick={copyToClipboard}
                   className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >

@@ -1,17 +1,27 @@
-'use client';
+"use client";
 
-import { TrendingUp, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, ArrowRight } from "lucide-react";
+import {
+  TrendingUp,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  ArrowRight,
+} from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     company: [
-    { name: "Projects", href: "/website/projects" },
-    { name: "Accessbility", href: "/website/accessibility-&-inclusion" },
-    { name: "About", href: "/website/about" },
-    { name: "Services", href: "/website/services" },
-    { name: "Contact", href: "/website/contact" },
+      { name: "Projects", href: "/website/projects" },
+      { name: "Accessbility", href: "/website/accessibility-&-inclusion" },
+      { name: "About", href: "/website/about" },
+      { name: "Services", href: "/website/services" },
+      { name: "Contact", href: "/website/contact" },
     ],
     services: [
       { name: "Title-1", href: "#" },
@@ -37,7 +47,7 @@ export default function Footer() {
     <footer className="relative bg-gradient-to-b from-background to-gray-50 dark:to-gray-900 border-t border-gray-200 ">
       {/* Decorative gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent pointer-events-none" />
-      
+
       <div className="relative max-w-7xl mx-auto px-6 py-16">
         {/* Newsletter Section */}
         <div className="mb-16 pb-16 border-b border-gray-200 ">
@@ -73,21 +83,29 @@ export default function Footer() {
                 Website Name
               </span>
             </a>
-            <p className="text-gray-600  mb-6 leading-relaxed">
-              Description
-            </p>
+            <p className="text-gray-600  mb-6 leading-relaxed">Description</p>
             <div className="space-y-3">
-              <a href="mailto:hello@thepainsystem.com" className="flex items-center text-gray-600  hover:text-orange-500 transition">
+              <a
+                href="mailto:hello@thepainsystem.com"
+                className="flex items-center text-gray-600  hover:text-orange-500 transition"
+              >
                 <Mail className="w-4 h-4 mr-3" />
-               Email
+                Email
               </a>
-              <a href="#" className="flex items-center text-gray-600  hover:text-orange-500 transition">
+              <a
+                href="#"
+                className="flex items-center text-gray-600  hover:text-orange-500 transition"
+              >
                 <Phone className="w-4 h-4 mr-3" />
                 Phone Number
               </a>
               <div className="flex items-start text-gray-600 ">
                 <MapPin className="w-4 h-4 mr-3 mt-1 flex-shrink-0" />
-                <span>Street<br />Address</span>
+                <span>
+                  Street
+                  <br />
+                  Address
+                </span>
               </div>
             </div>
           </div>
@@ -98,7 +116,10 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
+                  <a
+                    href={link.href}
+                    className="text-gray-600  hover:text-orange-500 transition"
+                  >
                     {link.name}
                   </a>
                 </li>
@@ -111,7 +132,10 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
+                  <a
+                    href={link.href}
+                    className="text-gray-600  hover:text-orange-500 transition"
+                  >
                     {link.name}
                   </a>
                 </li>
@@ -124,7 +148,10 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-gray-600  hover:text-orange-500 transition">
+                  <a
+                    href={link.href}
+                    className="text-gray-600  hover:text-orange-500 transition"
+                  >
                     {link.name}
                   </a>
                 </li>
@@ -139,7 +166,7 @@ export default function Footer() {
             <p className="text-gray-600  text-sm text-center md:text-left">
               © {currentYear} The Pain System. All rights reserved.
             </p>
-            
+
             {/* Social Links */}
             <div className="flex items-center space-x-4">
               {socialLinks.map((social) => (

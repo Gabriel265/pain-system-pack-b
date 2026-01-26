@@ -1,8 +1,8 @@
-'use client'; 
+"use client";
 // Required for Next.js App Router to enable client-side hooks (useState, events, DOM access)
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
 
 /**
  * ServicesOffering
@@ -35,45 +35,63 @@ const ServicesOffering = () => {
   const services = [
     {
       id: 1, // Unique key for React rendering
-      title: 'Title',
-      description: 'Description',
-      fullDescription: 'Full Description',
-      features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'],
+      title: "Title",
+      description: "Description",
+      fullDescription: "Full Description",
+      features: ["Feature 1", "Feature 2", "Feature 3", "Feature 4"],
       icon: (
         // Inline SVG used to avoid extra icon dependencies
-        <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          className="w-12 h-12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       ),
-      dark: true // Enables inverted color scheme for visual emphasis
+      dark: true, // Enables inverted color scheme for visual emphasis
     },
     {
       id: 2,
-      title: 'Title',
-      description: 'Description',
-      fullDescription: 'Full Description',
-      features: ['Feature A', 'Feature B', 'Feature C', 'Feature D'],
+      title: "Title",
+      description: "Description",
+      fullDescription: "Full Description",
+      features: ["Feature A", "Feature B", "Feature C", "Feature D"],
       icon: (
-        <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          className="w-12 h-12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <rect x="3" y="3" width="18" height="18" rx="2" />
           <path d="M3 9h18M9 21V9" />
         </svg>
       ),
-      dark: false
+      dark: false,
     },
     {
       id: 3,
-      title: 'Title',
-      description: 'Description',
-      fullDescription: 'Full Description',
-      features: ['Benefit 1', 'Benefit 2', 'Benefit 3', 'Benefit 4'],
+      title: "Title",
+      description: "Description",
+      fullDescription: "Full Description",
+      features: ["Benefit 1", "Benefit 2", "Benefit 3", "Benefit 4"],
       icon: (
-        <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          className="w-12 h-12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <path d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       ),
-      dark: false
-    }
+      dark: false,
+    },
   ];
 
   /**
@@ -82,7 +100,7 @@ const ServicesOffering = () => {
    */
   const openModal = (service) => {
     setSelectedService(service);
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
+    document.body.style.overflow = "hidden"; // Prevent background scroll
   };
 
   /**
@@ -90,7 +108,7 @@ const ServicesOffering = () => {
    */
   const closeModal = () => {
     setSelectedService(null);
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
   };
 
   return (
@@ -98,7 +116,6 @@ const ServicesOffering = () => {
       {/* ===================== MAIN SERVICES SECTION ===================== */}
       <section className="min-h-screen bg-white text-gray-800 py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
-
           {/* ---------- HEADER / INTRO ---------- */}
           <div className="mb-12 lg:mb-16 relative">
             {/* Decorative gradient background */}
@@ -148,8 +165,8 @@ const ServicesOffering = () => {
                 // Card theme switches based on `dark` flag
                 className={`group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl ${
                   service.dark
-                    ? 'bg-foreground text-background shadow-xl'
-                    : 'bg-white border-2 border-foreground/10 dark:border-foreground/20 hover:border-orange-500/30'
+                    ? "bg-foreground text-background shadow-xl"
+                    : "bg-white border-2 border-foreground/10 dark:border-foreground/20 hover:border-orange-500/30"
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }} // Staggered entrance animation
               >
@@ -168,7 +185,9 @@ const ServicesOffering = () => {
                     <h3 className="text-xl sm:text-2xl font-bold mb-4 tracking-tight">
                       {service.title}
                     </h3>
-                    <p className={`text-sm ${service.dark ? 'text-background/70' : 'text-gray-500'}`}>
+                    <p
+                      className={`text-sm ${service.dark ? "text-background/70" : "text-gray-500"}`}
+                    >
                       {service.description}
                     </p>
 
@@ -178,7 +197,13 @@ const ServicesOffering = () => {
                       className="mt-6 flex items-center gap-2 text-sm font-medium group-hover:gap-3 transition-all hover:text-orange-500"
                     >
                       <span>READ MORE</span>
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -225,16 +250,20 @@ const ServicesOffering = () => {
               className="absolute top-6 right-6 w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 flex items-center justify-center"
               aria-label="Close"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
             {/* Modal content */}
             <div className="p-8 lg:p-12">
-              <div className="mb-6 text-orange-500">
-                {selectedService.icon}
-              </div>
+              <div className="mb-6 text-orange-500">{selectedService.icon}</div>
 
               <h2 className="text-3xl lg:text-4xl font-bold mb-6 tracking-tight">
                 {selectedService.title}
@@ -251,9 +280,7 @@ const ServicesOffering = () => {
                   {selectedService.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                      <span className="text-sm text-gray-600 ">
-                        {feature}
-                      </span>
+                      <span className="text-sm text-gray-600 ">{feature}</span>
                     </div>
                   ))}
                 </div>

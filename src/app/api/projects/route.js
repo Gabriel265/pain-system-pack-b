@@ -25,9 +25,9 @@ async function getFromGitHub() {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "User-Agent": "NextApp"
-        }
-      }
+          "User-Agent": "NextApp",
+        },
+      },
     );
 
     if (!res.ok) {
@@ -55,9 +55,9 @@ async function pushToGitHub(updatedJSON) {
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        "User-Agent": "NextApp"
-      }
-    }
+        "User-Agent": "NextApp",
+      },
+    },
   );
 
   if (!metaRes.ok) {
@@ -74,15 +74,15 @@ async function pushToGitHub(updatedJSON) {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        "User-Agent": "NextApp"
+        "User-Agent": "NextApp",
       },
       body: JSON.stringify({
         message: "Update projects.json",
         content: Buffer.from(updatedJSON).toString("base64"),
         sha: meta.sha,
-        branch
+        branch,
       }),
-    }
+    },
   );
 }
 
@@ -143,10 +143,10 @@ export async function PUT(req) {
   let projects = await getFromGitHub();
 
   // Update project with matching ID
-  projects = projects.map(p =>
-    p.id === body.id 
+  projects = projects.map((p) =>
+    p.id === body.id
       ? { ...p, ...body, updatedAt: new Date().toISOString() }
-      : p
+      : p,
   );
 
   await pushToGitHub(JSON.stringify(projects, null, 2));
@@ -165,7 +165,7 @@ export async function DELETE(req) {
   let projects = await getFromGitHub();
 
   // Remove project with matching ID
-  projects = projects.filter(p => p.id !== id);
+  projects = projects.filter((p) => p.id !== id);
 
   await pushToGitHub(JSON.stringify(projects, null, 2));
 

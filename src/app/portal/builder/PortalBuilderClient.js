@@ -1,27 +1,29 @@
 // src/app/portal/builder/page.jsx
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { nanoid } from 'nanoid';
-import toast, { Toaster } from 'react-hot-toast';
-import { ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { nanoid } from "nanoid";
+import toast, { Toaster } from "react-hot-toast";
+import { ArrowLeft } from "lucide-react";
 
 export default function PortalBuilderClient() {
   const router = useRouter();
 
   // Get project from URL (e.g. ?edit=abc123) or create new
-  const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
-  const editId = urlParams.get('edit');
+  const urlParams = new URLSearchParams(
+    typeof window !== "undefined" ? window.location.search : "",
+  );
+  const editId = urlParams.get("edit");
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    description: '',
-    status: 'In-Build',
-    category: 'portal',
+    title: "",
+    slug: "",
+    description: "",
+    status: "In-Build",
+    category: "portal",
   });
 
   // Auto-generate slug when title changes (only on create)
@@ -29,10 +31,10 @@ export default function PortalBuilderClient() {
     if (!isEditing && formData.title) {
       const slug = formData.title
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-        .replace(/-+/g, '-');
-      setFormData(prev => ({ ...prev, slug }));
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .replace(/-+/g, "-");
+      setFormData((prev) => ({ ...prev, slug }));
     }
   }, [formData.title, isEditing]);
 
@@ -45,19 +47,19 @@ export default function PortalBuilderClient() {
           if (res.ok) {
             const project = await res.json();
             setFormData({
-              title: project.title || '',
-              slug: project.slug || '',
-              description: project.description || '',
-              status: project.status || 'In-Build',
-              category: project.category || 'website',
+              title: project.title || "",
+              slug: project.slug || "",
+              description: project.description || "",
+              status: project.status || "In-Build",
+              category: project.category || "website",
             });
             setIsEditing(true);
           } else {
-            toast.error('Project not found');
-            router.push('/portal/builder');
+            toast.error("Project not found");
+            router.push("/portal/builder");
           }
         } catch {
-          toast.error('Failed to load project');
+          toast.error("Failed to load project");
         } finally {
           setLoading(false);
         }
@@ -71,8 +73,12 @@ export default function PortalBuilderClient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title.trim() || !formData.slug.trim() || !formData.description.trim()) {
-      toast.error('Title, slug, and description are required');
+    if (
+      !formData.title.trim() ||
+      !formData.slug.trim() ||
+      !formData.description.trim()
+    ) {
+      toast.error("Title, slug, and description are required");
       return;
     }
 
@@ -84,21 +90,21 @@ export default function PortalBuilderClient() {
     };
 
     try {
-      const res = await fetch('/api/projects', {
-        method: isEditing ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/projects", {
+        method: isEditing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (res.ok) {
-        toast.success(isEditing ? 'Project updated!' : 'Project created!');
-        router.push('/admin/projects');
+        toast.success(isEditing ? "Project updated!" : "Project created!");
+        router.push("/admin/projects");
       } else {
         const error = await res.text();
-        toast.error(error || 'Failed to save');
+        toast.error(error || "Failed to save");
       }
     } catch {
-      toast.error('Network error');
+      toast.error("Network error");
     }
   };
 
@@ -115,27 +121,28 @@ export default function PortalBuilderClient() {
       <Toaster position="top-right" />
 
       <div className="min-h-screen bg-white ">
-      {/* Header Spacer */}
-      <div className=" bg-white h-16 md:h-20 lg:h-24"></div>
+        {/* Header Spacer */}
+        <div className=" bg-white h-16 md:h-20 lg:h-24"></div>
         <div className=" bg-white container mx-auto px-4 py-8 max-w-4xl">
-
-
           {/* Header */}
           <div className="mb-8">
             <button
-              onClick={() => router.push('/admin/projects')}
+              onClick={() => router.push("/admin/projects")}
               className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium mb-4"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to Projects
             </button>
             <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">
-              {isEditing ? 'Edit Project' : 'Create New Project'}
+              {isEditing ? "Edit Project" : "Create New Project"}
             </h1>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="bg-white  rounded-2xl shadow-xl p-8 space-y-8">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white  rounded-2xl shadow-xl p-8 space-y-8"
+          >
             <div>
               <label className="block text-sm font-semibold text-gray-700  mb-2">
                 Project Title *
@@ -143,7 +150,9 @@ export default function PortalBuilderClient() {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
+                }
                 required
                 className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 transition text-lg font-medium"
                 placeholder="My Awesome Project"
@@ -152,12 +161,14 @@ export default function PortalBuilderClient() {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700  mb-2">
-                Slug {isEditing && '(cannot change when editing)'}
+                Slug {isEditing && "(cannot change when editing)"}
               </label>
               <input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, slug: e.target.value }))
+                }
                 required
                 readOnly={isEditing}
                 className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  font-mono text-sm focus:ring-2 focus:ring-orange-500 transition disabled:opacity-70"
@@ -170,7 +181,12 @@ export default function PortalBuilderClient() {
               </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 rows={8}
                 required
                 className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500 resize-none transition"
@@ -185,7 +201,9 @@ export default function PortalBuilderClient() {
                 </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, status: e.target.value }))
+                  }
                   className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="Live">Live (Published)</option>
@@ -200,7 +218,12 @@ export default function PortalBuilderClient() {
                 </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
                   className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white  focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="portal">Portal</option>
@@ -217,11 +240,11 @@ export default function PortalBuilderClient() {
                 type="submit"
                 className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-5 rounded-xl text-lg shadow-xl transition transform hover:scale-105"
               >
-                {isEditing ? 'Update Project' : 'Create Project'}
+                {isEditing ? "Update Project" : "Create Project"}
               </button>
               <button
                 type="button"
-                onClick={() => router.push('/admin/projects')}
+                onClick={() => router.push("/admin/projects")}
                 className="px-8 py-5 bg-gray-200  text-gray-800  font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
                 Cancel

@@ -19,7 +19,10 @@ import {
 /**
  * Absolute path to the local project store.
  */
-const PROJECTS_PATH = path.join(process.cwd(), "src/project-store/projects.json");
+const PROJECTS_PATH = path.join(
+  process.cwd(),
+  "src/project-store/projects.json",
+);
 
 /**
  * Read all projects from the JSON store.
@@ -237,7 +240,8 @@ export default async function ProjectPage({ params }) {
                     Coming in Future Phases
                   </h3>
                   <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-                    This project is in the concept stage. Check back later for updates.
+                    This project is in the concept stage. Check back later for
+                    updates.
                   </p>
                 </div>
               </section>

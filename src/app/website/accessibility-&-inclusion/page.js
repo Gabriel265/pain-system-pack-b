@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import {
   Eye,
   Brain,
@@ -9,7 +9,7 @@ import {
   Type,
   FileText,
   Volume2,
-} from 'lucide-react';
+} from "lucide-react";
 
 export default function AccessibilityPage() {
   const [readingMode, setReadingMode] = useState(false);
@@ -17,58 +17,57 @@ export default function AccessibilityPage() {
   const supportAreas = [
     {
       icon: Eye,
-      title: 'Visual accessibility',
+      title: "Visual accessibility",
       description:
-        'High-contrast design, scalable text, screen reader optimisation, and colour-safe UI patterns.',
+        "High-contrast design, scalable text, screen reader optimisation, and colour-safe UI patterns.",
     },
     {
       icon: Brain,
-      title: 'Cognitive accessibility',
+      title: "Cognitive accessibility",
       description:
-        'Clear navigation, predictable layouts, plain-language content, and reduced visual distraction.',
+        "Clear navigation, predictable layouts, plain-language content, and reduced visual distraction.",
     },
     {
       icon: Hand,
-      title: 'Physical accessibility',
+      title: "Physical accessibility",
       description:
-        'Keyboard-first navigation, accessible touch targets, motion controls, and assistive tech support.',
+        "Keyboard-first navigation, accessible touch targets, motion controls, and assistive tech support.",
     },
     {
       icon: MessageSquare,
-      title: 'Communication accessibility',
+      title: "Communication accessibility",
       description:
-        'Captions, transcripts, text alternatives, and support for multiple input methods.',
+        "Captions, transcripts, text alternatives, and support for multiple input methods.",
     },
   ];
 
   const features = [
     {
       icon: Contrast,
-      title: 'High-contrast modes',
+      title: "High-contrast modes",
       description:
-        'Designed for low vision and colour sensitivity without breaking layout or branding.',
-      status: 'Active',
+        "Designed for low vision and colour sensitivity without breaking layout or branding.",
+      status: "Active",
     },
     {
       icon: Type,
-      title: 'Readable typography',
+      title: "Readable typography",
       description:
-        'Carefully selected fonts, spacing, and hierarchy for long-form and UI content.',
-      status: 'Active',
+        "Carefully selected fonts, spacing, and hierarchy for long-form and UI content.",
+      status: "Active",
     },
     {
       icon: FileText,
-      title: 'Plain-language content',
+      title: "Plain-language content",
       description:
-        'Content written clearly from the start. No AI rewriting. No loss of meaning.',
-      status: 'Active',
+        "Content written clearly from the start. No AI rewriting. No loss of meaning.",
+      status: "Active",
     },
     {
       icon: Volume2,
-      title: 'Sign language support',
-      description:
-        'Integrated video interpretation for key user journeys.',
-      status: 'Coming soon',
+      title: "Sign language support",
+      description: "Integrated video interpretation for key user journeys.",
+      status: "Coming soon",
     },
   ];
 
@@ -79,8 +78,6 @@ export default function AccessibilityPage() {
       {/* HERO */}
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto text-center">
-          
-
           <h1 className="text-4xl md:text-5xl font-serif font-light leading-tight mb-6">
             Built for everyone,
             <br className="hidden sm:block" />
@@ -88,8 +85,8 @@ export default function AccessibilityPage() {
           </h1>
 
           <p className="text-lg text-gray-600 leading-relaxed">
-            TwinAccess is not an add-on or a separate experience. Accessibility is
-            embedded into how our platform is designed, written, and built.
+            TwinAccess is not an add-on or a separate experience. Accessibility
+            is embedded into how our platform is designed, written, and built.
           </p>
         </div>
       </section>
@@ -165,9 +162,9 @@ export default function AccessibilityPage() {
                         <h3 className="font-medium">{item.title}</h3>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
-                            item.status === 'Active'
-                              ? 'bg-green-500/10 text-green-600'
-                              : 'bg-muted/20 text-gray-600'
+                            item.status === "Active"
+                              ? "bg-green-500/10 text-green-600"
+                              : "bg-muted/20 text-gray-600"
                           }`}
                         >
                           {item.status}
@@ -197,37 +194,35 @@ export default function AccessibilityPage() {
                 onClick={() => setReadingMode(!readingMode)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                   readingMode
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-gray-800'
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border text-gray-800"
                 }`}
               >
-                {readingMode ? 'Disable' : 'Enable'}
+                {readingMode ? "Disable" : "Enable"}
               </button>
             </div>
 
             <div
               className={`text-gray-600 transition ${
                 readingMode
-                  ? 'text-lg leading-loose'
-                  : 'text-base leading-relaxed'
+                  ? "text-lg leading-loose"
+                  : "text-base leading-relaxed"
               }`}
             >
               <p className="mb-4">
                 {readingMode
-                  ? 'This mode uses simple words and short sentences. It removes unnecessary complexity so information is easier to understand.'
-                  : 'Plain-language mode improves clarity through careful writing, not automated rewriting. The meaning stays intact.'}
+                  ? "This mode uses simple words and short sentences. It removes unnecessary complexity so information is easier to understand."
+                  : "Plain-language mode improves clarity through careful writing, not automated rewriting. The meaning stays intact."}
               </p>
               <p>
                 {readingMode
-                  ? 'Nothing is changed by AI. The content is written this way on purpose.'
-                  : 'This ensures consistency, accuracy, and trust across all accessibility modes.'}
+                  ? "Nothing is changed by AI. The content is written this way on purpose."
+                  : "This ensures consistency, accuracy, and trust across all accessibility modes."}
               </p>
             </div>
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 }

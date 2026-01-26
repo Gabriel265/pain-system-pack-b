@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, TrendingUp, Search } from "lucide-react";
@@ -81,12 +81,12 @@ export default function Header() {
                     How discovery works right now
                   </p>
                   <p>
-                    Projects are currently curated and browsed manually. There is no
-                    automated search, crawling, or indexing in this phase.
+                    Projects are currently curated and browsed manually. There
+                    is no automated search, crawling, or indexing in this phase.
                   </p>
                   <p className="mt-3">
-                    Advanced research, filtering, and discovery tools are planned for
-                    later phases once the core system is stable.
+                    Advanced research, filtering, and discovery tools are
+                    planned for later phases once the core system is stable.
                   </p>
                 </div>
               </div>
@@ -103,7 +103,10 @@ export default function Header() {
         <div className="bg-white/95 backdrop-blur-xl shadow-xl rounded-full border border-gray-200 px-4 sm:px-6 md:px-8">
           <div className="flex justify-between items-center h-16 gap-2 sm:gap-4 md:gap-6">
             {/* Logo */}
-            <a href="/" className="flex items-center space-x-2 flex-shrink-0 min-w-0">
+            <a
+              href="/"
+              className="flex items-center space-x-2 flex-shrink-0 min-w-0"
+            >
               <TrendingUp className="w-6 h-6 sm:w-7 sm:h-7 text-orange-500 flex-shrink-0" />
               <span className="text-base sm:text-xl font-bold text-gray-900 font-sans truncate">
                 Website Name
@@ -150,7 +153,11 @@ export default function Header() {
               </button>
 
               <button onClick={() => setIsOpen(!isOpen)} className="p-2">
-                {isOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
+                {isOpen ? (
+                  <X className="w-6 h-6 text-gray-700" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-700" />
+                )}
               </button>
             </div>
           </div>
@@ -158,9 +165,7 @@ export default function Header() {
 
         {/* Mobile Dropdown */}
         {isOpen && (
-          <div
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[90vw] max-w-sm bg-white border border-gray-200 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] pb-4"
-          >
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[90vw] max-w-sm bg-white border border-gray-200 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] pb-4">
             <div className="p-6 space-y-4">
               {navItems.map((item) => (
                 <a

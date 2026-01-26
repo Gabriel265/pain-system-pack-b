@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -27,9 +26,9 @@ export default function PortalDashboardClient() {
 
   // === REAL METRICS ===
   const total = projects.length;
-  const Live = projects.filter(p => p.status === "Live").length;
-  const inProgress = projects.filter(p => p.status === "In-Build").length;
-  const Concept = projects.filter(p => p.status === "Concept").length;
+  const Live = projects.filter((p) => p.status === "Live").length;
+  const inProgress = projects.filter((p) => p.status === "In-Build").length;
+  const Concept = projects.filter((p) => p.status === "Concept").length;
 
   const categories = projects.reduce((acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1;
@@ -37,15 +36,19 @@ export default function PortalDashboardClient() {
   }, {});
 
   const recent7Days = projects
-    .filter(p => {
+    .filter((p) => {
       const date = new Date(p.updatedAt || p.createdAt);
       return date > subDays(new Date(), 7);
     })
-    .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt || b.createdAt) -
+        new Date(a.updatedAt || a.createdAt),
+    )
     .slice(0, 8);
 
   const topCategories = Object.entries(categories)
-    .sort(([,a], [,b]) => b - a)
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 5);
 
   if (loading) {
@@ -63,7 +66,9 @@ export default function PortalDashboardClient() {
         <h1 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
           Admin Dashboard
         </h1>
-        <p className="mt-2 text-gray-600 ">Your project ecosystem at a glance</p>
+        <p className="mt-2 text-gray-600 ">
+          Your project ecosystem at a glance
+        </p>
       </div>
 
       {/* KPI Cards - Mobile Stacked, Desktop Grid */}
@@ -85,8 +90,12 @@ export default function PortalDashboardClient() {
         </div>
         <div className="bg-white  rounded-2xl shadow-lg p-6 text-center sm:text-left">
           <p className="text-sm text-gray-500 ">Categories</p>
-          <p className="text-4xl font-bold mt-2 text-purple-600">{Object.keys(categories).length}</p>
-          <p className="text-xs mt-1 capitalize">{Object.keys(categories).join(", ")}</p>
+          <p className="text-4xl font-bold mt-2 text-purple-600">
+            {Object.keys(categories).length}
+          </p>
+          <p className="text-xs mt-1 capitalize">
+            {Object.keys(categories).join(", ")}
+          </p>
         </div>
       </div>
 
@@ -100,23 +109,35 @@ export default function PortalDashboardClient() {
               <svg viewBox="0 0 36 36" className="w-full h-full">
                 {/* Live */}
                 <circle
-                  cx="18" cy="18" r="15.9"
-                  fill="none" stroke="#10b981" strokeWidth="3.8"
+                  cx="18"
+                  cy="18"
+                  r="15.9"
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth="3.8"
                   strokeDasharray={`${(Live / total) * 100 || 0} 100`}
                   className="transition-all duration-1000"
                 />
                 {/* In Build */}
                 <circle
-                  cx="18" cy="18" r="15.9"
-                  fill="none" stroke="#3b82f6" strokeWidth="3.8"
+                  cx="18"
+                  cy="18"
+                  r="15.9"
+                  fill="none"
+                  stroke="#3b82f6"
+                  strokeWidth="3.8"
                   strokeDasharray={`${(inProgress / total) * 100 || 0} 100`}
                   strokeDashoffset={-(Live / total) * 100 || 0}
                   className="transition-all duration-1000"
                 />
                 {/* Concept */}
                 <circle
-                  cx="18" cy="18" r="15.9"
-                  fill="none" stroke="#ef4444" strokeWidth="3.8"
+                  cx="18"
+                  cy="18"
+                  r="15.9"
+                  fill="none"
+                  stroke="#ef4444"
+                  strokeWidth="3.8"
                   strokeDasharray={`${(Concept / total) * 100 || 0} 100`}
                   strokeDashoffset={-((Live + inProgress) / total) * 100 || 0}
                   className="transition-all duration-1000"
@@ -132,15 +153,21 @@ export default function PortalDashboardClient() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <span>Live <strong className="ml-2">{Live}</strong></span>
+                <span>
+                  Live <strong className="ml-2">{Live}</strong>
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                <span>In Build <strong className="ml-2">{inProgress}</strong></span>
+                <span>
+                  In Build <strong className="ml-2">{inProgress}</strong>
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <span>Concept <strong className="ml-2">{Concept}</strong></span>
+                <span>
+                  Concept <strong className="ml-2">{Concept}</strong>
+                </span>
               </div>
             </div>
           </div>
@@ -162,10 +189,15 @@ export default function PortalDashboardClient() {
                   <div className="w-full bg-gray-200  rounded-full h-8">
                     <div
                       className={`h-full rounded-full transition-all duration-1000 ${
-                        cat === "builder" ? "bg-orange-500" :
-                        cat === "portal" ? "bg-purple-500" :
-                        cat === "website" ? "bg-blue-500" :
-                        cat === "app" ? "bg-green-500" : "bg-cyan-500"
+                        cat === "builder"
+                          ? "bg-orange-500"
+                          : cat === "portal"
+                            ? "bg-purple-500"
+                            : cat === "website"
+                              ? "bg-blue-500"
+                              : cat === "app"
+                                ? "bg-green-500"
+                                : "bg-cyan-500"
                       }`}
                       style={{ width: `${(count / total) * 100}%` }}
                     ></div>
@@ -181,17 +213,27 @@ export default function PortalDashboardClient() {
       <div className="max-w-7xl mx-auto mt-10 space-y-8">
         {/* Recent Activity */}
         <div className="bg-white  rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">Recent Activity (Last 7 Days)</h2>
+          <h2 className="text-xl font-bold mb-4">
+            Recent Activity (Last 7 Days)
+          </h2>
           {recent7Days.length === 0 ? (
             <p className="text-center text-gray-500 py-8">No recent activity</p>
           ) : (
             <div className="space-y-3">
-              {recent7Days.map(p => (
-                <div key={p.id} className="flex items-center justify-between py-3 border-b border-gray-200  last:border-0">
+              {recent7Days.map((p) => (
+                <div
+                  key={p.id}
+                  className="flex items-center justify-between py-3 border-b border-gray-200  last:border-0"
+                >
                   <div>
-                    <p className="font-medium">{p.title || "Untitled Project"}</p>
+                    <p className="font-medium">
+                      {p.title || "Untitled Project"}
+                    </p>
                     <p className="text-sm text-gray-500">
-                      {new Date(p.updatedAt || p.createdAt).toLocaleDateString()} • {p.status}
+                      {new Date(
+                        p.updatedAt || p.createdAt,
+                      ).toLocaleDateString()}{" "}
+                      • {p.status}
                     </p>
                   </div>
                   <span className="text-xs text-gray-500">
@@ -220,26 +262,39 @@ export default function PortalDashboardClient() {
               <thead className="border-b border-gray-200 ">
                 <tr>
                   <th className="text-left py-3 px-2 font-medium">Title</th>
-                  <th className="text-left py-3 px-2 font-medium hidden sm:table-cell">Category</th>
+                  <th className="text-left py-3 px-2 font-medium hidden sm:table-cell">
+                    Category
+                  </th>
                   <th className="text-left py-3 px-2 font-medium">Status</th>
-                  <th className="text-left py-3 px-2 font-medium hidden md:table-cell">Created</th>
+                  <th className="text-left py-3 px-2 font-medium hidden md:table-cell">
+                    Created
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {projects.slice(0, 6).map(p => (
-                  <tr key={p.id} className="border-b border-gray-100  hover:bg-white dark:hover:bg-gray-700">
-                    <td className="py-4 px-2 font-medium">{p.title || "Untitled"}</td>
+                {projects.slice(0, 6).map((p) => (
+                  <tr
+                    key={p.id}
+                    className="border-b border-gray-100  hover:bg-white dark:hover:bg-gray-700"
+                  >
+                    <td className="py-4 px-2 font-medium">
+                      {p.title || "Untitled"}
+                    </td>
                     <td className="py-4 px-2 hidden sm:table-cell">
                       <span className="px-3 py-1 text-xs rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                         {p.category}
                       </span>
                     </td>
                     <td className="py-4 px-2">
-                      <span className={`px-3 py-1 text-xs rounded-full ${
-                        p.status === "Live" ? "bg-green-100 text-green-800 " :
-                        p.status === "In-Build" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
-                        "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                      }`}>
+                      <span
+                        className={`px-3 py-1 text-xs rounded-full ${
+                          p.status === "Live"
+                            ? "bg-green-100 text-green-800 "
+                            : p.status === "In-Build"
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        }`}
+                      >
                         {p.status}
                       </span>
                     </td>

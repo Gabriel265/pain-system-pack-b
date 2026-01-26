@@ -1,25 +1,24 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+"use client";
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const slides = [
-  { id: 1, label: 'Build → Launch → Prove → Monetise' },
-  { id: 2, label: 'Fast builds. Clean delivery.' },
-  { id: 3, label: 'Admin-ready. Client-ready.' },
-  { id: 4, label: 'Security + compliance first.' },
-  { id: 5, label: 'IP protected by design.' },
-];
-  
+    { id: 1, label: "Build → Launch → Prove → Monetise" },
+    { id: 2, label: "Fast builds. Clean delivery." },
+    { id: 3, label: "Admin-ready. Client-ready." },
+    { id: 4, label: "Security + compliance first." },
+    { id: 5, label: "IP protected by design." },
+  ];
 
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(
       () => setCurrentSlide((prev) => (prev + 1) % slides.length),
-      5000
+      5000,
     );
     return () => clearInterval(interval);
   }, [isAutoPlaying, slides.length]);
@@ -93,14 +92,12 @@ export default function HeroSection() {
                 <div
                   key={slide.id}
                   className={`absolute inset-0 transition-opacity duration-700 ${
-                    index === currentSlide ? 'opacity-100' : 'opacity-0'
+                    index === currentSlide ? "opacity-100" : "opacity-0"
                   }`}
                 >
                   {/* Placeholder visual */}
                   <div className="w-full h-full flex items-center justify-center bg-muted/10">
-                    <span className="text-sm text-gray-600">
-                      {slide.label}
-                    </span>
+                    <span className="text-sm text-gray-600">{slide.label}</span>
                   </div>
                 </div>
               ))}
@@ -134,9 +131,7 @@ export default function HeroSection() {
                     onClick={() => goToSlide(index)}
                     aria-label={`Go to slide ${index + 1}`}
                     className={`h-2 rounded-full transition-all ${
-                      index === currentSlide
-                        ? 'w-6 bg-primary'
-                        : 'w-2 bg-muted'
+                      index === currentSlide ? "w-6 bg-primary" : "w-2 bg-muted"
                     }`}
                   />
                 ))}

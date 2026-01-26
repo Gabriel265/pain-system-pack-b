@@ -1,21 +1,21 @@
-import fs from 'fs';
-import path from 'path';
-import Link from 'next/link';
-import { Rocket, Wrench, Lightbulb, Eye } from 'lucide-react';
+import fs from "fs";
+import path from "path";
+import Link from "next/link";
+import { Rocket, Wrench, Lightbulb, Eye } from "lucide-react";
 
 export default function ProjectsPage() {
   /**
    * Read project data directly from local JSON store.
    * Any schema changes to projects.json are reflected here.
    */
-  const filePath = path.join(process.cwd(), 'src/project-store/projects.json');
-  const projects = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const filePath = path.join(process.cwd(), "src/project-store/projects.json");
+  const projects = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
   /**
    * Normalize project status values to a controlled set.
    * This prevents inconsistent casing or wording from breaking UI logic.
    */
-  const normalizedProjects = projects.map(p => ({
+  const normalizedProjects = projects.map((p) => ({
     ...p,
     status: normalizeStatus(p.status),
   }));
@@ -24,9 +24,13 @@ export default function ProjectsPage() {
    * Split projects by lifecycle phase.
    * These arrays directly control which sections render.
    */
-  const liveProjects = normalizedProjects.filter(p => p.status === 'live');
-  const inBuildProjects = normalizedProjects.filter(p => p.status === 'in-build');
-  const conceptProjects = normalizedProjects.filter(p => p.status === 'concept');
+  const liveProjects = normalizedProjects.filter((p) => p.status === "live");
+  const inBuildProjects = normalizedProjects.filter(
+    (p) => p.status === "in-build",
+  );
+  const conceptProjects = normalizedProjects.filter(
+    (p) => p.status === "concept",
+  );
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
@@ -142,16 +146,16 @@ export default function ProjectsPage() {
  * a strict, predictable set used by UI logic.
  */
 function normalizeStatus(status) {
-  if (!status) return 'concept';
+  if (!status) return "concept";
 
   const value = status.toLowerCase().trim();
 
-  if (value === 'Live') return 'live';
-  if (value.includes('build') || value.includes('dev')) return 'in-build';
-  if (['live', 'concept'].includes(value)) return value;
+  if (value === "Live") return "live";
+  if (value.includes("build") || value.includes("dev")) return "in-build";
+  if (["live", "concept"].includes(value)) return value;
 
   // Fallback for unknown or malformed values
-  return 'concept';
+  return "concept";
 }
 
 /**
@@ -160,9 +164,9 @@ function normalizeStatus(status) {
  */
 function StatusGuide({ icon: Icon, title, description, color }) {
   const colors = {
-    green: 'text-green-600',
-    blue: 'text-blue-600',
-    purple: 'text-purple-600',
+    green: "text-green-600",
+    blue: "text-blue-600",
+    purple: "text-purple-600",
   };
 
   return (
@@ -197,7 +201,7 @@ function ProjectSection({
 
         {/* Project grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map(project => (
+          {projects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
@@ -218,7 +222,7 @@ function ProjectCard({ project, clickable }) {
   const content = (
     <div
       className={`border border-border rounded-xl p-6 h-full flex flex-col ${
-        clickable ? 'hover:shadow-md transition' : 'opacity-70'
+        clickable ? "hover:shadow-md transition" : "opacity-70"
       }`}
     >
       <div className="flex justify-between items-start mb-4">
@@ -231,20 +235,16 @@ function ProjectCard({ project, clickable }) {
       </p>
 
       {/* Call-to-action is dependent on project state */}
-      {clickable && project.status === 'live' ? (
-        <span className="text-sm text-primary font-medium">
-          View project →
-        </span>
+      {clickable && project.status === "live" ? (
+        <span className="text-sm text-primary font-medium">View project →</span>
       ) : (
-        <span className="text-sm text-gray-600 italic">
-          Not yet available
-        </span>
+        <span className="text-sm text-gray-600 italic">Not yet available</span>
       )}
     </div>
   );
 
   // Only wrap in Link when navigation is allowed
-  if (clickable && project.status === 'live') {
+  if (clickable && project.status === "live") {
     return (
       <Link href={`/website/projects/${project.slug}`} className="block h-full">
         {content}
@@ -261,9 +261,9 @@ function ProjectCard({ project, clickable }) {
  */
 function StatusBadge({ status }) {
   const map = {
-    live: 'bg-green-500/10 text-green-600',
-    'in-build': 'bg-blue-500/10 text-blue-600',
-    concept: 'bg-purple-500/10 text-purple-600',
+    live: "bg-green-500/10 text-green-600",
+    "in-build": "bg-blue-500/10 text-blue-600",
+    concept: "bg-purple-500/10 text-purple-600",
   };
 
   return (
@@ -272,7 +272,7 @@ function StatusBadge({ status }) {
         map[status] || map.concept
       }`}
     >
-      {status.replace('-', ' ')}
+      {status.replace("-", " ")}
     </span>
   );
 }
