@@ -56,10 +56,10 @@ export default function SignIn() {
     >
 
       {/* Overlay for better contrast */}
-      <div className="absolute inset-0 bg-[#fcd5c5]/80 /80 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-[#fcd5c5]/80  backdrop-blur-sm"></div>
 
       {/* Main card container */}
-      <div className="relative w-full max-w-6xl bg-white/40 /40 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/20 /20">
+      <div className="relative w-full max-w-6xl bg-white/40 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/20 ">
         
         <div className="flex flex-col lg:flex-row min-h-[600px]">
           {/* Spacer for top padding */}
@@ -67,7 +67,7 @@ export default function SignIn() {
 
           {/* Left side - Login form */}
           <div className="w-full lg:w-1/2 p-6 md:p-12 lg:p-16 flex items-center justify-center">
-            <div className="w-full max-w-md bg-white/70 /70 backdrop-blur-xl rounded-2xl shadow-xl p-8 md:p-10 border border-white/30 /30">
+            <div className="w-full max-w-md bg-white/70  backdrop-blur-xl rounded-2xl shadow-xl p-8 md:p-10 border border-white/30 ">
               {/* Header */}
               <div className="mb-8">
                 <p className="text-sm text-gray-500  mb-2">Your logo</p>
@@ -82,7 +82,7 @@ export default function SignIn() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 /80 backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80  backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
                 />
                 <input 
                   type="password" 
@@ -90,7 +90,7 @@ export default function SignIn() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 /80 backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80  backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
                 />
 
                 <button 
