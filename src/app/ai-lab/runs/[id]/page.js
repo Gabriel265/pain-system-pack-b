@@ -2,6 +2,17 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { Highlight, themes } from 'prism-react-renderer';
+
+const theme = themes.dracula;
+
+/*
+ * Detail page for a single run/proposal.
+ * Displays summary, prompt, actions, code changes with highlighting, preview iframe, and new Logs section (AI response).
+ * iframe for embedded preview (toggleable for performance).
+ * Highlight component for diff syntax (language='diff').
+ * Logs section showing run.aiResponse as highlighted JSON.
+ */
 
 export default function RunDetailPage() {
   const { id } = useParams();
@@ -13,6 +24,7 @@ export default function RunDetailPage() {
   const [isLoadingBranchFiles, setIsLoadingBranchFiles] = useState(true);
   const [expandedFolders, setExpandedFolders] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [previewOpen, setPreviewOpen] = useState(false); // New: State to toggle iframe.
 
   useEffect(() => {
     const fetchRun = async () => {
@@ -22,6 +34,7 @@ export default function RunDetailPage() {
         const data = await res.json();
         setRun(data);
       } catch (err) {
+        console.error('Fetch run error:', err); // Improved logging.
         setError(err.message);
       } finally {
         setLoading(false);
@@ -112,6 +125,7 @@ export default function RunDetailPage() {
       alert(action === 'merge' ? 'Merged successfully!' : 'Discarded successfully');
       window.location.href = '/ai-lab';
     } catch (err) {
+      console.error('Action error:', err); // Improved logging.
       setError(err.message);
     } finally {
       setActionLoading(false);
@@ -147,7 +161,7 @@ export default function RunDetailPage() {
       <div className="h-16 md:h-20 flex-shrink-0"></div>
 
       <div className="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 lg:gap-6 w-full max-w-[1600px] mx-auto px-4 md:px-6 py-4 md:py-6">
-        {/* Collapsible Sidebar */}
+        {/* Collapsible Sidebar (unchanged) */}
         <div
           className={`bg-white border border-gray-200 rounded-lg shadow-sm transition-all duration-300 overflow-hidden flex-shrink-0 flex flex-col ${
             sidebarOpen ? 'w-full lg:w-72 xl:w-80' : 'w-full lg:w-12'
@@ -191,7 +205,7 @@ export default function RunDetailPage() {
 
         {/* Main content */}
         <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden flex flex-col gap-4 lg:gap-6">
-          {/* Header */}
+          {/* Header (unchanged) */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex-shrink-0">
             <Link 
               href="/ai-lab" 
@@ -220,18 +234,34 @@ export default function RunDetailPage() {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* Actions (updated: Add toggle for preview) */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex-shrink-0">
-            <a
-              href={run.previewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setPreviewOpen(!previewOpen)}
               className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-md mb-4"
             >
               <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
-              Open Preview (See Changes Live)
+              {previewOpen ? 'Hide Preview' : 'Show Embedded Preview'}
+            </button>
+
+            {previewOpen && (
+              <iframe
+                src={run.previewUrl}
+                className="w-full h-96 border border-gray-300 rounded-lg"
+                sandbox="allow-scripts allow-same-origin" // Security: Restrict iframe.
+                title="Preview"
+              ></iframe>
+            )}
+
+            <a
+              href={run.previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md mb-4"
+            >
+              Open Preview in New Tab
             </a>
 
             {run.status === 'Pending' && (
@@ -268,7 +298,7 @@ export default function RunDetailPage() {
             )}
           </div>
 
-          {/* Code Changes */}
+          {/* Code Changes (updated: With syntax highlighting) */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex-shrink-0 overflow-hidden flex flex-col">
             <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
@@ -292,9 +322,20 @@ export default function RunDetailPage() {
                         </div>
                       </div>
                       <div className="overflow-auto max-h-96 w-full">
-                        <pre className="p-4 md:p-6 bg-white text-xs md:text-sm font-mono leading-relaxed min-w-0">
-                          <code className="block whitespace-pre">{file.diff}</code>
-                        </pre>
+                        {/* New: Use Highlight for syntax. */}
+                        <Highlight theme={theme} code={file.diff} language="diff">
+                          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                            <pre className={`${className} p-4 md:p-6 bg-white text-xs md:text-sm font-mono leading-relaxed min-w-0`} style={style}>
+                              {tokens.map((line, i) => (
+                                <div {...getLineProps({ line, key: i })}>
+                                  {line.map((token, key) => (
+                                    <span {...getTokenProps({ token, key })} />
+                                  ))}
+                                </div>
+                              ))}
+                            </pre>
+                          )}
+                        </Highlight>
                       </div>
                     </div>
                   ))
@@ -309,6 +350,30 @@ export default function RunDetailPage() {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* New: Logs Section (AI Response) */}
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex-shrink-0 overflow-hidden flex flex-col">
+            <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
+                AI Logs
+              </h2>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 md:p-6">
+              <Highlight theme={theme} code={run.aiResponse} language="json">
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                  <pre className={`${className} bg-white text-xs md:text-sm font-mono leading-relaxed`} style={style}>
+                    {tokens.map((line, i) => (
+                      <div {...getLineProps({ line, key: i })}>
+                        {line.map((token, key) => (
+                          <span {...getTokenProps({ token, key })} />
+                        ))}
+                      </div>
+                    ))}
+                  </pre>
+                )}
+              </Highlight>
             </div>
           </div>
         </div>

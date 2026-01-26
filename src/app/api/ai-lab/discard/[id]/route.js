@@ -8,9 +8,7 @@ import { getOctokit } from '../../_shared';
 export async function POST(request, context) {
   try {
     const params = await context.params;
-    const pull_number = Number(params.id);
-
-    console.log('Discarding PR #', pull_number); 
+    const pull_number = Number(params.id); 
 
     const octokit = await getOctokit();
 
@@ -30,7 +28,6 @@ export async function POST(request, context) {
 
     return NextResponse.json({ success: true, message: 'PR closed and branch deleted' });
   } catch (e) {
-    console.error('Discard error:', e);
     return NextResponse.json({ error: e.message || 'Failed to discard' }, { status: 500 });
   }
 }

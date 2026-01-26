@@ -1,6 +1,14 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+/*
+ * Dashboard page for AI Coding Agent.
+ * Displays prompt input, file tree (now with search/filter), recent runs.
+ * Developer note: Added searchTerm state and filterTree function for UI polish.
+ * Recursively filters tree nodes based on search (case-insensitive, matches path/name).
+ * Keeps existing functionality; no new deps.
+ */
+
 export default function AiAgentDashboard() {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +28,7 @@ export default function AiAgentDashboard() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // New: State for file tree search.
 
   const observerTarget = useRef(null);
 
@@ -61,8 +70,7 @@ export default function AiAgentDashboard() {
       const data = await res.json();
       setFiles(data);
     } catch (err) {
-      console.error('Failed to load files:', err);
-      setFileError(err.message);
+     setFileError(err.message);
       setFiles([]);
     } finally {
       setIsLoadingFiles(false);
@@ -128,8 +136,7 @@ export default function AiAgentDashboard() {
       const data = await res.json();
       setFileContent(data.content);
     } catch (err) {
-      console.error('Failed to load file content:', err);
-      setContentError(err.message);
+     setContentError(err.message);
     } finally {
       setContentLoading(false);
     }
@@ -200,7 +207,29 @@ export default function AiAgentDashboard() {
     return root;
   };
 
+  // New: Recursive function to filter tree based on searchTerm.
+  // Matches if node path includes searchTerm (case-insensitive).
+  // Preserves folder structure if any child matches.
+  const filterTree = (nodes, term) => {
+    if (!term) return nodes; // No filter if empty.
+    const lowerTerm = term.toLowerCase();
+    return nodes.reduce((acc, node) => {
+      if (node.type === 'file') {
+        if (node.path.toLowerCase().includes(lowerTerm)) {
+          acc.push(node);
+        }
+      } else {
+        const filteredChildren = filterTree(node.children, term);
+        if (filteredChildren.length > 0 || node.path.toLowerCase().includes(lowerTerm)) {
+          acc.push({ ...node, children: filteredChildren });
+        }
+      }
+      return acc;
+    }, []);
+  };
+
   const treeData = buildTree(files);
+  const filteredTreeData = filterTree(treeData, searchTerm); // Apply filter.
 
   const toggleFolder = (path) => {
     setExpandedFolders(prev => ({ ...prev, [path]: !prev[path] }));
@@ -280,6 +309,14 @@ export default function AiAgentDashboard() {
 
           {sidebarOpen && (
             <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+              {/* New: Search input for file tree. */}
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search files/folders..."
+                className="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              />
               {isLoadingFiles ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -288,7 +325,7 @@ export default function AiAgentDashboard() {
                 <p className="text-red-600 text-sm text-center py-4">{fileError}</p>
               ) : files.length > 0 ? (
                 <>
-                  {renderTree(treeData)}
+                  {renderTree(filteredTreeData)} {/* Use filtered tree. */}
                   {selectedPaths.size > 0 && (
                     <div className="mt-6 border-t border-gray-200 pt-4">
                       <h4 className="font-medium text-sm mb-2">Selected for Prompt:</h4>
@@ -315,7 +352,7 @@ export default function AiAgentDashboard() {
           )}
         </div>
 
-        {/* Main Content */}
+        {/* Main Content (unchanged) */}
         <div className="flex-1 min-w-0 transition-all duration-300">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 mb-4 lg:mb-6">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">AI Coding Agent</h1>
@@ -354,7 +391,7 @@ export default function AiAgentDashboard() {
             )}
           </div>
 
-          {/* Recent Prompts Section */}
+          {/* Recent Prompts Section (unchanged) */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6">
             <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5">Recent Prompts</h2>
 
@@ -406,7 +443,7 @@ export default function AiAgentDashboard() {
           </div>
         </div>
 
-        {/* File Viewer Panel */}
+        {/* File Viewer Panel (unchanged) */}
         {viewedFile && (
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 w-full lg:w-96 xl:w-[400px] flex-shrink-0 overflow-hidden transition-all duration-300">
             <div className="flex items-center justify-between mb-4">

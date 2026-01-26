@@ -9,6 +9,10 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* Hide footer on AI Lab pages */
+body.ai-lab-active footer {
+  display: none !important;
+}
 
 * {
   border-color: #e5e7eb;    /* gray-200 */

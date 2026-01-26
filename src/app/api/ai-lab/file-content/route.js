@@ -31,7 +31,6 @@ export async function GET(request) {
 
     return NextResponse.json({ content });
   } catch (error) {
-    console.error('Error fetching file content:', error);
 
     if (error.status === 404) {
       return NextResponse.json(
