@@ -21,7 +21,7 @@ jobs:
           git config user.name "pain-system-bot"
           git config user.email "bot@thepainsystem.com"
 
-      - name: Sync main to ai-deploy (source of truth)
+      - name: Sync main to ai-deploy
         run: |
           git fetch origin
           git checkout main
