@@ -21,10 +21,10 @@ jobs:
           git config user.name "pain-system-bot"
           git config user.email "bot@thepainsystem.com"
 
-      - name: Merge ai-deploy into main
+      - name: Sync main to ai-deploy (source of truth)
         run: |
           git fetch origin
           git checkout main
-          git merge origin/ai-deploy -X theirs --no-edit
-          git push origin main
+          git reset --hard origin/ai-deploy
+          git push origin main --force
 
