@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 export default function ExecutionStatusPanel() {
   const [runtimeState, setRuntimeState] = useState({
     status: 'NO RUN',
+    verified: false,
   });
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function ExecutionStatusPanel() {
     <div className="execution-status-panel">
       <h3>Execution Status</h3>
       <div><strong>Status:</strong> {runtimeState.status}</div>
+      <div><strong>Verified:</strong> {runtimeState.verified ? 'Yes' : 'No'}</div>
     </div>
   );
 }
