@@ -1,21 +1,27 @@
-// src/components/common/Header.jsx
-
+import React from 'react';
 import Link from 'next/link';
 
 export default function Header() {
   return (
     <header className="bg-white shadow">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Pain System</h1>
-        <nav>
-          <ul className="flex space-x-4">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-            <li><Link href="/accessibility">Accessibility</Link></li>
-            <li><Link href="/projects">Projects</Link></li> {/* Added Projects link */}
-            <li><Link href="/login">Login</Link></li>
-          </ul>
+        <div className="text-xl font-bold">Pain System</div>
+        <nav className="space-x-4">
+          <Link href="/">
+            <a className="text-gray-700 hover:text-gray-900">Home</a>
+          </Link>
+          <Link href="/about">
+            <a className="text-gray-700 hover:text-gray-900">About</a>
+          </Link>
+          <Link href="/contact">
+            <a className="text-gray-700 hover:text-gray-900">Contact</a>
+          </Link>
+          <Link href="/business-in-a-box">
+            <a className="text-gray-700 hover:text-gray-900">Business in a Box</a>
+          </Link>
+          <Link href="/login">
+            <a className="text-gray-700 hover:text-gray-900">Login</a>
+          </Link>
         </nav>
       </div>
     </header>
