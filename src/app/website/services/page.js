@@ -1,18 +1,9 @@
 // src/app/website/services/page.js
-
-import React from 'react';
-
 export default function Services() {
   return (
-    <div className="services-page">
-      <h1>Our Services</h1>
-      <p>At Pain System, we offer a range of services designed to provide calm, institutional, and trust-first solutions for our clients. Our team of experts is dedicated to delivering exceptional service and support.</p>
-      <ul>
-        <li>Consultation Services</li>
-        <li>Project Management</li>
-        <li>Technical Support</li>
-        <li>Custom Solutions</li>
-      </ul>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold">Our Services</h1>
+      <p className="mt-4">We offer a range of services designed to help you achieve your goals with confidence and trust.</p>
     </div>
   );
 }
