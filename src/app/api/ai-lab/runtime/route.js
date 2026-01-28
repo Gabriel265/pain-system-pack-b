@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 
 let runtimeState = {
-  run_id: null,
-  status: 'NO RUN DETECTED',
-  timestamp: null,
+  status: 'NO RUN',
 };
 
 export async function GET() {
