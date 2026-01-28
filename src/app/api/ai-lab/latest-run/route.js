@@ -1,17 +1,29 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+
+let latestRun = {
+  id: null,
+  status: 'IDLE',
+  safeToMerge: 'No',
+  timestamp: '',
+  summary: '',
+};
 
 export async function GET() {
-  try {
-    // Simulate fetching the latest run data
-    const latestRun = {
-      id: "123",
-      status: "NEEDS REVIEW",
-      safeToMerge: "No",
-      timestamp: new Date().toISOString(),
-    };
+  return NextResponse.json(latestRun);
+}
 
-    return NextResponse.json(latestRun);
+export async function POST(request) {
+  try {
+    const { status, safeToMerge, summary } = await request.json();
+    latestRun = {
+      id: new Date().getTime().toString(),
+      status,
+      safeToMerge,
+      timestamp: new Date().toISOString(),
+      summary,
+    };
+    return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch latest run" }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update latest run' }, { status: 500 });
   }
 }

@@ -3,7 +3,7 @@ import ExecutionStatusPanel from './ExecutionStatusPanel';
 
 export default function AiAgentDashboard() {
   const [lastRunId, setLastRunId] = useState(null);
-  const [status, setStatus] = useState('NEEDS REVIEW');
+  const [status, setStatus] = useState('IDLE');
   const [safeToMerge, setSafeToMerge] = useState('No');
   const [timestamp, setTimestamp] = useState('');
 
@@ -27,7 +27,12 @@ export default function AiAgentDashboard() {
 
   return (
     <div className="ai-lab-control-panel">
-      <ExecutionStatusPanel />
+      <ExecutionStatusPanel
+        lastInstruction={lastRunId}
+        status={status}
+        timestamp={timestamp}
+        safeToMerge={safeToMerge}
+      />
       <h2>AI Lab Control Panel</h2>
       <div>
         <strong>Last Run ID:</strong> {lastRunId || 'Loading...'}

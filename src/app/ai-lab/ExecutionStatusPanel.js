@@ -1,31 +1,13 @@
 import { useState, useEffect } from 'react';
 
-export default function ExecutionStatusPanel() {
-  const [runtimeState, setRuntimeState] = useState({
-    status: 'NO RUN',
-    verified: false,
-  });
-
-  useEffect(() => {
-    const fetchRuntimeState = async () => {
-      try {
-        const res = await fetch('/api/ai-lab/runtime');
-        if (!res.ok) throw new Error('Failed to fetch runtime state');
-        const data = await res.json();
-        setRuntimeState(data);
-      } catch (error) {
-        console.error('Error fetching runtime state:', error);
-      }
-    };
-
-    fetchRuntimeState();
-  }, []);
-
+export default function ExecutionStatusPanel({ lastInstruction, status, timestamp, safeToMerge }) {
   return (
     <div className="execution-status-panel">
       <h3>Execution Status</h3>
-      <div><strong>Status:</strong> {runtimeState.status}</div>
-      <div><strong>Verified:</strong> {runtimeState.verified ? 'Yes' : 'No'}</div>
+      <div><strong>Last Instruction:</strong> {lastInstruction}</div>
+      <div><strong>Status:</strong> {status}</div>
+      <div><strong>Timestamp:</strong> {timestamp}</div>
+      <div><strong>Safe to Merge:</strong> {safeToMerge}</div>
     </div>
   );
 }
