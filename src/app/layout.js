@@ -1,12 +1,13 @@
 // src/app/layout.js
-import { SkinProvider } from '@/context/SkinContext';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
 
-export default function AppLayout({ children }) {
+export default function Layout({ children }) {
   return (
-    <SkinProvider>
-      <div className="app-layout">
-        {children}
-      </div>
-    </SkinProvider>
+    <div>
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </div>
   );
 }
