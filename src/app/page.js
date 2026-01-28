@@ -1,14 +1,6 @@
-import HeroSection from "@/components/sections/HeroSection";
-import ServicesOffering from "@/components/sections/ServicesOffering";
-import AboutSection from "@/components/sections/AboutSection";
-import ContactSection from "@/components/sections/ContactSection";
+// src/app/page.js
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  return (
-    <>
-      <HeroSection />
-      <AboutSection />
-      <ContactSection />
-    </>
-  );
+export default function HomePage() {
+  redirect('/website');
 }
