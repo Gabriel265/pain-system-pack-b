@@ -1,20 +1,12 @@
-// src/app/layout.js (or your RootLayout file)
-import "./globals.css";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+// src/app/layout.js
+import { SkinProvider } from '@/context/SkinContext';
 
-export const metadata = {
-  title: "The Pain System",
-};
-
-export default function RootLayout({ children }) {
+export default function AppLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <Header />
+    <SkinProvider>
+      <div className="app-layout">
         {children}
-        <Footer />
-      </body>
-    </html>
+      </div>
+    </SkinProvider>
   );
 }
