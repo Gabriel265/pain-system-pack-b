@@ -1,11 +1,14 @@
-// src/components/sections/Homepage.jsx
-import AvaExplainer from './AvaExplainer';
+import React from 'react';
+import HeroSection from './HeroSection';
+import AvaSection from './AvaSection';
+import BIABPreview from './BIABPreview';
 
 export default function Homepage() {
   return (
     <div>
-      {/* Other sections */}
-      <AvaExplainer />
+      <HeroSection />
+      <AvaSection />
+      <BIABPreview />
       {/* Other sections */}
     </div>
   );
