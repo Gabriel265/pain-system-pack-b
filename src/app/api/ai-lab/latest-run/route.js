@@ -4,11 +4,14 @@ export async function GET() {
   try {
     // Simulate fetching the latest run data
     const latestRun = {
-      id: "123",
-      status: "NEEDS REVIEW",
-      safeToMerge: "No",
-      timestamp: new Date().toISOString(),
-    };
+  runId: "run-001",
+  status: "IDLE", // IDLE | RUNNING | PASSED | FAILED
+  safeToMerge: false,
+  startedAt: null,
+  finishedAt: null,
+  filesTouched: [],
+  summary: "",
+};
 
     return NextResponse.json(latestRun);
   } catch (error) {
