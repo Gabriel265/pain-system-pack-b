@@ -17,7 +17,7 @@ export function middleware(request) {
     pathname.startsWith('/ai-lab') ||
     pathname.startsWith('/api/ai-lab')
   ) {
-    if (role !== 'admin') {
+    if (role !== 'founder') {
       // Redirect to login (consistent with admin)
       return NextResponse.redirect(new URL('/(auth)/login', request.url));
       // OR for APIs: return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
