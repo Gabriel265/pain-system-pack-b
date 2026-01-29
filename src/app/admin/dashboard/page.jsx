@@ -19,6 +19,10 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold">Ideas</h2>
         </div>
       </Link>
+      <div className="tile bg-gray-500 text-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-bold">Notes Preview</h2>
+        <p className="mt-2">Notes Coming Online.</p>
+      </div>
     </div>
   );
 }
