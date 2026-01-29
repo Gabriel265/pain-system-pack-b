@@ -4,6 +4,7 @@ export default function ExecutionStatusPanel() {
   const [runtimeState, setRuntimeState] = useState({
     status: 'NO RUN',
     verified: false,
+    errors: null,
   });
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function ExecutionStatusPanel() {
         setRuntimeState(data);
       } catch (error) {
         console.error('Error fetching runtime state:', error);
+        setRuntimeState((prevState) => ({ ...prevState, errors: error.message }));
       }
     };
 
@@ -26,6 +28,7 @@ export default function ExecutionStatusPanel() {
       <h3>Execution Status</h3>
       <div><strong>Status:</strong> {runtimeState.status}</div>
       <div><strong>Verified:</strong> {runtimeState.verified ? 'Yes' : 'No'}</div>
+      {runtimeState.errors && <div><strong>Errors:</strong> {runtimeState.errors}</div>}
     </div>
   );
 }
