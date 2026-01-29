@@ -23,6 +23,20 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold">Notes Preview</h2>
         <p className="mt-2">Notes Coming Online.</p>
       </div>
+      <div className="tile bg-white text-black p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-bold">Theme Preview</h2>
+        <div className="mt-4">
+          <div className="p-4 mb-2 rounded-lg" style={{ backgroundColor: '#FF5733' }}>
+            <p className="text-white">Theme 1: Sunset Orange</p>
+          </div>
+          <div className="p-4 mb-2 rounded-lg" style={{ backgroundColor: '#33FF57' }}>
+            <p className="text-white">Theme 2: Lime Green</p>
+          </div>
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#3357FF' }}>
+            <p className="text-white">Theme 3: Ocean Blue</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
