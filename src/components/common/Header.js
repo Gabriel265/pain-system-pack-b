@@ -6,16 +6,14 @@ export default function Header() {
   return (
     <header className="bg-gray-800 text-white p-4">
       <nav className="flex justify-between">
-        <div>
-          <Link href="/">Home</Link>
-          <Link href="/about" className="ml-4">About</Link>
-          <Link href="/contact" className="ml-4">Contact</Link>
-          <Link href="/accessibility" className="ml-4">Accessibility</Link>
-          <Link href="/how-it-works" className="ml-4">How It Works</Link>
+        <div className="flex space-x-4">
+          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/about" className="hover:underline">About</Link>
+          <Link href="/contact" className="hover:underline">Contact</Link>
+          <Link href="/accessibility" className="hover:underline">Accessibility</Link>
+          <Link href="/tools" className="hover:underline">Tools</Link>
         </div>
-        <div>
-          <Link href="/login" className="ml-4">Login</Link>
-        </div>
+        <Link href="/login" className="hover:underline">Login</Link>
       </nav>
     </header>
   );
