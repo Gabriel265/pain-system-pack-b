@@ -4,16 +4,28 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="bg-gray-800 text-white p-4">
-      <nav className="flex justify-between">
-        <div className="flex space-x-4">
-          <Link href="/" className="hover:underline">Home</Link>
-          <Link href="/about" className="hover:underline">About</Link>
-          <Link href="/contact" className="hover:underline">Contact</Link>
-          <Link href="/accessibility" className="hover:underline">Accessibility</Link>
-          <Link href="/tools" className="hover:underline">Tools</Link>
+    <header className="bg-gray-800 text-white">
+      <nav className="container mx-auto flex justify-between items-center py-4">
+        <div className="text-lg font-bold">
+          <Link href="/">Pain System</Link>
         </div>
-        <Link href="/login" className="hover:underline">Login</Link>
+        <ul className="flex space-x-4">
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/projects">Projects</Link>
+          </li>
+          <li>
+            <Link href="/tools">Tools</Link>
+          </li>
+          <li>
+            <Link href="/services">Services</Link>
+          </li>
+          <li>
+            <Link href="/contact">Contact</Link>
+          </li>
+        </ul>
       </nav>
     </header>
   );
