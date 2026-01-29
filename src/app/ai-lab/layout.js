@@ -21,7 +21,7 @@ export default function AILabLayout({ children }) {
       <div className="flex flex-1">
         <Sidebar type="ai-lab" />
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-10">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 lg:p-10" role="main">{children}</main>
       </div>
     </div>
   );
