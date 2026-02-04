@@ -1,0 +1,30 @@
+name: Pain System Auto-Merge to Production
+
+on:
+  push:
+    branches:
+      - ai-deploy
+
+jobs:
+  merge-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Configure Git user
+        run: |
+          git config user.name "pain-system-bot"
+          git config user.email "bot@thepainsystem.com"
+
+      - name: Sync main to ai-deploy
+        run: |
+          git fetch origin
+          git checkout main
+          git reset --hard origin/ai-deploy
+          git push origin main --force
+
