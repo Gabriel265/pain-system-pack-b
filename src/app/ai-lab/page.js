@@ -1,14 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 
-/*
- * Dashboard page for AI Coding Agent.
- * Displays prompt input, file tree (now with search/filter), recent runs.
- * Developer note: Added searchTerm state and filterTree function for UI polish.
- * Recursively filters tree nodes based on search (case-insensitive, matches path/name).
- * Keeps existing functionality; no new deps.
- */
-
 export default function AiAgentDashboard() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +20,7 @@ export default function AiAgentDashboard() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // New: State for file tree search.
+  const [searchTerm, setSearchTerm] = useState("");
 
   const observerTarget = useRef(null);
 
@@ -94,10 +86,8 @@ export default function AiAgentDashboard() {
 
   useEffect(() => {
     const element = observerTarget.current;
-    const option = { threshold: 0.5 };
-    const observer = new IntersectionObserver(handleObserver, option);
+    const observer = new IntersectionObserver(handleObserver, { threshold: 0.5 });
     if (element) observer.observe(element);
-
     return () => {
       if (element) observer.unobserve(element);
     };
@@ -183,7 +173,7 @@ export default function AiAgentDashboard() {
         setPage(1);
         setHasMore(true);
         loadRuns(1, false);
-        setSelectedPaths(new Set()); // Clear selections after run
+        setSelectedPaths(new Set());
       }
     } catch (err) {
       setError(err.message);
@@ -222,11 +212,8 @@ export default function AiAgentDashboard() {
     return root;
   };
 
-  // New: Recursive function to filter tree based on searchTerm.
-  // Matches if node path includes searchTerm (case-insensitive).
-  // Preserves folder structure if any child matches.
   const filterTree = (nodes, term) => {
-    if (!term) return nodes; // No filter if empty.
+    if (!term) return nodes;
     const lowerTerm = term.toLowerCase();
     return nodes.reduce((acc, node) => {
       if (node.type === "file") {
@@ -247,7 +234,7 @@ export default function AiAgentDashboard() {
   };
 
   const treeData = buildTree(files);
-  const filteredTreeData = filterTree(treeData, searchTerm); // Apply filter.
+  const filteredTreeData = filterTree(treeData, searchTerm);
 
   const toggleFolder = (path) => {
     setExpandedFolders((prev) => ({ ...prev, [path]: !prev[path] }));
@@ -296,6 +283,12 @@ export default function AiAgentDashboard() {
     </ul>
   );
 
+  const getStatusColor = (value) => {
+    if (value === 'success' || value === 'READY') return 'text-green-600';
+    if (value === 'failure' || value === 'ERROR') return 'text-red-600';
+    return 'text-yellow-600';
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="h-16 md:h-20"></div>
@@ -339,7 +332,6 @@ export default function AiAgentDashboard() {
               className="p-4 overflow-y-auto"
               style={{ maxHeight: "calc(100vh - 12rem)" }}
             >
-              {/* New: Search input for file tree. */}
               <input
                 type="text"
                 value={searchTerm}
@@ -357,7 +349,7 @@ export default function AiAgentDashboard() {
                 </p>
               ) : files.length > 0 ? (
                 <>
-                  {renderTree(filteredTreeData)} {/* Use filtered tree. */}
+                  {renderTree(filteredTreeData)}
                   {selectedPaths.size > 0 && (
                     <div className="mt-6 border-t border-gray-200 pt-4">
                       <h4 className="font-medium text-sm mb-2">
@@ -391,7 +383,7 @@ export default function AiAgentDashboard() {
           )}
         </div>
 
-        {/* Main Content (unchanged) */}
+        {/* Main Content */}
         <div className="flex-1 min-w-0 transition-all duration-300">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 mb-4 lg:mb-6">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
@@ -432,7 +424,7 @@ export default function AiAgentDashboard() {
             )}
           </div>
 
-          {/* Recent Prompts Section (unchanged) */}
+          {/* Recent Prompts Section */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6">
             <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5">
               Recent Prompts
@@ -445,9 +437,7 @@ export default function AiAgentDashboard() {
             ) : runs.length > 0 ? (
               <div className="space-y-3 md:space-y-4">
                 {runs
-                  .sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                  )
+                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                   .map((run) => (
                     <div
                       key={run.id}
@@ -460,10 +450,39 @@ export default function AiAgentDashboard() {
                         {run.summary}
                       </a>
                       <p className="text-xs md:text-sm text-gray-600 mt-2">
-                        Status:{" "}
-                        <span className="font-medium">{run.status}</span> •{" "}
+                        Status: <span className="font-medium">{run.status}</span> •{" "}
                         {new Date(run.created_at).toLocaleString()}
                       </p>
+
+                      <div className="mt-2 text-xs text-gray-500">
+                        GitHub CI:{" "}
+                        <span className={getStatusColor(run.buildStatuses?.githubCI?.conclusion)}>
+                          {run.buildStatuses?.githubCI?.conclusion || 
+                           run.buildStatuses?.githubCI?.status || 
+                           'unknown'}
+                        </span>
+                        {run.buildStatuses?.githubCI?.logs && (
+                          <> (Error: {run.buildStatuses.githubCI.logs.slice(0, 50)}...)</>
+                        )}
+                        <br />
+                        Vercel Deploy:{" "}
+                        <span className={getStatusColor(run.buildStatuses?.vercelDeploy?.status)}>
+                          {run.buildStatuses?.vercelDeploy?.status || 'unknown'}
+                        </span>
+                        {run.buildStatuses?.vercelDeploy?.url && (
+                          <a
+                            href={run.buildStatuses.vercelDeploy.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-1 text-blue-600 hover:underline"
+                          >
+                            Preview
+                          </a>
+                        )}
+                        {run.buildStatuses?.vercelDeploy?.error && (
+                          <> (Error: {run.buildStatuses.vercelDeploy.error.slice(0, 50)}...)</>
+                        )}
+                      </div>
                     </div>
                   ))}
 
@@ -504,7 +523,7 @@ export default function AiAgentDashboard() {
           </div>
         </div>
 
-        {/* File Viewer Panel (unchanged) */}
+        {/* File Viewer Panel */}
         {viewedFile && (
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 w-full lg:w-96 xl:w-[400px] flex-shrink-0 overflow-hidden transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
@@ -530,6 +549,7 @@ export default function AiAgentDashboard() {
                 </svg>
               </button>
             </div>
+
             {contentLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>

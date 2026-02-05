@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { getOctokit } from "../../_shared"; // Adjust path if needed (was '../_shared' earlier)
+import { getOctokit, getBuildStatuses  } from "../../_shared"; // Adjust path if needed (was '../_shared' earlier)
 
 export async function GET(request, context) {
   // context contains { params }
@@ -66,6 +66,7 @@ export async function GET(request, context) {
       /\*\*AI Response:\*\*\n```json\n([\s\S]*?)\n```/,
     );
 
+      const buildStatuses = await getBuildStatuses(pr.number);
     const run = {
       id: pr.number.toString(),
       summary: pr.title.replace(/^AI Proposal: /, "") || pr.title, // Fallback if no prefix
@@ -82,6 +83,7 @@ export async function GET(request, context) {
       aiResponse: aiResponseMatch
         ? aiResponseMatch[1].trim()
         : "No AI response available",
+        buildStatuses,
     };
 
     return NextResponse.json(run);

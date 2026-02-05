@@ -6,13 +6,6 @@ import { Highlight, themes } from "prism-react-renderer";
 
 const theme = themes.dracula;
 
-/*
- * Detail page for a single run/proposal.
- * Displays summary, prompt, actions, code changes with highlighting, and new Logs section (AI response).
- * Highlight component for diff syntax (language='diff').
- * Logs section showing run.aiResponse as highlighted JSON.
- */
-
 export default function RunDetailPage() {
   const { id } = useParams();
   const [run, setRun] = useState(null);
@@ -32,7 +25,7 @@ export default function RunDetailPage() {
         const data = await res.json();
         setRun(data);
       } catch (err) {
-        console.error("Fetch run error:", err); // Improved logging.
+        console.error("Fetch run error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -136,14 +129,14 @@ export default function RunDetailPage() {
       );
       window.location.href = "/ai-lab";
     } catch (err) {
-      console.error("Action error:", err); // Improved logging.
+      console.error("Action error:", err);
       setError(err.message);
     } finally {
       setActionLoading(false);
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center px-4">
         <div className="text-center">
@@ -154,8 +147,9 @@ export default function RunDetailPage() {
         </div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="text-center max-w-md w-full">
@@ -168,8 +162,9 @@ export default function RunDetailPage() {
         </div>
       </div>
     );
+  }
 
-  if (!run)
+  if (!run) {
     return (
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <p className="text-base sm:text-lg text-gray-600 text-center">
@@ -177,13 +172,20 @@ export default function RunDetailPage() {
         </p>
       </div>
     );
+  }
+
+  const getStatusColor = (value) => {
+    if (value === 'success' || value === 'READY') return 'bg-green-100 text-green-800';
+    if (value === 'failure' || value === 'ERROR') return 'bg-red-100 text-red-800';
+    return 'bg-yellow-100 text-yellow-800';
+  };
 
   return (
     <div className="fixed inset-0 bg-white overflow-hidden flex flex-col">
       <div className="h-16 md:h-20 flex-shrink-0"></div>
 
       <div className="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 lg:gap-6 w-full max-w-[1600px] mx-auto px-4 md:px-6 py-4 md:py-6">
-        {/* Collapsible Sidebar (unchanged) */}
+        {/* Collapsible Sidebar */}
         <div
           className={`bg-white border border-gray-200 rounded-lg shadow-sm transition-all duration-300 overflow-hidden flex-shrink-0 flex flex-col ${
             sidebarOpen ? "w-full lg:w-72 xl:w-80" : "w-full lg:w-12"
@@ -236,7 +238,7 @@ export default function RunDetailPage() {
 
         {/* Main content */}
         <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden flex flex-col gap-4 lg:gap-6">
-          {/* Header (unchanged) */}
+          {/* Header */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex-shrink-0">
             <Link
               href="/ai-lab"
@@ -265,9 +267,7 @@ export default function RunDetailPage() {
             <div className="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-600">
               <span>
                 Status:{" "}
-                <span className="font-semibold text-blue-600">
-                  {run.status}
-                </span>
+                <span className="font-semibold text-blue-600">{run.status}</span>
               </span>
               <span className="hidden sm:inline">•</span>
               <span className="w-full sm:w-auto">
@@ -284,7 +284,7 @@ export default function RunDetailPage() {
 
           {/* Actions */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex-shrink-0">
-              <a
+            <a
               href={run.previewUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -327,7 +327,51 @@ export default function RunDetailPage() {
             )}
           </div>
 
-          {/* Code Changes*/}
+          {/* Build & Deployment Status */}
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex-shrink-0">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
+              Build & Deployment Status
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-medium mb-2">GitHub CI (Fast Check)</h3>
+                <p className={`inline-block px-2 py-1 rounded text-sm ${getStatusColor(run.buildStatuses?.githubCI?.conclusion)}`}>
+                  {run.buildStatuses?.githubCI?.conclusion || 
+                   run.buildStatuses?.githubCI?.status || 
+                   'unknown'}
+                </p>
+                {run.buildStatuses?.githubCI?.logs && (
+                  <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto text-sm text-gray-700">
+                    {run.buildStatuses.githubCI.logs}
+                  </pre>
+                )}
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-medium mb-2">Vercel Deployment (Final)</h3>
+                <p className={`inline-block px-2 py-1 rounded text-sm ${getStatusColor(run.buildStatuses?.vercelDeploy?.status)}`}>
+                  {run.buildStatuses?.vercelDeploy?.status || 'unknown'}
+                </p>
+                {run.buildStatuses?.vercelDeploy?.url && (
+                  <a
+                    href={run.buildStatuses.vercelDeploy.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 text-blue-600 hover:underline"
+                  >
+                    View Preview
+                  </a>
+                )}
+                {run.buildStatuses?.vercelDeploy?.error && (
+                  <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto text-sm text-gray-700">
+                    {run.buildStatuses.vercelDeploy.error}
+                  </pre>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Code Changes */}
           <div className="bg-gray-900 border border-gray-200 rounded-lg shadow-sm flex-shrink-0 overflow-hidden flex flex-col">
             <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white">
@@ -359,13 +403,7 @@ export default function RunDetailPage() {
                           code={file.diff}
                           language="diff"
                         >
-                          {({
-                            className,
-                            style,
-                            tokens,
-                            getLineProps,
-                            getTokenProps,
-                          }) => (
+                          {({ className, style, tokens, getLineProps, getTokenProps }) => (
                             <pre
                               className={`${className} p-4 md:p-6 bg-white text-xs md:text-sm font-mono leading-relaxed min-w-0`}
                               style={style}
@@ -399,8 +437,7 @@ export default function RunDetailPage() {
                       />
                     </svg>
                     <p className="text-gray-600 text-base md:text-lg italic">
-                      No detailed diff available — check preview link above for
-                      live changes.
+                      No detailed diff available — check preview link above for live changes.
                     </p>
                   </div>
                 )}
@@ -408,7 +445,7 @@ export default function RunDetailPage() {
             </div>
           </div>
 
-          {/*Logs Section (AI Response) */}
+          {/* AI Logs */}
           <div className="bg-gray-900 border border-gray-200 rounded-lg shadow-sm flex-shrink-0 overflow-hidden flex flex-col">
             <div className="p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white">
@@ -417,13 +454,7 @@ export default function RunDetailPage() {
             </div>
             <div className="flex-1 overflow-y-auto p-4 md:p-6">
               <Highlight theme={theme} code={run.aiResponse} language="json">
-                {({
-                  className,
-                  style,
-                  tokens,
-                  getLineProps,
-                  getTokenProps,
-                }) => (
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
                   <pre
                     className={`${className} bg-white text-xs md:text-sm font-mono leading-relaxed`}
                     style={style}

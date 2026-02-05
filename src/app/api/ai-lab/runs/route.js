@@ -10,7 +10,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { getOctokit } from "../_shared";
+import { getOctokit, getBuildStatuses  } from "../_shared";
 
 export async function GET(request) {
   try {
@@ -37,17 +37,31 @@ export async function GET(request) {
     );
 
     // Map to minimal run objects (what dashboard actually needs)
-    const runs = pulls.map((p) => ({
-      id: p.number.toString(),
-      summary: p.title.replace(/^AI Proposal: /, "") || p.title, // fallback if no prefix
-      status:
-        p.state === "open" ? "Pending" : p.merged_at ? "Merged" : "Closed",
-      created_at: p.created_at,
-      // prompt: ... → intentionally omitted here (fetched in detail view)
-    }));
+    const runs = await Promise.all(
+  pulls.map(async (p) => {
+    let buildStatuses = {
+      githubCI: { status: 'unknown', conclusion: 'neutral' },
+      vercelDeploy: { status: 'unknown' }
+    };
 
-    return NextResponse.json(runs);
-  } catch (e) {
+    try {
+      buildStatuses = await getBuildStatuses(p.number) || buildStatuses;
+    } catch (err) {
+      console.error(`Status fetch failed for PR #${p.number}:`, err);
+    }
+
+    return {
+      id: p.number.toString(),
+      summary: p.title.replace(/^AI Proposal: /, "") || p.title,
+      status: p.state === "open" ? "Pending" : p.merged_at ? "Merged" : "Closed",
+      created_at: p.created_at,
+      buildStatuses,
+    };
+  })
+);
+
+  return NextResponse.json(runs);
+} catch (e) {
     return NextResponse.json(
       { error: "Failed to list proposals: " + (e.message || "Unknown error") },
       { status: 500 },
