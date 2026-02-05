@@ -91,6 +91,9 @@ Add these exactly (replace with your real values):
 - Name: `VERCEL_TEAM_SLUG`  
   Value: if you are in a Vercel Team → your team slug (check preview URLs or leave empty if personal account)
 
+- Name: `VERCEL_TOKEN`  
+  Value: Vercel account settings -> Tokens -> create token with project scope
+
 After adding → click **Redeploy** (top right in Vercel) so the changes take effect.
 
 ## How to Use AI Lab (Step by Step for Anyone)
