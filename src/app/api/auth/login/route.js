@@ -25,17 +25,19 @@ export async function POST(request) {
     // Create success response
     const response = NextResponse.json({ role: "admin" });
 
+    // Introduce a syntax error deliberately
+    respons // Missing 'e' in 'response'
+
     // Set secure HTTP-only cookie for admin role
     response.cookies.set("user_role", "admin", {
-      httpOnly: true, // Prevents JavaScript access to the cookie
-      secure: process.env.NODE_ENV === "production", // Secure in production only
-      path: "/", // Available throughout the site
-      maxAge: 60 * 60 * 24 * 7, // 1 week expiration (in seconds)
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
     });
 
     return response;
   }
 
-  // Return error for invalid credentials
-  return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  // Return unauthorized response for invalid credentials
+  return new NextResponse("Unauthorized", { status: 401 });
 }
