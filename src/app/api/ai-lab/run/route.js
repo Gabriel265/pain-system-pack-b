@@ -19,7 +19,6 @@ export async function POST(req) {
     }
 
     // Create OpenAI client ONLY when the route is actually called (runtime)
-    // This prevents build-time crashes when env var is missing during next build
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
