@@ -63,54 +63,37 @@ export default function SignIn() {
           {/* Spacer for top padding */}
           <div className="h-16 md:h-20"></div>
 
-          {/* Left side - Login form */}
-          <div className="w-full lg:w-1/2 p-6 md:p-12 lg:p-16 flex items-center justify-center">
-            <div className="w-full max-w-md bg-white/70  backdrop-blur-xl rounded-2xl shadow-xl p-8 md:p-10 border border-white/30 ">
-              {/* Header */}
-              <div className="mb-8">
-                <p className="text-sm text-gray-500  mb-2">Your logo</p>
-                <h1 className="text-4xl font-bold text-gray-800">Login</h1>
-              </div>
-
-              {/* Login form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <input
-                  type="email"
-                  placeholder="example@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80  backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
-                />
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80  backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
-                />
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="block w-full text-center py-3 px-4 bg-orange-500 hover:bg-orange-600 disabled:opacity-70 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
-                >
-                  {loading ? "Signing in..." : "Sign in"}
-                </button>
-              </form>
-            </div>
-          </div>
-
-          {/* Right side - Hero section */}
-          {/* Removed background image - replaced with placeholder */}
-          <div className="w-full lg:w-1/2 relative overflow-hidden min-h-[400px] lg:min-h-full bg-gradient-to-br from-orange-400/20 to-orange-600/20 flex items-center justify-center">
-            <div className="text-white/70 text-center p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Welcome Back
-              </h2>
-              <p className="text-lg">Sign in to access your dashboard</p>
-            </div>
+          {/* Form container */}
+          <div className="flex-1 flex flex-col justify-center p-8">
+            <h2 className="text-2xl font-bold mb-6">Sign In</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full p-3 bg-black text-white rounded-lg"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Sign In"}
+              </button>
+            </form>
+            <p className="mt-4 text-center">
+              Don't have an account? <Link href="/register">Register</Link>
+            </p>
           </div>
         </div>
       </div>
