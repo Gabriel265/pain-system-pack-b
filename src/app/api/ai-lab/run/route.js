@@ -8,10 +8,6 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getOctokit, getBuildStatuses } from "../_shared";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req) {
   try {
     const { prompt } = await req.json();
@@ -20,6 +16,17 @@ export async function POST(req) {
         { error: "Invalid or missing prompt" },
         { status: 400 },
       );
+    }
+
+    // Create OpenAI client ONLY when the route is actually called (runtime)
+    // This prevents build-time crashes when env var is missing during next build
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // Optional: explicit check (good for debugging)
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not set in environment variables");
     }
 
     const octokit = await getOctokit();
