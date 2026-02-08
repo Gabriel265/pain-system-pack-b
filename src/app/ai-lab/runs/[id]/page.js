@@ -16,6 +16,8 @@ export default function RunDetailPage() {
   const [isLoadingBranchFiles, setIsLoadingBranchFiles] = useState(true);
   const [expandedFolders, setExpandedFolders] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', logs: '' });
 
   useEffect(() => {
     const fetchRun = async () => {
@@ -180,6 +182,11 @@ export default function RunDetailPage() {
     return 'bg-yellow-100 text-yellow-800';
   };
 
+  const openModal = (title, logs) => {
+    setModalContent({ title, logs });
+    setModalOpen(true);
+  };
+
   return (
     <div className="fixed inset-0 bg-white overflow-hidden flex flex-col">
       <div className="h-16 md:h-20 flex-shrink-0"></div>
@@ -266,8 +273,7 @@ export default function RunDetailPage() {
 
             <div className="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-600">
               <span>
-                Status:{" "}
-                <span className="font-semibold text-blue-600">{run.status}</span>
+                Status: <span className="font-semibold text-blue-600">{run.status}</span>
               </span>
               <span className="hidden sm:inline">•</span>
               <span className="w-full sm:w-auto">
@@ -336,14 +342,15 @@ export default function RunDetailPage() {
               <div className="p-4 border rounded-lg">
                 <h3 className="font-medium mb-2">GitHub CI (Fast Check)</h3>
                 <p className={`inline-block px-2 py-1 rounded text-sm ${getStatusColor(run.buildStatuses?.githubCI?.conclusion)}`}>
-                  {run.buildStatuses?.githubCI?.conclusion || 
-                   run.buildStatuses?.githubCI?.status || 
-                   'unknown'}
+                  {run.buildStatuses?.githubCI?.conclusion || run.buildStatuses?.githubCI?.status || 'unknown'}
                 </p>
                 {run.buildStatuses?.githubCI?.logs && (
-                  <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto text-sm text-gray-700">
-                    {run.buildStatuses.githubCI.logs}
-                  </pre>
+                  <button
+                    onClick={() => openModal('GitHub CI Error', run.buildStatuses.githubCI.logs)}
+                    className="ml-2 text-blue-600 hover:underline text-sm"
+                  >
+                    View Full Error
+                  </button>
                 )}
               </div>
 
@@ -363,10 +370,18 @@ export default function RunDetailPage() {
                   </a>
                 )}
                 {run.buildStatuses?.vercelDeploy?.error && (
-                  <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto text-sm text-gray-700">
-                    {run.buildStatuses.vercelDeploy.error}
-                  </pre>
-                )}
+  <button
+    onClick={() => openModal(
+      'Vercel Deployment Error',
+      run.buildStatuses.vercelDeploy.fullError || 
+      run.buildStatuses.vercelDeploy.error || 
+      'No detailed error message available yet. Try refreshing status.'
+    )}
+    className="ml-1 text-red-600 hover:underline"
+  >
+    View Full Error
+  </button>
+)}
               </div>
             </div>
           </div>
@@ -473,6 +488,42 @@ export default function RunDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* New Modal for Full Errors */}
+      {modalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="p-5 border-b flex items-center justify-between bg-gray-50">
+        <h3 className="text-xl font-semibold text-gray-900">{modalContent.title}</h3>
+        <button onClick={() => setModalOpen(false)} className="text-2xl text-gray-600 hover:text-gray-900">×</button>
+      </div>
+
+      <div className="p-6 overflow-auto flex-1 bg-white">
+        <pre className="whitespace-pre-wrap font-mono text-sm text-gray-800 leading-relaxed bg-gray-50 p-4 rounded border border-gray-200">
+          {modalContent.logs}
+        </pre>
+      </div>
+
+      <div className="p-5 border-t bg-gray-50 flex justify-between">
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(modalContent.logs);
+            alert('Copied to clipboard — paste anywhere!');
+          }}
+          className="px-5 py-2.5 bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+        >
+          Copy Full Details
+        </button>
+        <button
+          onClick={() => setModalOpen(false)}
+          className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

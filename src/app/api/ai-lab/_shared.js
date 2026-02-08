@@ -72,68 +72,78 @@ export async function getBuildStatuses(pullNumber) {
   // ──────────────────────────────────────────────────────────────
   // 2. Vercel Deployment (use correct v6 API version!)
   // ──────────────────────────────────────────────────────────────
-  let vercelDeploy = { status: 'unknown', url: '', error: '' };
+  // 2. Vercel Deployment
+// 2. Vercel Deployment
+// 2. Vercel Deployment
+let vercelDeploy = { 
+  status: 'unknown', 
+  url: '', 
+  error: '', 
+  fullError: ''   // This will hold the complete text for the modal
+};
 
-  try {
-    const query = new URLSearchParams({
-      limit: '1',
-      branch: 'ai-lab',
-    });
+try {
+  const query = new URLSearchParams({
+    limit: '1',
+    branch: 'ai-lab',
+  });
 
-    // Use project slug + team slug if no numeric ID
-    // Vercel v6 supports ?projectName=... but it's less reliable → prefer ID if you can add it
-    if (process.env.VERCEL_PROJECT_ID) {
-      query.set('projectId', process.env.VERCEL_PROJECT_ID);
-    } else {
-      // Fallback using slug (may return multiple if name collision)
-      query.set('projectName', process.env.VERCEL_PROJECT_SLUG);
-    }
-
-    if (process.env.VERCEL_TEAM_ID) query.set('teamId', process.env.VERCEL_TEAM_ID);
-
-    const res = await fetch(`https://api.vercel.com/v6/deployments?${query.toString()}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
-      },
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`Vercel API error: ${res.status} - ${errText}`);
-    }
-
-    const { deployments } = await res.json();
-
-    if (deployments?.length > 0) {
-      const dep = deployments[0];
-      vercelDeploy.status = dep.state || dep.readyState || 'unknown'; // QUEUED, BUILDING, READY, ERROR, CANCELED
-      vercelDeploy.url = dep.url ? `https://${dep.url}` : '';
-
-      // Fetch error logs if failed
-      if (['ERROR', 'CANCELED'].includes(vercelDeploy.status)) {
-        try {
-          const logsRes = await fetch(
-            `https://api.vercel.com/v6/deployments/${dep.id}/builds?limit=1`,
-            { headers: { Authorization: `Bearer ${process.env.VERCEL_TOKEN}` } }
-          );
-          if (logsRes.ok) {
-            const builds = await logsRes.json();
-            if (builds.builds?.length > 0) {
-              vercelDeploy.error = builds.builds[0].output?.join('\n') || 'Build failed – see Vercel dashboard.';
-            }
-          }
-        } catch (logsErr) {
-          vercelDeploy.error = 'Failed to fetch logs: ' + logsErr.message;
-        }
-      }
-    } else {
-      vercelDeploy.status = 'no_deploy_found';
-      vercelDeploy.error = 'No recent deployment on ai-lab branch';
-    }
-  } catch (err) {
-    console.error('Vercel status fetch failed:', err);
-    vercelDeploy.error = 'Could not fetch Vercel status: ' + (err.message || 'Unknown');
+  if (process.env.VERCEL_PROJECT_ID) {
+    query.set('projectId', process.env.VERCEL_PROJECT_ID);
+  } else if (process.env.VERCEL_PROJECT_SLUG) {
+    query.set('projectName', process.env.VERCEL_PROJECT_SLUG);
   }
+
+  if (process.env.VERCEL_TEAM_ID) query.set('teamId', process.env.VERCEL_TEAM_ID);
+
+  const res = await fetch(`https://api.vercel.com/v6/deployments?${query.toString()}`, {
+    headers: { Authorization: `Bearer ${process.env.VERCEL_TOKEN}` },
+  });
+
+  if (!res.ok) throw new Error(await res.text());
+
+  const { deployments } = await res.json();
+
+  if (deployments?.length > 0) {
+    const dep = deployments[0];
+    vercelDeploy.status = dep.state || dep.readyState || 'unknown';
+    vercelDeploy.url = dep.url ? `https://${dep.url}` : '';
+
+    if (['ERROR', 'CANCELED'].includes(vercelDeploy.status)) {
+  let fullText = dep.errorMessage || 
+                 (dep.errorCode ? `${dep.errorCode}: Build command failed` : 'Build failed');
+
+  fullText += `\n\nBuild command (npm run build) exited with code 1.`;
+  fullText += `\nCommon causes in Next.js:`;
+  fullText += `\n  • Syntax error or invalid JS/TS`;
+  fullText += `\n  • Missing import or module not found`;
+  fullText += `\n  • Runtime error during static generation`;
+  fullText += `\n  • Invalid Tailwind/PostCSS config`;
+  fullText += `\n  • Dependency version mismatch`;
+
+  if (dep.meta?.githubCommitMessage) {
+    fullText += `\n\nTriggered by commit: "${dep.meta.githubCommitMessage}"`;
+  }
+
+  fullText += `\n\nDeployment created: ${new Date(dep.createdAt).toLocaleString()}`;
+  fullText += `\nBranch: ai-lab`;
+  fullText += `\nProject: ${dep.name}`;
+
+  if (dep.inspectorUrl) {
+    fullText += `\n\nIf you need the raw build output (lines, timestamps, webpack details):\n${dep.inspectorUrl}`;
+  }
+
+  vercelDeploy.fullError = fullText.trim();
+  vercelDeploy.error = dep.errorMessage || 'npm run build failed (code 1)';
+}
+  } else {
+    vercelDeploy.status = 'no_deploy_found';
+    vercelDeploy.error = 'No recent deployment on ai-lab branch';
+  }
+} catch (err) {
+  console.error('Vercel fetch error:', err);
+  vercelDeploy.error = 'Failed to fetch Vercel deployment: ' + err.message;
+}
 
   return { githubCI, vercelDeploy };
 }

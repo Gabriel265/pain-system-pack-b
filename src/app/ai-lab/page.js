@@ -21,29 +21,24 @@ export default function AiAgentDashboard() {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', logs: '' });
 
   const observerTarget = useRef(null);
 
   const loadRuns = async (pageNum = 1, append = false) => {
-    if (pageNum === 1) {
-      setIsLoadingRuns(true);
-    } else {
-      setLoadingMore(true);
-    }
+    if (pageNum === 1) setIsLoadingRuns(true);
+    else setLoadingMore(true);
+
     try {
       const res = await fetch(`/api/ai-lab/runs?page=${pageNum}&limit=10`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
 
-      if (append) {
-        setRuns((prev) => [...prev, ...data]);
-      } else {
-        setRuns(data);
-      }
+      if (append) setRuns((prev) => [...prev, ...data]);
+      else setRuns(data);
 
-      if (data.length < 10) {
-        setHasMore(false);
-      }
+      setHasMore(data.length >= 10);
     } catch (err) {
       setError(err.message);
       if (!append) setRuns([]);
@@ -88,25 +83,18 @@ export default function AiAgentDashboard() {
     const element = observerTarget.current;
     const observer = new IntersectionObserver(handleObserver, { threshold: 0.5 });
     if (element) observer.observe(element);
-    return () => {
-      if (element) observer.unobserve(element);
-    };
+    return () => element && observer.unobserve(element);
   }, [handleObserver]);
 
   useEffect(() => {
-    if (page > 1) {
-      loadRuns(page, true);
-    }
+    if (page > 1) loadRuns(page, true);
   }, [page]);
 
   const toggleSelect = (path) => {
     setSelectedPaths((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(path)) {
-        newSet.delete(path);
-      } else {
-        newSet.add(path);
-      }
+      if (newSet.has(path)) newSet.delete(path);
+      else newSet.add(path);
       return newSet;
     });
   };
@@ -124,9 +112,7 @@ export default function AiAgentDashboard() {
     setContentLoading(true);
     setContentError(null);
     try {
-      const res = await fetch(
-        `/api/ai-lab/file-content?path=${encodeURIComponent(path)}`,
-      );
+      const res = await fetch(`/api/ai-lab/file-content?path=${encodeURIComponent(path)}`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setFileContent(data.content);
@@ -138,14 +124,9 @@ export default function AiAgentDashboard() {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(fileContent)
-      .then(() => {
-        alert("Copied to clipboard!");
-      })
-      .catch((err) => {
-        console.error("Failed to copy:", err);
-      });
+    navigator.clipboard.writeText(fileContent)
+      .then(() => alert("Copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy:", err));
   };
 
   const handleRun = async () => {
@@ -154,9 +135,7 @@ export default function AiAgentDashboard() {
     setError(null);
     try {
       const selectedList = Array.from(selectedPaths);
-      const appendText = selectedList.length
-        ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}`
-        : "";
+      const appendText = selectedList.length ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}` : "";
       const fullPrompt = prompt + appendText;
 
       const res = await fetch("/api/ai-lab/run", {
@@ -164,10 +143,12 @@ export default function AiAgentDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: fullPrompt }),
       });
+
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.error || "Failed to run AI Lab");
       }
+
       const data = await res.json();
       if (data.success) {
         setPage(1);
@@ -196,12 +177,7 @@ export default function AiAgentDashboard() {
         } else {
           let node = map.get(currentPath);
           if (!node) {
-            node = {
-              name: part,
-              type: "folder",
-              children: [],
-              path: currentPath,
-            };
+            node = { name: part, type: "folder", children: [], path: currentPath };
             map.set(currentPath, node);
             current.push(node);
           }
@@ -217,15 +193,10 @@ export default function AiAgentDashboard() {
     const lowerTerm = term.toLowerCase();
     return nodes.reduce((acc, node) => {
       if (node.type === "file") {
-        if (node.path.toLowerCase().includes(lowerTerm)) {
-          acc.push(node);
-        }
+        if (node.path.toLowerCase().includes(lowerTerm)) acc.push(node);
       } else {
         const filteredChildren = filterTree(node.children, term);
-        if (
-          filteredChildren.length > 0 ||
-          node.path.toLowerCase().includes(lowerTerm)
-        ) {
+        if (filteredChildren.length > 0 || node.path.toLowerCase().includes(lowerTerm)) {
           acc.push({ ...node, children: filteredChildren });
         }
       }
@@ -275,9 +246,7 @@ export default function AiAgentDashboard() {
               </span>
             )}
           </div>
-          {node.type === "folder" &&
-            expandedFolders[node.path] &&
-            renderTree(node.children, level + 1)}
+          {node.type === "folder" && expandedFolders[node.path] && renderTree(node.children, level + 1)}
         </li>
       ))}
     </ul>
@@ -287,6 +256,11 @@ export default function AiAgentDashboard() {
     if (value === 'success' || value === 'READY') return 'text-green-600';
     if (value === 'failure' || value === 'ERROR') return 'text-red-600';
     return 'text-yellow-600';
+  };
+
+  const openModal = (title, logs) => {
+    setModalContent({ title, logs });
+    setModalOpen(true);
   };
 
   return (
@@ -457,12 +431,15 @@ export default function AiAgentDashboard() {
                       <div className="mt-2 text-xs text-gray-500">
                         GitHub CI:{" "}
                         <span className={getStatusColor(run.buildStatuses?.githubCI?.conclusion)}>
-                          {run.buildStatuses?.githubCI?.conclusion || 
-                           run.buildStatuses?.githubCI?.status || 
-                           'unknown'}
+                          {run.buildStatuses?.githubCI?.conclusion || run.buildStatuses?.githubCI?.status || 'unknown'}
                         </span>
                         {run.buildStatuses?.githubCI?.logs && (
-                          <> (Error: {run.buildStatuses.githubCI.logs.slice(0, 50)}...)</>
+                          <button
+                            onClick={() => openModal('GitHub CI Error', run.buildStatuses.githubCI.logs)}
+                            className="ml-1 text-blue-600 hover:underline"
+                          >
+                            View Error
+                          </button>
                         )}
                         <br />
                         Vercel Deploy:{" "}
@@ -480,8 +457,18 @@ export default function AiAgentDashboard() {
                           </a>
                         )}
                         {run.buildStatuses?.vercelDeploy?.error && (
-                          <> (Error: {run.buildStatuses.vercelDeploy.error.slice(0, 50)}...)</>
-                        )}
+  <button
+    onClick={() => openModal(
+      'Vercel Deployment Error',
+      run.buildStatuses.vercelDeploy.fullError || 
+      run.buildStatuses.vercelDeploy.error || 
+      'No detailed error message available yet. Try refreshing status.'
+    )}
+    className="ml-1 text-red-600 hover:underline"
+  >
+    View Full Error
+  </button>
+)}
                       </div>
                     </div>
                   ))}
@@ -549,7 +536,6 @@ export default function AiAgentDashboard() {
                 </svg>
               </button>
             </div>
-
             {contentLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -571,6 +557,42 @@ export default function AiAgentDashboard() {
             )}
           </div>
         )}
+
+        {/* New Modal for Full Errors */}
+        {modalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="p-5 border-b flex items-center justify-between bg-gray-50">
+        <h3 className="text-xl font-semibold text-gray-900">{modalContent.title}</h3>
+        <button onClick={() => setModalOpen(false)} className="text-2xl text-gray-600 hover:text-gray-900">×</button>
+      </div>
+
+      <div className="p-6 overflow-auto flex-1 bg-white">
+        <pre className="whitespace-pre-wrap font-mono text-sm text-gray-800 leading-relaxed bg-gray-50 p-4 rounded border border-gray-200">
+          {modalContent.logs}
+        </pre>
+      </div>
+
+      <div className="p-5 border-t bg-gray-50 flex justify-between">
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(modalContent.logs);
+            alert('Copied to clipboard — paste anywhere!');
+          }}
+          className="px-5 py-2.5 bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+        >
+          Copy Full Details
+        </button>
+        <button
+          onClick={() => setModalOpen(false)}
+          className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
