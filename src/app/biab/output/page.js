@@ -1,22 +1,57 @@
 // src/app/biab/output/page.js
-"use client";
+'use client';
+
+import { useEffect, useState } from 'react';
 
 export default function BIABOutput() {
+  const [output, setOutput] = useState(null);
+
+  useEffect(() => {
+    const storedOutput = localStorage.getItem('biabOutput');
+    if (storedOutput) {
+      setOutput(JSON.parse(storedOutput));
+    }
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(JSON.stringify(output, null, 2));
+    alert('Copied to clipboard');
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'biab-output.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  if (!output) return <div>Loading...</div>;
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">BIAB Pack Output</h1>
-        <div className="space-y-4">
-          <div><strong>Business Summary:</strong> [Summary]</div>
-          <div><strong>Recommended Modules:</strong> [Modules]</div>
-          <div><strong>Website Pages:</strong> [Pages]</div>
-          <div><strong>Dashboard Sections:</strong> [Sections]</div>
-          <div><strong>Monetisation Plan:</strong> [Plan]</div>
-          <div><strong>Compliance Checklist:</strong> [Checklist]</div>
-          <div><strong>MVP Roadmap:</strong> [Roadmap]</div>
-          <div><strong>Pricing Ladder:</strong> [Pricing]</div>
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Download PDF (coming soon)</button>
-        </div>
+    <div className='max-w-2xl mx-auto mt-10 p-4 bg-white shadow-md rounded-md'>
+      <h2 className='text-xl font-bold mb-4'>BIAB Output Pack</h2>
+      <div>
+        <h3 className='font-bold'>Project Summary</h3>
+        <p>{output.businessName} - {output.businessType}</p>
+        <h3 className='font-bold'>Target Customer + Offer</h3>
+        <p>{output.targetCustomers} - {output.coreOffer}</p>
+        <h3 className='font-bold'>MVP Scope (5 features)</h3>
+        <p>{output.mvpFeatures}</p>
+        <h3 className='font-bold'>Monetisation Plan</h3>
+        <p>{output.revenueModel} - {output.pricing}</p>
+        <h3 className='font-bold'>Growth Plan (first 30 days)</h3>
+        <p>{output.acquisitionChannels}</p>
+        <h3 className='font-bold'>Risk & Compliance Notes</h3>
+        <p>{output.risks} - {output.complianceNeeds}</p>
+        <h3 className='font-bold'>Delivery Spine Stage + Next Actions</h3>
+        <p>{output.timelineUrgency}</p>
+      </div>
+      <div className='flex justify-between mt-4'>
+        <button onClick={handleCopy} className='bg-blue-500 text-white p-2 rounded'>Copy Pack</button>
+        <button onClick={handleDownload} className='bg-green-500 text-white p-2 rounded'>Download JSON</button>
       </div>
     </div>
   );
