@@ -17,59 +17,80 @@ export async function POST(req) {
     const repo = process.env.GITHUB_REPO;
     const branch = "ai-lab";
 
-    // Helper to update a file
-    const updateFile = async (path, updateContentFn, commitMessage) => {
+    // Helper: Update or create a file
+    const updateOrCreateFile = async (path, updateContentFn, commitMessage) => {
+      let currentContent = "{}"; // default for new file
+      let sha = null;
+
       try {
-        // Get current file
+        // Try to get existing file
         const { data: file } = await octokit.request(
           "GET /repos/{owner}/{repo}/contents/{path}",
           { owner, repo, path, ref: branch }
         );
 
-        const currentContent = Buffer.from(file.content, "base64").toString("utf-8");
-        const updatedContent = updateContentFn(currentContent);
-
-        // Commit update
-        await octokit.request(
-          "PUT /repos/{owner}/{repo}/contents/{path}",
-          {
-            owner,
-            repo,
-            path,
-            message: commitMessage,
-            content: Buffer.from(updatedContent).toString("base64"),
-            sha: file.sha,
-            branch,
-          }
-        );
-
-        console.log(`[approve] Updated ${path}`);
+        currentContent = Buffer.from(file.content, "base64").toString("utf-8");
+        sha = file.sha;
+        console.log(`[approve] Found existing ${path}, sha: ${sha}`);
       } catch (err) {
-        console.error(`[approve] Failed to update ${path}:`, err.message);
-        throw err;
+        if (err.status === 404) {
+          console.log(`[approve] ${path} does not exist yet — will create it`);
+        } else {
+          console.error(`[approve] Failed to get ${path}:`, err.message);
+          throw err;
+        }
       }
+
+      // Apply updates
+      const updatedContent = updateContentFn(currentContent);
+
+      // Commit (create or update)
+      await octokit.request(
+        "PUT /repos/{owner}/{repo}/contents/{path}",
+        {
+          owner,
+          repo,
+          path,
+          message: commitMessage,
+          content: Buffer.from(updatedContent).toString("base64"),
+          sha, // only include if file existed (omit for create)
+          branch,
+        }
+      );
+
+      console.log(`[approve] ${sha ? "Updated" : "Created"} ${path}`);
     };
 
-    // 1. Update package.json (add to dependencies)
-    await updateFile(
+    // 1. Update package.json
+    await updateOrCreateFile(
       "package.json",
       (content) => {
-        const pkg = JSON.parse(content);
+        let pkg;
+        try {
+          pkg = JSON.parse(content);
+        } catch {
+          pkg = { dependencies: {} }; // fallback if invalid
+        }
         if (!pkg.dependencies) pkg.dependencies = {};
         packages.forEach((p) => {
           pkg.dependencies[p.name] = p.version;
         });
-        return JSON.stringify(pkg, null, 2) + "\n"; // ensure trailing newline
+        return JSON.stringify(pkg, null, 2) + "\n";
       },
       "AI-Lab: add approved dependencies to package.json"
     );
 
-    // 2. Update .github/allowed-dependencies.json
-    await updateFile(
+    // 2. Update or create .github/allowed-dependencies.json
+    await updateOrCreateFile(
       ".github/allowed-dependencies.json",
       (content) => {
-        const data = JSON.parse(content);
-        const allowedSet = new Set(data.allowed);
+        let data;
+        try {
+          data = JSON.parse(content);
+        } catch {
+          data = { allowed: [] }; // initialize if new or invalid
+        }
+        const allowedSet = new Set(data.allowed || []);
         packages.forEach((p) => allowedSet.add(p.name));
         data.allowed = Array.from(allowedSet).sort();
         return JSON.stringify(data, null, 2) + "\n";
@@ -77,10 +98,7 @@ export async function POST(req) {
       "AI-Lab: add approved packages to allowlist"
     );
 
-    // 3. package-lock.json — we can't reliably generate it here.
-    //    Instead: commit an empty change or note that next CI/npm ci will regenerate it.
-    //    Simplest: just commit a dummy update if needed, or skip and let CI handle.
-    //    For now, skip — next push will trigger CI which runs npm ci anyway.
+    // 3. package-lock.json: skipped (CI/npm ci will regenerate it on next push/build)
 
     console.log("[approve] Direct commits complete — changes pushed to ai-lab");
 
