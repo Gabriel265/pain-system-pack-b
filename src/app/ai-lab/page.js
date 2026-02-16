@@ -24,6 +24,10 @@ export default function AiAgentDashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({ title: '', logs: '' });
 
+  const [needsApproval, setNeedsApproval] = useState(false);
+  const [pendingDependencies, setPendingDependencies] = useState([]);
+  const [originalFullPrompt, setOriginalFullPrompt] = useState("");
+
   const observerTarget = useRef(null);
 
   const loadRuns = async (pageNum = 1, append = false) => {
@@ -130,38 +134,56 @@ export default function AiAgentDashboard() {
   };
 
   const handleRun = async () => {
-    if (!prompt.trim()) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const selectedList = Array.from(selectedPaths);
-      const appendText = selectedList.length ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}` : "";
-      const fullPrompt = prompt + appendText;
+  if (!prompt.trim()) return;
 
-      const res = await fetch("/api/ai-lab/run", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: fullPrompt }),
-      });
+  setLoading(true);
+  setError(null);
+  setNeedsApproval(false); // reset in case previous attempt had deps
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "Failed to run AI Lab");
-      }
+  try {
+    const selectedList = Array.from(selectedPaths);
+    const appendText = selectedList.length
+      ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}`
+      : "";
+    const fullPrompt = prompt + appendText;
 
-      const data = await res.json();
-      if (data.success) {
-        setPage(1);
-        setHasMore(true);
-        loadRuns(1, false);
-        setSelectedPaths(new Set());
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    // Save for potential retry after install
+    setOriginalFullPrompt(fullPrompt);
+
+    const res = await fetch("/api/ai-lab/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: fullPrompt }),
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || "Failed to run AI Lab");
     }
-  };
+
+    const data = await res.json();
+
+    if (data.needsApproval) {
+      // Show approval modal
+      setPendingDependencies(data.dependencies);
+      setNeedsApproval(true);
+      setLoading(false);
+      return; // stop here — wait for user approval
+    }
+
+    // Normal success (no deps needed)
+    if (data.success) {
+      setPage(1);
+      setHasMore(true);
+      loadRuns(1, false);
+      setSelectedPaths(new Set());
+    }
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const buildTree = (paths) => {
     const root = [];
@@ -457,19 +479,19 @@ export default function AiAgentDashboard() {
                           </a>
                         )}
                         {run.buildStatuses?.vercelDeploy?.error && (
-  <button
-    onClick={() => openModal(
-      'Vercel Deployment Error',
-      run.buildStatuses.vercelDeploy.fullError || 
-      run.buildStatuses.vercelDeploy.error || 
-      'No detailed error message available yet. Try refreshing status.'
-    )}
-    className="ml-1 text-red-600 hover:underline"
-  >
-    View Full Error
-  </button>
-)}
-                      </div>
+                        <button
+                          onClick={() => openModal(
+                            'Vercel Deployment Error',
+                            run.buildStatuses.vercelDeploy.fullError || 
+                            run.buildStatuses.vercelDeploy.error || 
+                            'No detailed error message available yet. Try refreshing status.'
+                          )}
+                          className="ml-1 text-red-600 hover:underline"
+                        >
+                          View Full Error
+                        </button>
+                      )}
+                                            </div>
                     </div>
                   ))}
 
@@ -588,6 +610,89 @@ export default function AiAgentDashboard() {
           className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* New Modal for Approve depencies */}
+{needsApproval && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+      <h3 className="text-2xl font-bold mb-6 text-center">Install Required Packages?</h3>
+      
+      <div className="space-y-4 mb-8">
+        {pendingDependencies.map((dep, index) => (
+          <div 
+            key={index} 
+            className="bg-gray-50 border border-gray-200 p-4 rounded-xl flex items-center gap-4"
+          >
+            <div className="text-4xl">📦</div>
+            <div>
+              <p className="font-mono font-semibold text-lg">{dep.name} <span className="text-gray-500">@{dep.version}</span></p>
+              <p className="text-sm text-gray-600">{dep.type}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-center text-gray-600 mb-8">
+        The AI needs these packages to complete your request.<br/>
+        They'll be installed securely with exact versions.
+      </p>
+
+      <div className="flex gap-4">
+        <button
+          onClick={() => {
+            setNeedsApproval(false);
+            setLoading(false);
+          }}
+          className="flex-1 py-4 border-2 border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={async () => {
+            setLoading(true);
+            try {
+              const approveRes = await fetch("/api/ai-lab/approve-dependency", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  packages: pendingDependencies,
+                }),
+              });
+
+              if (!approveRes.ok) throw new Error("Approval failed");
+
+              // Give GitHub Actions ~20-40s to finish install & push
+              setTimeout(() => {
+                setNeedsApproval(false);
+                handleRun(); // retry original prompt (now deps are installed)
+              }, 25000);
+            } catch (err) {
+              setError("Failed to install dependencies: " + err.message);
+              setNeedsApproval(false);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          className={`flex-1 py-4 rounded-xl font-medium text-white transition ${
+            loading 
+              ? "bg-gray-400 cursor-not-allowed" 
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+              Installing...
+            </span>
+          ) : (
+            "Yes, Install & Continue"
+          )}
         </button>
       </div>
     </div>

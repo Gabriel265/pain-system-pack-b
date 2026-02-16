@@ -18,12 +18,10 @@ export async function POST(req) {
       );
     }
 
-    // Create OpenAI client ONLY when the route is actually called (runtime)
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    // Optional: explicit check (good for debugging)
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not set in environment variables");
     }
@@ -66,21 +64,29 @@ export async function POST(req) {
     const system = `You are an expert Next.js developer.
 Rules:
 - Only change files relevant to the task
-- Never delete files or add dependencies
+- Never delete files
 - Never change auth, env, pricing, analytics or security code
 - Keep existing style & structure
 - Use server components when appropriate
 - Return ONLY valid JSON, nothing else
 
+If you need a new external package that is NOT already in the project:
+- ONLY request packages that are truly necessary
+- Include them in "newDependencies" array
+- Use exact version (e.g. "0.33.5")
+- Use "dependencies" or "devDependencies" as type
+
 Repo context (partial):
 ${context}
 
-Respond with:
+Respond with this exact JSON structure (no extra text):
 {
-  "summary": "One sentence description",
+  "summary": "One sentence description of the changes",
   "files": [
     {"path": "path/to/file.js", "action": "modify"|"create", "content": "complete file content"}
-  ]
+  ],
+  "newDependencies": 
+   [{"name": "name of package", "version": "package version", "type": "dependencies"}]
 }`;
 
     const completion = await openai.chat.completions.create({
@@ -94,15 +100,45 @@ Respond with:
       response_format: { type: "json_object" },
     });
 
-    const response = JSON.parse(completion.choices[0].message.content);
-
-    if (
-      !response.summary ||
-      !Array.isArray(response.files) ||
-      response.files.length === 0
-    ) {
-      throw new Error("Invalid AI response format");
+    let response;
+    try {
+      response = JSON.parse(completion.choices[0].message.content);
+    } catch (e) {
+      throw new Error("AI returned invalid JSON");
     }
+
+    if (!response.summary || !Array.isArray(response.files)) {
+      throw new Error("Invalid AI response format: missing summary or files");
+    }
+
+    // ────────────────────────────────────────────────
+    // NEW: Handle dependency requests
+    // ────────────────────────────────────────────────
+    if (response.newDependencies && Array.isArray(response.newDependencies) && response.newDependencies.length > 0) {
+      // Validate structure
+      const validDeps = response.newDependencies.every(
+        d => 
+          d.name && typeof d.name === 'string' &&
+          d.version && typeof d.version === 'string' &&
+          ['dependencies', 'devDependencies'].includes(d.type)
+      );
+
+      if (!validDeps) {
+        throw new Error("Invalid newDependencies format from AI");
+      }
+
+      return NextResponse.json({
+        success: true,
+        needsApproval: true,
+        dependencies: response.newDependencies,
+        summary: response.summary,
+        // We do NOT return files here — they'll be re-requested after install
+      });
+    }
+
+    // ────────────────────────────────────────────────
+    // Normal flow: no new deps → proceed with branch + PR
+    // ────────────────────────────────────────────────
 
     // Reset or create ai-lab branch from ai-deploy
     const { data: base } = await octokit.request(
@@ -224,7 +260,6 @@ Respond with:
       prNumber = pr.data.number;
     }
 
-    // Now that we have the PR number, fetch initial statuses
     const initialStatuses = await getBuildStatuses(prNumber).catch(() => ({
       githubCI: { conclusion: 'unknown' },
       vercelDeploy: { status: 'unknown' },
@@ -232,7 +267,6 @@ Respond with:
 
     const updatedBody = prBody + `\n\n**Initial Build Statuses:**\nGitHub CI: ${initialStatuses.githubCI.conclusion}\nVercel: ${initialStatuses.vercelDeploy.status}`;
 
-    // Update PR body with statuses (non-blocking)
     await octokit.request(
       "PATCH /repos/{owner}/{repo}/pulls/{pull_number}",
       {

@@ -15,7 +15,23 @@ export async function getOctokit() {
     installationId: Number(process.env.GITHUB_INSTALLATION_ID),
   });
 
-  return new Octokit({ auth: installationAuth.token });
+  const octokit = new Octokit({ auth: installationAuth.token });
+
+  // ───── TEMP DEBUG: Check effective permissions ─────
+  try {
+    // This endpoint returns the app's permissions for the installation
+    const { data } = await octokit.request("GET /app/installations/{installation_id}", {
+      installation_id: process.env.GITHUB_INSTALLATION_ID,
+    });
+    console.log("[DEBUG] Installation permissions:", JSON.stringify(data.permissions, null, 2));
+  } catch (debugErr) {
+    console.error("[DEBUG] Failed to log permissions:", debugErr.message);
+  }
+  // ──────────────────────────────────────────────────
+
+  return octokit;
+
+  //return new Octokit({ auth: installationAuth.token });
 }
 
 export async function getBuildStatuses(pullNumber) {
@@ -72,9 +88,6 @@ export async function getBuildStatuses(pullNumber) {
   // ──────────────────────────────────────────────────────────────
   // 2. Vercel Deployment (use correct v6 API version!)
   // ──────────────────────────────────────────────────────────────
-  // 2. Vercel Deployment
-// 2. Vercel Deployment
-// 2. Vercel Deployment
 let vercelDeploy = { 
   status: 'unknown', 
   url: '', 

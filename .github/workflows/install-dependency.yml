@@ -1,0 +1,79 @@
+name: AI-Lab Install Dependency
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'JSON array of packages to install'
+        required: true
+        type: string
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ai-lab
+          token: ${{ secrets.GITHUB_TOKEN }}   # important for push
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install requested packages
+        run: |
+          echo "Installing packages..."
+          node -e '
+            const fs = require("fs");
+            const packages = JSON.parse(process.env.PACKAGES);
+            
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+            
+            packages.forEach(p => {
+              if (!pkg[p.type]) pkg[p.type] = {};
+              pkg[p.type][p.name] = p.version;
+              console.log(`Added ${p.name}@${p.version} to ${p.type}`);
+            });
+            
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
+          '
+        env:
+          PACKAGES: ${{ inputs.packages }}
+
+      - name: Install & update lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Update allowlist
+        run: |
+          node -e '
+            const fs = require("fs");
+            const packages = JSON.parse(process.env.PACKAGES);
+            const allowedPath = ".github/allowed-dependencies.json";
+            
+            let allowed = JSON.parse(fs.readFileSync(allowedPath, "utf-8"));
+            packages.forEach(p => {
+              if (!allowed.allowed.includes(p.name)) {
+                allowed.allowed.push(p.name);
+              }
+            });
+            
+            fs.writeFileSync(allowedPath, JSON.stringify(allowed, null, 2));
+            console.log("Updated allowlist");
+          '
+        env:
+          PACKAGES: ${{ inputs.packages }}
+
+      - name: Commit & push
+        run: |
+          git config user.name "AI Lab"
+          git config user.email "ai-lab@vercel.app"
+          git add package.json package-lock.json .github/allowed-dependencies.json
+          git commit -m "ai-lab: install approved dependencies" || echo "No changes to commit"
+          git push
