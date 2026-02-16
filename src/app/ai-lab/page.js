@@ -653,47 +653,56 @@ export default function AiAgentDashboard() {
           Cancel
         </button>
         <button
-          onClick={async () => {
-            setLoading(true);
-            try {
-              const approveRes = await fetch("/api/ai-lab/approve-dependency", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  packages: pendingDependencies,
-                }),
-              });
+  onClick={async () => {
+    setLoading(true);
+    try {
+      const approveRes = await fetch("/api/ai-lab/approve-dependency", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          packages: pendingDependencies,
+        }),
+      });
 
-              if (!approveRes.ok) throw new Error("Approval failed");
+      if (!approveRes.ok) {
+        const errText = await approveRes.text();
+        throw new Error("Approval failed: " + errText);
+      }
 
-              // Give GitHub Actions ~20-40s to finish install & push
-              setTimeout(() => {
-                setNeedsApproval(false);
-                handleRun(); // retry original prompt (now deps are installed)
-              }, 25000);
-            } catch (err) {
-              setError("Failed to install dependencies: " + err.message);
-              setNeedsApproval(false);
-            } finally {
-              setLoading(false);
-            }
-          }}
-          disabled={loading}
-          className={`flex-1 py-4 rounded-xl font-medium text-white transition ${
-            loading 
-              ? "bg-gray-400 cursor-not-allowed" 
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
-              Installing...
-            </span>
-          ) : (
-            "Yes, Install & Continue"
-          )}
-        </button>
+      // Approval succeeded — close modal immediately
+      setNeedsApproval(false);
+
+      // Wait for commit + CI to settle (adjust time as needed)
+      await new Promise(resolve => setTimeout(resolve, 15000)); // 15s
+
+      // Refresh runs list instead of re-running the prompt
+      setPage(1);
+      setHasMore(true);
+      await loadRuns(1, false);
+
+      // Optional: show success toast/message
+      alert("Dependencies committed! Refreshing recent prompts...");
+
+    } catch (err) {
+      setError("Failed to approve & install: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }}
+  disabled={loading}
+  className={`flex-1 py-4 rounded-xl font-medium text-white transition ${
+    loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+  }`}
+>
+  {loading ? (
+    <span className="flex items-center justify-center gap-2">
+      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+      Installing...
+    </span>
+  ) : (
+    "Yes, Install & Continue"
+  )}
+</button>
       </div>
     </div>
   </div>
