@@ -13,11 +13,11 @@ export async function middleware(request) {
     const authHeader = request.headers.get('authorization');
     const [scheme, encoded] = authHeader ? authHeader.split(' ') : [];
     if (scheme !== 'Basic' || !encoded) {
-      return NextResponse.redirect(new URL('/(auth)/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
     const [user, pass] = Buffer.from(encoded, 'base64').toString().split(':');
     if (user !== process.env.ADMIN_USER || pass !== process.env.ADMIN_PASS) {
-      return NextResponse.redirect(new URL('/(auth)/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 

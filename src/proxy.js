@@ -10,7 +10,7 @@ export function middleware(request) {
   // Authentication protection
   if (pathname.startsWith('/admin') || pathname.startsWith('/ai-lab') || pathname.startsWith('/api')) {
     if (role !== 'admin') {
-      return NextResponse.redirect(new URL('/(auth)/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
