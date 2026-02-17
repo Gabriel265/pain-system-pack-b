@@ -8,7 +8,7 @@ export function middleware(request) {
   // Your existing admin protection
   if (pathname.startsWith('/admin')) {
     if (role !== 'admin') {
-      return NextResponse.redirect(new URL('/(auth)/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
@@ -19,7 +19,7 @@ export function middleware(request) {
   ) {
     if (role !== 'admin') {
       // Redirect to login (consistent with admin)
-      return NextResponse.redirect(new URL('/(auth)/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
       // OR for APIs: return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }
