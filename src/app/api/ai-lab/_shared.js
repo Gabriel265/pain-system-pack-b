@@ -4,35 +4,50 @@
 import { Octokit } from "@octokit/core";
 import { createAppAuth } from "@octokit/auth-app";
 
+
+
 export async function getOctokit() {
-  const auth = createAppAuth({
-    appId: process.env.GITHUB_APP_ID,
-    privateKey: process.env.GITHUB_PRIVATE_KEY.replace(/\\n/g, "\n"),
-  });
-
-  const installationAuth = await auth({
-    type: "installation",
-    installationId: Number(process.env.GITHUB_INSTALLATION_ID),
-  });
-
-  // const octokit = new Octokit({ auth: installationAuth.token });
-
-  // // ───── TEMP DEBUG: Check effective permissions ─────
-  // try {
-  //   // This endpoint returns the app's permissions for the installation
-  //   const { data } = await octokit.request("GET /app/installations/{installation_id}", {
-  //     installation_id: process.env.GITHUB_INSTALLATION_ID,
-  //   });
-  //   console.log("[DEBUG] Installation permissions:", JSON.stringify(data.permissions, null, 2));
-  // } catch (debugErr) {
-  //   console.error("[DEBUG] Failed to log permissions:", debugErr.message);
-  // }
-  // // ──────────────────────────────────────────────────
-
-  // return octokit;
-
-  return new Octokit({ auth: installationAuth.token });
+  console.log("[DEBUG] USING PAT FOR TEST");
+  const pat = process.env.GITHUB_PAT;
+  if (!pat) throw new Error("GITHUB_PAT missing in .env.local");
+  return new Octokit({ auth: pat });
 }
+// export async function getOctokit() {
+//   console.log("[getOctokit] === Starting ===");
+//   console.log("GITHUB_APP_ID:", process.env.GITHUB_APP_ID ? "present" : "MISSING");
+//   console.log("GITHUB_INSTALLATION_ID:", process.env.GITHUB_INSTALLATION_ID ? "present" : "MISSING");
+//   console.log("GITHUB_PRIVATE_KEY length:", process.env.GITHUB_PRIVATE_KEY?.length || "MISSING");
+//   const auth = createAppAuth({
+//     appId: process.env.GITHUB_APP_ID,
+//     privateKey: process.env.GITHUB_PRIVATE_KEY.replace(/\\n/g, "\n"),
+//   });
+
+//   const installationAuth = await auth({
+//     type: "installation",
+//     installationId: Number(process.env.GITHUB_INSTALLATION_ID),
+//   });
+
+//   // const octokit = new Octokit({ auth: installationAuth.token });
+
+//   // // ───── TEMP DEBUG: Check effective permissions ─────
+//   // try {
+//   //   // This endpoint returns the app's permissions for the installation
+//   //   const { data } = await octokit.request("GET /app/installations/{installation_id}", {
+//   //     installation_id: process.env.GITHUB_INSTALLATION_ID,
+//   //   });
+//   //   console.log("[DEBUG] Installation permissions:", JSON.stringify(data.permissions, null, 2));
+//   // } catch (debugErr) {
+//   //   console.error("[DEBUG] Failed to log permissions:", debugErr.message);
+//   // }
+//   // // ──────────────────────────────────────────────────
+
+//   // return octokit;
+
+//   console.log("[getOctokit] Token length:", installationAuth.token?.length || "NO TOKEN");
+//   console.log("[getOctokit] Token preview (first 10 chars):", installationAuth.token.substring(0, 10));
+
+//   return new Octokit({ auth: installationAuth.token });
+// }
 
 export async function getBuildStatuses(pullNumber) {
   const octokit = await getOctokit();
