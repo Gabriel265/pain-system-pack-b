@@ -134,56 +134,53 @@ export default function AiAgentDashboard() {
   };
 
   const handleRun = async () => {
-  if (!prompt.trim()) return;
+    if (!prompt.trim()) return;
 
-  setLoading(true);
-  setError(null);
-  setNeedsApproval(false); // reset in case previous attempt had deps
+    setLoading(true);
+    setError(null);
+    setNeedsApproval(false);
 
-  try {
-    const selectedList = Array.from(selectedPaths);
-    const appendText = selectedList.length
-      ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}`
-      : "";
-    const fullPrompt = prompt + appendText;
+    try {
+      const selectedList = Array.from(selectedPaths);
+      const appendText = selectedList.length
+        ? `\n\nFocus on these files/folders: ${selectedList.join(", ")}`
+        : "";
+      const fullPrompt = prompt + appendText;
 
-    // Save for potential retry after install
-    setOriginalFullPrompt(fullPrompt);
+      setOriginalFullPrompt(fullPrompt);
 
-    const res = await fetch("/api/ai-lab/run", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: fullPrompt }),
-    });
+      const res = await fetch("/api/ai-lab/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: fullPrompt }),
+      });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || "Failed to run AI Lab");
-    }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to run AI Lab");
+      }
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.needsApproval) {
-      // Show approval modal
-      setPendingDependencies(data.dependencies);
-      setNeedsApproval(true);
+      if (data.needsApproval) {
+        setPendingDependencies(data.dependencies || []);
+        setNeedsApproval(true);
+        setLoading(false);
+        return;
+      }
+
+      if (data.success) {
+        setPage(1);
+        setHasMore(true);
+        loadRuns(1, false);
+        setSelectedPaths(new Set());
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-      return; // stop here — wait for user approval
     }
-
-    // Normal success (no deps needed)
-    if (data.success) {
-      setPage(1);
-      setHasMore(true);
-      loadRuns(1, false);
-      setSelectedPaths(new Set());
-    }
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const buildTree = (paths) => {
     const root = [];
@@ -616,97 +613,125 @@ export default function AiAgentDashboard() {
   </div>
 )}
 
-{/* New Modal for Approve depencies */}
-{needsApproval && (
-  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-    <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
-      <h3 className="text-2xl font-bold mb-6 text-center">Install Required Packages?</h3>
-      
-      <div className="space-y-4 mb-8">
-        {pendingDependencies.map((dep, index) => (
-          <div 
-            key={index} 
-            className="bg-gray-50 border border-gray-200 p-4 rounded-xl flex items-center gap-4"
-          >
-            <div className="text-4xl">📦</div>
-            <div>
-              <p className="font-mono font-semibold text-lg">{dep.name} <span className="text-gray-500">@{dep.version}</span></p>
-              <p className="text-sm text-gray-600">{dep.type}</p>
+{/* Approval Modal - Improved version */}
+      {needsApproval && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+            <h3 className="text-2xl font-bold mb-6 text-center">
+              Install Required Packages?
+            </h3>
+
+            <div className="space-y-5 mb-8">
+              {pendingDependencies.length === 0 ? (
+                <p className="text-center text-gray-600">No dependencies detected.</p>
+              ) : (
+                pendingDependencies.map((dep, i) => (
+                  <div
+                    key={i}
+                    className="bg-gray-50 border border-gray-200 p-5 rounded-xl"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl pt-1">📦</div>
+                      <div className="flex-1">
+                        <p className="font-mono font-bold text-lg">
+                          {dep.name} <span className="text-gray-500">@{dep.version}</span>
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1 font-medium">
+                          {dep.type || "dependencies"}
+                        </p>
+
+                        {dep.reason && (
+                          <div className="mt-3 text-sm">
+                            <div className="font-medium text-gray-700">Why needed:</div>
+                            <p className="text-gray-600 mt-1">{dep.reason}</p>
+                          </div>
+                        )}
+
+                        {dep.diff && (
+                          <div className="mt-4">
+                            <div className="font-medium text-gray-700 mb-1">Change preview:</div>
+                            <pre className="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto max-h-40">
+                              {dep.diff}
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <p className="text-center text-gray-600 mb-8 text-sm">
+              These packages are required to complete your request.<br />
+              Exact versions will be added — human review still required via PR.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => {
+                  setNeedsApproval(false);
+                  setLoading(false);
+                }}
+                className="flex-1 py-4 border-2 border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    const approveRes = await fetch("/api/ai-lab/approve-dependency", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        packages: pendingDependencies,
+                      }),
+                    });
+
+                    if (!approveRes.ok) {
+                      const errText = await approveRes.text();
+                      throw new Error("Approval failed: " + errText);
+                    }
+
+                    setNeedsApproval(false);
+                    await new Promise((r) => setTimeout(r, 12000));
+
+                    setPage(1);
+                    setHasMore(true);
+                    await loadRuns(1, false);
+
+                    alert(
+                      "Dependencies committed to ai-lab branch.\n\nA PR has been created/updated for review.\n\nNo automatic merge will occur."
+                    );
+                  } catch (err) {
+                    setError("Failed to approve dependencies: " + err.message);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className={`flex-1 py-4 rounded-xl font-medium text-white transition ${
+                  loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                    Committing...
+                  </span>
+                ) : (
+                  "Approve → Create PR"
+                )}
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      <p className="text-center text-gray-600 mb-8">
-        The AI needs these packages to complete your request.<br/>
-        They'll be installed securely with exact versions.
-      </p>
 
-      <div className="flex gap-4">
-        <button
-          onClick={() => {
-            setNeedsApproval(false);
-            setLoading(false);
-          }}
-          className="flex-1 py-4 border-2 border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Cancel
-        </button>
-        <button
-  onClick={async () => {
-    setLoading(true);
-    try {
-      const approveRes = await fetch("/api/ai-lab/approve-dependency", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          packages: pendingDependencies,
-        }),
-      });
-
-      if (!approveRes.ok) {
-        const errText = await approveRes.text();
-        throw new Error("Approval failed: " + errText);
-      }
-
-      // Approval succeeded — close modal immediately
-      setNeedsApproval(false);
-
-      // Wait for commit + CI to settle (adjust time as needed)
-      await new Promise(resolve => setTimeout(resolve, 15000)); // 15s
-
-      // Refresh runs list instead of re-running the prompt
-      setPage(1);
-      setHasMore(true);
-      await loadRuns(1, false);
-
-      // Optional: show success toast/message
-      alert("Dependencies committed! Refreshing recent prompts...");
-
-    } catch (err) {
-      setError("Failed to approve & install: " + err.message);
-    } finally {
-      setLoading(false);
-    }
-  }}
-  disabled={loading}
-  className={`flex-1 py-4 rounded-xl font-medium text-white transition ${
-    loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-  }`}
->
-  {loading ? (
-    <span className="flex items-center justify-center gap-2">
-      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
-      Installing...
-    </span>
-  ) : (
-    "Yes, Install & Continue"
-  )}
-</button>
-      </div>
-    </div>
-  </div>
-)}
+      
       </div>
     </div>
   );

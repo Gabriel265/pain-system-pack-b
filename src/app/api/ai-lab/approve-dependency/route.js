@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/core";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
+  const allowedFilePath = ".github/allowed-dependencies.json";
   try {
     const { packages } = await req.json();
 
@@ -108,31 +109,21 @@ export async function POST(req) {
 
     // 1. Update package.json
     await updateOrCreateFile(
-      "package.json",
-      (content) => {
-        let pkg;
-        try {
-          pkg = JSON.parse(content);
-        } catch {
-          pkg = { dependencies: {}, devDependencies: {} };
-        }
-        if (!pkg.dependencies) pkg.dependencies = {};
-        if (!pkg.devDependencies) pkg.devDependencies = {};
-
-        packages.forEach((p) => {
-          if (p.type === "dependencies") {
-            pkg.dependencies[p.name] = p.version;
-          } else if (p.type === "devDependencies") {
-            pkg.devDependencies[p.name] = p.version;
-          } else {
-            pkg.dependencies[p.name] = p.version; // fallback
-          }
-        });
-
-        return JSON.stringify(pkg, null, 2) + "\n";
-      },
-      "AI-Lab: add approved dependencies to package.json"
-    );
+  allowedFilePath,
+  (content) => {
+    let data;
+    try {
+      data = JSON.parse(content);
+    } catch {
+      data = { allowed: [] };
+    }
+    const allowedSet = new Set(data.allowed || []);
+    packages.forEach((p) => allowedSet.add(p.name));
+    data.allowed = Array.from(allowedSet).sort();
+    return JSON.stringify(data, null, 2) + "\n";
+  },
+  "chore: add AI-approved packages to dependency allowlist"
+);
 
     // 2. Update or create allowlist
     await updateOrCreateFile(
