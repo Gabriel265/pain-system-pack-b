@@ -7,34 +7,79 @@
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0000FF;
-      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: #e0e0e0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
+    }
+    header, footer {
+      width: 100%;
+      padding: 16px;
+      background: #1f1f1f;
+      color: #e0e0e0;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: #e0e0e0;
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: 500;
+    }
+    nav a:hover {
+      color: #bb86fc;
     }
     .wrap {
       max-width: 600px;
       padding: 24px;
     }
     h1 {
-      font-size: 32px;
+      font-size: 36px;
       margin-bottom: 12px;
     }
     p {
       opacity: 0.8;
       line-height: 1.6;
     }
+    button {
+      background-color: #bb86fc;
+      border: none;
+      padding: 10px 20px;
+      color: #121212;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #3700b3;
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div>Pain System</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
   <div class="wrap">
-    <h1>Pain System</h1>
-    <p>System online.</p>
-    <p>Infrastructure locked. Build in progress.</p>
+    <h1>Welcome to Pain System</h1>
+    <p>Your system is online and ready to use.</p>
+    <button>Get Started</button>
   </div>
+  <footer>
+    <p>&copy; 2023 Pain System. All rights reserved.</p>
+  </footer>
 </body>
 </html>
