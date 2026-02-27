@@ -1,47 +1,42 @@
-/* Global styles and design tokens */
-:root {
-  --ps-bg: linear-gradient(135deg, #0a0a0a, #1c1c1c);
-  --ps-surface: #1e1e1e;
-  --ps-text: #e0e0e0;
-  --ps-muted: #a0a0a0;
-  --ps-border: #333;
-  --ps-accent: #ff6f61;
-}
-
 body {
-  background: var(--ps-bg);
-  color: var(--ps-text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-/* Additional global styles */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
+a {
+  color: #007aff;
+  text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: var(--ps-text);
-}
-
-p {
-  color: var(--ps-muted);
+a:hover {
+  text-decoration: underline;
 }
 
 button {
-  background-color: var(--ps-accent);
-  color: #fff;
+  background-color: #007aff;
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #e65b54;
+  background-color: #005bb5;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: monospace;
 }
