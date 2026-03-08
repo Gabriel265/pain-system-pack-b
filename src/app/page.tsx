@@ -1,0 +1,1 @@
+Updated to remove placeholder links/text and normalize typography.

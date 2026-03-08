@@ -1,0 +1,1 @@
+Removed placeholder links/text from footer.

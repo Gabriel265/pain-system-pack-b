@@ -1,0 +1,1 @@
+Removed forced global background color and set a premium dark neutral.
